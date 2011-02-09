@@ -1,0 +1,44 @@
+/* 
+    Document   : style
+    Created on : 2011-feb-01, 11:33:09
+    Author     : make
+    Description:
+        Purpose of the stylesheet follows.
+*/
+root{display: block;}
+body {color:#333;font-family:Arial,Verdana;font-size:11px;}
+.clear{clear:both;}
+
+.error{
+  border:1px solid red;
+  padding:5px;
+  width:450px;
+  margin-bottom: 10px;
+}
+.error-msg{color: red;}
+
+
+.input-text{width:65px;}
+#header{float:left;position:relative;}
+#greeting{position:absolute;top:30px;right:20px;color:#fff;}
+#greeting-nick{font-weight:bold;text-transform:capitalize;}
+#greeting a{color:#fff;}
+#log-in {
+  position:absolute;top:5px;right:20px;color:#fff;
+  border:0 solid #000000;
+  float:left;
+  height:45px;
+  margin:13px 0 0 455px;
+  text-align:right;
+  width:290px;
+}
+.log-in-input{
+  padding-top:4px;
+  text-align:right;
+  white-space:nowrap;
+}
+
+#debug{display:none;}
+
+
+
