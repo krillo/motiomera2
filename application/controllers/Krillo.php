@@ -7,22 +7,26 @@ class Krillo extends CI_Controller {
 	}
 
 	function index(){
-		$this->load->view('addsteps_view');
+		//$this->load->view('addsteps_view');
+    //$calcSteps = $this->m_activities->calcSteps(2, 30);
+    //echo $calcSteps;
+
+    //$same = $this->m_activities->getSameName(2);
+    //print_r($same);
+
+    //$data['severity_data'] = $this->m_activities->getSameName(2, true);
+    //print_r($data);
+    //$this->load->view('include/v_severitydropdown', $data);
+
+    echo "apa";
+    $data['step_data'] = $this->m_step->getByUserId(3, 'TEMP', '2011-03-07', '2011-03-07', 20);
+    print_r($data);
+
+
+
 	}
 
-  function store(){
-    //field name, error mesg, validation rule
-    $this->form_validation->set_rules('steps', 'steg', 'trim|required|numeric|max_length[5]' );
-    $this->form_validation->set_rules('email', 'epost', 'trim|required|valid_email');
 
-    if ($this->form_validation->run() == FALSE){
-			$this->load->view('addsteps_view');
-		}else{
-      echo 'store ok';
-			//$this->load->view('formsuccess');
-		}
-
-  }
 
   function apa(){
     $data['key1'] = "value1";
@@ -32,17 +36,6 @@ class Krillo extends CI_Controller {
 	}
 
 
-  function getAll(){
-    //echo "jepp";
-    $this->load->model('m_activities');
-    $data['records'] = $this->m_activities->getAll(10);
-    $this->load->view('v_activities', $data);
-  }
 
-  function getById(){
-    $this->load->model('m_activities');
-    $data['records'] = $this->m_activities->getById();
-    $this->load->view('v_activities', $data);
-  }
 
 }

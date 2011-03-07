@@ -17,11 +17,27 @@ class Mypage extends CI_Controller{
     }
   }
 
-
+  /**
+   * Show my page
+   * @param <type> $id
+   */
   function showMyPage($id){
     $data = $this->m_user->getById($id);
     $this->load->view('v_mypage', $data);
+    $this->reportStepDialog();
   }
+
+
+  /**
+   * Display the "report steps data"- dialog view
+   * with all the data prepared
+   */
+  function reportStepDialog(){
+    $data = $this->m_activities->getUnique();
+    $prep['activites_data'] = $this->_prepareStepList($data);
+    $this->load->view('dialog/v_steps_dialog', $prep);
+  }
+  
 
 
   /**
@@ -66,6 +82,9 @@ class Mypage extends CI_Controller{
     }
     return $prepArray;
   }
+
+
+
 
 
 

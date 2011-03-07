@@ -29,6 +29,9 @@
 </pre>
 
 
+
+
+
 <h1>List <?php echo $controller ?></h1>
 
 <?php $filter = array('id', 'created_at', 'updated_at'); ?>

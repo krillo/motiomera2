@@ -38,7 +38,9 @@ body {color:#333;font-family:Arial,Verdana;font-size:11px;}
   white-space:nowrap;
 }
 
-#debug{display:none;}
+#debug-msg{display:none;}
+#count{width:50px;}
+.capitalize{text-transform: capitalize;}
 
 
 

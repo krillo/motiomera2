@@ -65,12 +65,12 @@ class Activities extends CI_Controller{
 
   /**
    * returns all activities with same name
-   * 3rd segment takes name
+   * 3rd segment takes an activity id
    */
   function same(){
-    $data['records'] = $this->m_activities->getSameName();
-    $this->load->view('admin/v_view', $data);
-    $this->output->enable_profiler(true);
+    $id =  $this->uri->segment(3);
+    $data['severity_data'] = $this->m_activities->getSameName($id, true);
+    $this->load->view('include/v_severitydropdown', $data);
   }
 
 

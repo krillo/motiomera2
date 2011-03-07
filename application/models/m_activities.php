@@ -15,6 +15,8 @@ class M_activities extends CI_Model {
    * @return <type>
    */
   function getAll($limit = 20){
+    $this->db->order_by("name", "asc");
+    $this->db->order_by("multiplicity", "asc");
     $query = $this->db->get($this->table, $limit);
     if($query->num_rows() > 0 ){
       foreach ($query->result() as $row){
@@ -37,21 +39,59 @@ class M_activities extends CI_Model {
   }
 
 
-  function getSameName(){
-    $name =  $this->uri->segment(3);
+  /**
+   * This function returns all duplicate matches for a name
+   * @param <type> $id
+   * @return <type>
+   */
+  function getSameName($id, $raw = false){
     $data = array();
-    $query = $this->db->query("select * from activities where name  = '$name'");
+    $query = $this->db->query("select * from activities where name like (SELECT name FROM activities where id = $id) order by multiplicity ");
     if($query->num_rows() > 0 ){
       foreach ($query->result() as $row){
         $data[] = $row;
       }
+      if(!$raw){
+        return $data;
+      }else{ //return an array that suits the dropdown helper
+        return $this->_prepareSeverityList($data);
+      }
+    } else {
+      //todo error handling
+      return -1;
     }
-    return $data;
+  }
+
+
+  function _prepareSeverityList($data){
+    $prepArray = array();
+    foreach ($data as $key => $value) {
+      $name = $value->severity;
+      $id = $value->id;
+      $prepArray[$id] = $name;
+    }
+    return $prepArray;
   }
 
 
 
 
+  /**
+   * Calculates actual steps from activity
+   *
+   * @param <type> $activity_id
+   * @param <type> $count
+   * @return <type>
+   */
+  function calcSteps($activity_id, $count){
+    $query = $this->db->query("select (multiplicity * $count) calc_steps from activities where id = $activity_id");
+    if($query->num_rows() == 1 ){
+      return $query->row()->calc_steps;
+    } else {
+      //todo  error handling
+      return -1;
+    }
+  }
 
 
 

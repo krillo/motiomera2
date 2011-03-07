@@ -42,6 +42,28 @@ class M_step extends CI_Model {
     }
   }
 
+
+  /**
+   * Gets the steps for an user
+   *
+   * @param <type> $user_id
+   * @param <type> $limit
+   * @return <type>
+   */
+  function getByUserId($user_id, $status, $startdate, $stopdate,  $limit = 20){
+    $sql = "SELECT * FROM steps s, activities a WHERE s.activity_id  = a.id AND s.user_id = ? AND s.status = ? AND s.date >= ? AND s.date <= ? LIMIT ?";
+    $query = $this->db->query($sql, array($user_id, $status, $startdate, $stopdate, $limit));
+
+    if($query->num_rows() > 0 ){
+      foreach ($query->result() as $row){
+        $data[] = $row;
+      }
+      return $data;
+    }
+  }
+
+
+
   /**
    * Count all records.
    * Returns count and which table their from
@@ -61,13 +83,18 @@ class M_step extends CI_Model {
 	}
 
 	/**
-   * Creates a new post
-   * @param <type> $data
+   * Creates a new post.
+   * The function calculates counted steps
+   *
+   * @param array $data the step data
    * @return <type>
    */
 	function create($data){
+    $calcSteps = $this->m_activities->calcSteps($data['activity_id'], $data['count']);
+    $data['steps'] = $calcSteps;
     $data['created_at'] = date('Y-m-d H:i:s');
     $data['updated_at'] = date('Y-m-d H:i:s');
+    //print_r($data); die();
 		$this->db->insert($this->table, $data);
 		return $this->db->insert_id();
 	}

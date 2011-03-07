@@ -4,11 +4,15 @@ function m_step_showActivities(){
   document.getElementById('activity-list').style.display = 'block';
 }
 
+
 function m_debug(){
-  document.getElementById('debug').style.display = 'block';
+  document.getElementById('debug-link').style.display = 'none';
+  document.getElementById('debug-msg').style.display = 'block';
 }
+
 function m_close_debug(){
-  document.getElementById('debug').style.display = 'none';
+  document.getElementById('debug-msg').style.display = 'none';
+  document.getElementById('debug-link').style.display = 'block';
 }
 
 

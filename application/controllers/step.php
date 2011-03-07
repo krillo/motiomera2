@@ -11,6 +11,10 @@ class Step extends CI_Controller{
 	}
 
 
+	function submit(){
+		$this->all();
+	}
+
 
 
   /**
@@ -18,11 +22,9 @@ class Step extends CI_Controller{
    * Show all records - limit as 3rd segment, auto populated as first parameter
    */
   function all($limit = 20){
-    //$limit = $this->uri->segment(3);
+    $limit = $this->uri->segment(3);
     $data['records'] = $this->m_step->getAll($limit);
     $this->load->view('admin/v_view', $data);
-    //$this->load->view('v_default', $data);
-    //$this->output->enable_profiler(true);
   }
 
   /**
@@ -33,6 +35,20 @@ class Step extends CI_Controller{
     $data['records'] = $this->m_step->getById($id);
     $this->load->view('admin/v_view', $data);
   }
+
+
+  /**
+   * this function does getByUserId -
+   * user_id as segment 3
+   * limit as segmant 4
+   */
+  function user(){
+    $user_id = $this->uri->segment(3);
+    $limit = $this->uri->segment(4);
+    $data['records'] = $this->m_step->getByUserId($user_id, $limit);
+    $this->load->view('admin/v_view', $data);
+  }
+
 
 
 
@@ -50,20 +66,47 @@ class Step extends CI_Controller{
   }
 
   /**
-   * Creates a new row
+   * Creates a new row.
+   * parameter must be passed by a post
+   *
    */
-  function create(){
+  function create() {
+    $user_id     = $this->input->post('user_id');
+    $activity_id = $this->input->post('activity_id');
+    $count       = $this->input->post('count');
+    $date        = $this->input->post('date');
+    $status      = $this->input->post('status');
+    $view        = $this->input->post('view');
     $data = array(
-      'member_id' => $_POST['member_id'],
-      'activity_id' => $_POST['activity_id'],
-      'count' => $this->input->post('count'),
-      'steps' => $_POST['steps'],
-      'date' => $_POST['date']
+        'user_id' => $user_id,
+        'activity_id' => $activity_id,
+        'count' => $count,
+        'date' => $date,
+        'status'=> $status
     );
     //print_r($data); die();
     $this->m_step->create($data);
-    $this->all();
-	}
+    if($view == 'showStepsPreview'){
+      $this->showStepsPreview();
+    } else {
+      $this->all();
+    }    
+  }
+
+
+
+
+
+function showStepsPreview(){
+    $user_id     = $this->input->post('user_id');
+    $date        = $this->input->post('date');
+    $data['records'] = $this->m_step->getByUserId($user_id, 'VALID', $date, $date, 200);
+    $this->load->view('include/v_preview-step-rows', $data);
+}
+
+
+
+
 
   /**
    * Edit row - id as segment 3
@@ -79,7 +122,7 @@ class Step extends CI_Controller{
    */
 	function update(){
     $data = array(
-      'member_id' => $_POST['member_id'],
+      'user_id' => $_POST['user_id'],
       'activity_id' => $_POST['activity_id'],
       'count' => $this->input->post('count'),
       'steps' => $_POST['steps'],
@@ -98,64 +141,5 @@ class Step extends CI_Controller{
     $data['records'] = $this->m_step->delete($id);
     $this->all(20);
   }
-
-
-
-
-
-
-
-
-
-
-
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of step
- *
- * @author make
- */
-/*
-class step extends CI_Controller{
-  
-  
-  function index(){
-    $this->load->view('v_mypage');
-  }
-  
-  function getAll(){
-    $this->load->model('step');
-    $data['records'] = $this->step->getAll();
-    $this->load->view('step_view', $data);
-  }
-
-
-  function store(){
-    //field name, error mesg, validation rule
-    $this->form_validation->set_rules('steps', 'steg', 'trim|required|numeric|max_length[5]' );
-
-    if ($this->form_validation->run() == FALSE){
-			$this->load->view('v_steps');
-		}else{
-      echo 'store ok';
-			//$this->load->view('formsuccess');
-		}
-
-  }
-
-
-  function krillo(){
-    echo 'apa'; die();
-    $a = new Activities();
-    
-    $a->steps();
-  }
-}
- */
-
 
 }
