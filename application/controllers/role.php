@@ -1,6 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
-class User extends CI_Controller{
+class Role extends CI_Controller{
 
 	function __construct(){
 		parent::__construct();
@@ -15,7 +14,7 @@ class User extends CI_Controller{
    * Show all records - limit as 3rd segment, auto populated as first parameter
    */
   function all($limit = 20){
-    $data['records'] = $this->m_user->getAll($limit);
+    $data['records'] = $this->m_role->getAll($limit);
     $this->load->view('admin/v_view', $data);
   }
 
@@ -23,14 +22,14 @@ class User extends CI_Controller{
    * this function does getById - id as segment 3
    */
   function get($id){
-    $data['records'] = $this->m_user->getById($id);
+    $data['records'] = $this->m_role->getById($id);
     $this->load->view('admin/v_view', $data);
   }
 
 
 
 	function count(){
-    $data['records'] = $this->m_user->count();
+    $data['records'] = $this->m_role->count();
     $this->load->view('admin/v_default', $data);
 	}
 
@@ -46,7 +45,12 @@ class User extends CI_Controller{
    * Creates a new row
    */
   function create(){
-    $this->m_user->create();
+    $data = array(
+      'level' => $this->input->post('level'),
+      'descr' => $this->input->post('descr'),
+      'name' => $this->input->post('name'),
+    );
+    $this->m_role->create($data);
     $this->all();
 	}
 
@@ -54,17 +58,23 @@ class User extends CI_Controller{
    * Edit row - id as segment 3
    */
   function edit(){
-    $data['records'] = $this->m_user->getById($this->uri->segment(3));
+    $data['records'] = $this->m_role->getById($this->uri->segment(3));
     $this->load->view('admin/v_edit', $data);
   }
 
 
 	/**
    * Update row - id as segment 3
+   * level  	descr  	name
    */
 	function update(){
     $id = $this->uri->segment(3);
-    $this->m_user->update($id);
+    $data = array(
+      'level' => $this->input->post('level'),
+      'descr' => $this->input->post('descr'),
+      'name' => $this->input->post('name'),
+    );
+    $this->m_role->update($id, $data);
     $this->all();
 	}
 
@@ -73,7 +83,7 @@ class User extends CI_Controller{
    */
 	function delete(){
     $id = $this->uri->segment(3);
-    $data['records'] = $this->m_user->delete($id);
+    $data['records'] = $this->m_role->delete($id);
     $this->all(20);
   }
 

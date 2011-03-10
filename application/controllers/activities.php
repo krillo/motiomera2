@@ -64,7 +64,7 @@ class Activities extends CI_Controller{
   }
 
   /**
-   * returns all activities with same name
+   * Returns all activities with same name
    * 3rd segment takes an activity id
    */
   function same(){

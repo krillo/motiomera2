@@ -36,13 +36,16 @@ class M_user extends CI_Model {
    * @return <type>
    */
   function getById($id){
-    $this->db->where('id = ', $id);
-    $query = $this->db->get($this->table);
+    $sql = "SELECT * FROM users WHERE id  = ?";
+    $query = $this->db->query($sql, array($id));
     if($query->num_rows() > 0 ){
       foreach ($query->result() as $row){
         $data[] = $row;
       }
       return $data;
+    }else{
+      //todo error handling
+      return -1;
     }
   }
 
@@ -169,6 +172,9 @@ class M_user extends CI_Model {
           'user_full_name' => $data[0]->f_name."_".$data[0]->l_name,
           'user_nick' => $data[0]->nick,
           'user_logged_in' => TRUE,
+          'role_level'=> $data[0]->level,
+          'real_user_id' => $data[0]->id,
+          'simulation' => FALSE,
         );
         $this->session->set_userdata($session_data);
           // TODO: Update last login

@@ -1,13 +1,16 @@
-<?php if($records != null):  ?>
-  <?php foreach($records as $row):?>
-    <?php echo form_open("step/delete/".$row->id); ?>
+<?php
+if ($records != null):
+  $defaultActivityId = $this->m_activities->getDefaultActivityId();
+?>
+<?php foreach ($records as $row): ?>
+
     <tr>
-      <th class="step-table-cell"><?php echo $row->date; ?></th>
-      <th class="step-table-cell capitalize"><?php echo $row->name; ?></th>
-      <th class="step-table-cell"><?php echo $row->name == 'steg' ? '' : $row->count . ' ' . $row->unit; ?></th>
-      <th class="step-table-cell"><?php echo $row->steps; ?> steg</th>
-      <td class=""><button id="delete-step-row">Ta bort</button></td>
+      <td class="step-table-cell"><?php echo $row->date; ?></td>
+      <td class="step-table-cell-big capitalize"><?php echo $row->activity_id == $defaultActivityId ? $row->name : $row->name . ' (' . $row->severity . ')'; ?></td>
+      <td class="step-table-cell"><?php echo $row->activity_id == $defaultActivityId ? '' : $row->count . ' ' . $row->unit; ?></td>
+      <td class="step-table-cell-small"><?php echo $row->steps; ?></td>
+      <td class="step-table-cell-small">steg</td>
+      <td class="step-table-cell"><button id="delete-step-row<?php echo $row->step_id; ?>" onclick="deleteRow(<?php echo $row->step_id; ?>)" >Ta bort</button></td>
     </tr>
-    <?php echo form_close(); ?>
-  <?php endforeach;?>
-<?php endif;?>
+<?php endforeach; ?>
+<?php endif; ?>

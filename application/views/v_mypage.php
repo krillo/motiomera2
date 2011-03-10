@@ -8,9 +8,10 @@
 
 <script type="text/javascript">
   $(function(){
-    $("#btn_report_dialog").click(function(){
-      $("#dialog").dialog({title: "Rapportera steg", height: 300, width: 650 });
-      $("#dialog").dialog();
+    $("#btn-report-dialog").click(function(){
+alert('krillo');
+      $("#dialog").dialog({title: "Rapportera steg", height: 340, width: 750 });      
+      $("#dialog").dialog();            
     });
 
   });
@@ -18,7 +19,7 @@
 
 
 
-<button id="btn_report_dialog"><img src="/img/m_report_steps.gif" alt="Rapportera Steg"></button>
+<button id="btn-report-dialog"><img src="/img/m_report_steps.gif" alt="Rapportera Steg"></button>
 
 <br/>
 <br/>

@@ -1,13 +1,24 @@
 /* 
     Document   : style
-    Created on : 2011-feb-01, 11:33:09
-    Author     : make
-    Description:
-        Purpose of the stylesheet follows.
+    Created on : 2011-02-01, 11:33:09
+    Author     : Kristian Erendi
+    Description: The style for motiomera        
 */
 root{display: block;}
 body {color:#333;font-family:Arial,Verdana;font-size:11px;}
 .clear{clear:both;}
+
+
+/* adminbar */
+#adminbar{float:left;}
+#adminbar li{
+  float:left;
+  font-size:18px;
+  list-style-image:none;
+  list-style-position:outside;
+  list-style-type:none;
+  margin-right:25px;
+}
 
 .error{
   border:1px solid red;

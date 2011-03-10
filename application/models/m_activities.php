@@ -8,6 +8,17 @@
 class M_activities extends CI_Model {
 
   private $table = 'activities';
+  private $defaultActivityId = 1;
+
+
+
+  /**
+   * Returns the default activity id i.e. the id for steps
+   */
+  function getDefaultActivityId(){
+    return $this->defaultActivityId;
+  }
+
 
   /**
    * Gets all the records, defaults to limit the result to 20 rows
@@ -46,7 +57,8 @@ class M_activities extends CI_Model {
    */
   function getSameName($id, $raw = false){
     $data = array();
-    $query = $this->db->query("select * from activities where name like (SELECT name FROM activities where id = $id) order by multiplicity ");
+    $sql = "select * from activities where name like (SELECT name FROM activities where id = ?) order by multiplicity";
+    $query = $this->db->query($sql, array($id));
     if($query->num_rows() > 0 ){
       foreach ($query->result() as $row){
         $data[] = $row;
@@ -62,19 +74,23 @@ class M_activities extends CI_Model {
     }
   }
 
-
-  function _prepareSeverityList($data){
+  /**
+   * Prepares the severitylist-array to match the dropdown helper
+   *
+   * @param <type> $data
+   * @return <type>
+   */
+  function _prepareSeverityList($data) {
     $prepArray = array();
     foreach ($data as $key => $value) {
-      $name = $value->severity;
-      $id = $value->id;
-      $prepArray[$id] = $name;
+      if ($value->severity != '') {
+        $name = $value->severity;
+        $id = $value->id;
+        $prepArray[$id] = $name;
+      }
     }
     return $prepArray;
   }
-
-
-
 
   /**
    * Calculates actual steps from activity

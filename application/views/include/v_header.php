@@ -2,17 +2,18 @@
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link href="<?php echo base_url() ?>css/style.css" rel="stylesheet" type="text/css" media="screen" />
     <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js'></script>
-    <!--script type="text/javascript" src="js/jquery-1.5.min.js"></script -->
     <script type="text/javascript" src="<?php echo base_url() ?>js/jquery-ui-1.8.9.custom.min.js"></script>
-    <link rel="stylesheet" href="<?php echo base_url() ?>css/ui-lightness/jquery-ui-1.8.9.custom.css" type="text/css" />
     <script type="text/javascript" src="<?php echo base_url(); ?>js/step.js?ver=0.2"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url() ?>css/ui-lightness/jquery-ui-1.8.9.custom.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url() ?>css/style.css" />
     <title>Add steps</title>
   </head>
   <body>
 
+    <?php include 'v_adminbar.php'; ?>
     <?php include 'v_debug.php'; ?>
+
     <div id="header">
       <img src="<?php echo base_url(); ?>img/motiomera_header.png" />
       <?php if ($this->m_user->isLoggedIn()): ?>
