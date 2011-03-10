@@ -9,7 +9,6 @@
 <script type="text/javascript">
   $(function(){
     $("#btn-report-dialog").click(function(){
-alert('krillo');
       $("#dialog").dialog({title: "Rapportera steg", height: 340, width: 750 });      
       $("#dialog").dialog();            
     });

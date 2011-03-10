@@ -11,8 +11,7 @@
   </head>
   <body>
 
-    <?php include 'v_adminbar.php'; ?>
-    <?php include 'v_debug.php'; ?>
+
 
     <div id="header">
       <img src="<?php echo base_url(); ?>img/motiomera_header.png" />
@@ -43,3 +42,6 @@
 
     </div>
     <div class="clear"></div>
+
+    <?php include 'v_adminbar.php'; ?>
+    <?php include 'v_debug.php'; ?>
