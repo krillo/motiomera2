@@ -20,17 +20,3 @@
 
 <button id="btn-report-dialog"><img src="/img/m_report_steps.gif" alt="Rapportera Steg"></button>
 
-<br/>
-<br/>
-<div style="clear:both;"></div>
-<div>
-
-
-
-
-<ul>
-  <li><a href="/activities/steps">Rapportera DINA STEG</a></li>
-  <li>-- </li>
-  <li><a href="/admin">Admin</a></li>
-</ul>
-</div>

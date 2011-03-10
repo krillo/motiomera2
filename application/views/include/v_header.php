@@ -44,4 +44,4 @@
     <div class="clear"></div>
 
     <?php include 'v_adminbar.php'; ?>
-    <?php include 'v_debug.php'; ?>
+    
