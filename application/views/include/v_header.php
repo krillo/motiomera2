@@ -7,11 +7,20 @@
     <script type="text/javascript" src="<?php echo base_url(); ?>js/step.js?ver=0.2"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url() ?>css/ui-lightness/jquery-ui-1.8.9.custom.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url() ?>css/style.css" />
-    <title>Add steps</title>
+
+
+<?php if ($this->session->userdata('role_level') > 40): ?>
+    <script type="text/javascript" src="<?php echo base_url(); ?>dataTables/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url() ?>dataTables/css/demo_table.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url() ?>dataTables/css/demo_page.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url() ?>dataTables/css/demo_table_jui.css" />
+<?php endif; ?>
+
+    <title><?php echo $title;?></title>
   </head>
   <body>
 
-
+<?php include 'v_adminbar.php'; ?>
 
     <div id="header">
       <img src="<?php echo base_url(); ?>img/motiomera_header.png" />
@@ -43,5 +52,5 @@
     </div>
     <div class="clear"></div>
 
-    <?php include 'v_adminbar.php'; ?>
+    
     

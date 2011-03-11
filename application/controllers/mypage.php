@@ -8,18 +8,31 @@ class Mypage extends CI_Controller{
 
 
   /**
-   * This function checks wether a user is logged in or not, redirects to correct page.
-   * If user has higher level than user, then display the admin-bar
+   * Constructor
+   * Don't even allow a user pass the constructor if she is not logged in or have at least COMP_ADM_LEVEL
    */
-  function index(){    
+	function __construct(){
+		parent::__construct();
+    //$this->load->view('/include/v_header');
+	}
+
+
+
+  /**
+   * This function checks wether a user is logged in or not, redirects to correct page.
+   */
+  function index(){
     if($this->m_user->isLoggedIn()){
       $this->_showMyPage($this->session->userdata('user_id'));
     } else {
+      $this->load->view('/include/v_header');
       $this->load->view('v_startpage');
     }
   }
 
-  
+
+
+
 
   /**
    * Show my page
@@ -27,6 +40,8 @@ class Mypage extends CI_Controller{
    */
   function _showMyPage($id){
     $data = $this->m_user->getById($id);
+    $data['title'] = 'krillodillo';
+    $this->load->view('/include/v_header');
     $this->load->view('v_mypage', $data);
     $this->reportStepDialog();
   }

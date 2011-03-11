@@ -18,10 +18,12 @@ class Krillo extends CI_Controller {
     //print_r($data);
     //$this->load->view('include/v_severitydropdown', $data);
 
-    echo "apa";
-    $data['step_data'] = $this->m_step->getByUserId(3, 'TEMP', '2011-03-07', '2011-03-07', 20);
-    print_r($data);
+    //echo "apa";
+    //$data['step_data'] = $this->m_step->getByUserId(3, 'TEMP', '2011-03-07', '2011-03-07', 20);
+    //print_r($data);
 
+    $this->load->view('include/v_header');
+    $this->load->view('v_krillo');
 
 
 	}

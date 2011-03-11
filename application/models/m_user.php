@@ -146,8 +146,8 @@ class M_user extends CI_Model {
   }
 
 
-  /*
-    Return true if user is logged in
+  /**
+   * Return true if user is logged in
    * @author Jonas Bjork <jonas.bjork@aller.se>
    */
   function isLoggedIn() {
@@ -159,26 +159,45 @@ class M_user extends CI_Model {
   }
 
   
+  /**
+   * Checking where user login creditials are correct. If correct log in and store some data.
+   *
+   * @param <type> $username
+   * @param <type> $password
+   * @return <type> boolean
+   */
   function authenticate($username, $password) {
     $sql = "SELECT * FROM users WHERE (email = ? OR nick = ?) AND password = ? LIMIT 1";
     $query = $this->db->query($sql, array($username, $username, $password));
-      if (!$query->num_rows) {
+    if (!$query->num_rows) {
+      //todo: return no match
+      return FALSE;
+    } else {
+      $data = $query->result();
+      if ($data[0]->paid_until < date('Y-m-d')) {
+        //todo: return date is expired
         return FALSE;
       } else {
-        $data = $query->result();
         $session_data = array(
-          'user_id' => $data[0]->id,
-          'user_mail' => $data[0]->email,
-          'user_full_name' => $data[0]->f_name."_".$data[0]->l_name,
-          'user_nick' => $data[0]->nick,
-          'user_logged_in' => TRUE,
-          'role_level'=> $data[0]->level,
-          'real_user_id' => $data[0]->id,
-          'simulation' => FALSE,
+            'user_id' => $data[0]->id,
+            'user_mail' => $data[0]->email,
+            'user_full_name' => $data[0]->f_name . "_" . $data[0]->l_name,
+            'user_nick' => $data[0]->nick,
+            'user_logged_in' => TRUE,
+            'role_level' => $data[0]->level,
+            'real_user_id' => $data[0]->id,
+            'simulation' => FALSE,
         );
         $this->session->set_userdata($session_data);
-          // TODO: Update last login
-          return TRUE;
+        //update user in db
+        $id = $data[0]->id;
+        $update_data['last_login'] = date('Y-m-d H:i:s');
+        $update_data['ip'] = $this->session->userdata('ip_address');
+        $update_data['browser'] = $this->session->userdata('user_agent');
+        $this->db->where('id', $id);
+        $this->db->update('users', $update_data);
+        return TRUE;
+      }
     }
   }
 
