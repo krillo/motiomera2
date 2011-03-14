@@ -16,7 +16,7 @@
     <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url() ?>dataTables/css/demo_table_jui.css" />
 <?php endif; ?>
 
-    <title><?php echo $title;?></title>
+    <title><?php echo $title; ?></title>
   </head>
   <body>
 
@@ -50,6 +50,13 @@
       <?php endif; ?>
 
     </div>
+
+    <div id="mmMenuTop">
+					<a href="/user/newuser">BLI MEDLEM</a> |
+					<a href="/user/forgotpass">GLÖMT LÖSENORDET?</a>
+		</div>
+
+
     <div class="clear"></div>
 
     

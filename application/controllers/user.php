@@ -16,6 +16,7 @@ class User extends CI_Controller{
    */
   function all($limit = 20){
     $data['records'] = $this->m_user->getAll($limit);
+    $this->load->view('/include/v_header', $data);
     $this->load->view('admin/v_view', $data);
   }
 
@@ -24,12 +25,20 @@ class User extends CI_Controller{
    */
   function get($id){
     $data['records'] = $this->m_user->getById($id);
-    $this->load->view('admin/v_view', $data);
+    $this->load->view('/include/v_header', $data);
+    $this->load->view('admin/v_view');
   }
 
 
+  /**
+   * create a new user
+   */
+  function newuser() {
+    $this->load->view('/include/v_header');
+    $this->load->view('v_new_user');
+  }
 
-	function count(){
+  function count(){
     $data['records'] = $this->m_user->count();
     $this->load->view('admin/v_default', $data);
 	}
@@ -39,6 +48,7 @@ class User extends CI_Controller{
    * display the new form
    */
   function add(){
+    $this->load->view('/include/v_header');
     $this->load->view('admin/v_add');
   }
 

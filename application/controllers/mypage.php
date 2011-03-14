@@ -40,9 +40,9 @@ class Mypage extends CI_Controller{
    */
   function _showMyPage($id){
     $data = $this->m_user->getById($id);
-    $data['title'] = 'krillodillo';
-    $this->load->view('/include/v_header');
-    $this->load->view('v_mypage', $data);
+    $data['title'] = 'mypage';
+    $this->load->view('/include/v_header', $data);
+    $this->load->view('v_mypage');
     $this->reportStepDialog();
   }
 
