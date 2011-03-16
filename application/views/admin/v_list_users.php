@@ -64,7 +64,7 @@
       } else{
         $.ajax({
           type: "POST",
-          url: "<?php echo base_url() ?>user/findusers",
+          url: "<?php echo base_url() ?>admin/findusers/" + search_word,
           data: dataString,
           cache: false,
           beforeSend: function(html) {

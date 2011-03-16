@@ -3,6 +3,11 @@
 if (!defined('BASEPATH'))
   exit('No direct script access allowed');
 
+/**
+ * The Step controller class handles steps
+ *
+ * @author Kristian Erendi, Aller media 2011
+ */
 class Step extends CI_Controller {
 
   function __construct() {
@@ -61,7 +66,7 @@ class Step extends CI_Controller {
   }
 
   /**
-   * Creates a new row
+   * Creates a new row of step data
    * Parameter must be passed by a post
    */
   function create() {
@@ -74,15 +79,7 @@ class Step extends CI_Controller {
     if($activity_id == 'undefined'){
       $activity_id = $this->m_activities->getDefaultActivityId();
     }
-    $data = array(
-        'user_id' => $user_id,
-        'activity_id' => $activity_id,
-        'count' => $count,
-        'date' => $date,
-        'status' => $status
-    );
-    //print_r($data); die();
-    $this->m_step->create($data);
+    $step_id = $this->m_step->create($user_id, $activity_id, $count, $date, $status);
     if ($view == 'showStepsPreview') {
       $this->_showStepsPreview($date);
     } else {

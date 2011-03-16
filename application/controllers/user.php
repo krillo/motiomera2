@@ -88,15 +88,6 @@ class User extends CI_Controller{
   }
 
 
-  /**
-   * wildcard search
-   */
-  function findusers(){
-    $search_word = $this->input->post('search');
-    $data['records'] = $this->m_user->getByWildcard($search_word);
-    $data['search_word'] = $search_word;
-    //$this->load->view('/snippets/v_test_snippet', $data);
-    $this->load->view('/snippets/v_users_search_result', $data);
-  }
+
 
 }

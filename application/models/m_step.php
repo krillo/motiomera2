@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Description of activities
+ * The M_step model class handles steps
  *
- * @author kristian Erendi
+ * @author Kristian Erendi, Aller media 2011
  */
 class M_step extends CI_Model {
 
@@ -82,23 +82,44 @@ class M_step extends CI_Model {
 	}
 
 	/**
-   * Creates a new post.
-   * The function calculates counted steps
+   * Creates a new row of steps.
+   * The parameters dont contain actual steps, but activity_id and count.
+   * Then the functions calculates actual steps
+   *
+   * A check is made that the id is the same as in the session
    *
    * @param array $data the step data
-   * @return <type>
+   * @return 
    */
-	function create($data){
-    $calcSteps = $this->m_activities->calcSteps($data['activity_id'], $data['count']);
-    $data['steps'] = $calcSteps;
-    $data['created_at'] = date('Y-m-d H:i:s');
-    $data['updated_at'] = date('Y-m-d H:i:s');
-    //print_r($data); die();
-		$this->db->insert($this->table, $data);
-		return $this->db->insert_id();
-	}
+	function create($user_id, $activity_id, $count, $date, $status) {
+    if ($this->session->userdata('user_id') == $user_id) {
+      $data = array(
+          'user_id' => $user_id,
+          'activity_id' => $activity_id,
+          'count' => $count,
+          'date' => $date,
+          'status' => $status
+      );
+      $calcSteps = $this->m_activities->calcSteps($data['activity_id'], $data['count']);
+      $data['steps'] = $calcSteps;
+      $data['created_at'] = date('Y-m-d H:i:s');
+      $data['updated_at'] = date('Y-m-d H:i:s');
+      //print_r($data); die();
+      $this->db->insert($this->table, $data);
+      if ($this->db->affected_rows() == 1) {
+        //update
+        return $this->db->insert_id();
+      } else {
+        //todo: nice error handling, no rows inserted
+        return -1;
+      }
+    } else {
+      //todo: nice error handling, not same is in session as in the request
+      return -1;
+    }
+  }
 
-	// update person by id
+  // update person by id
 	function update($data, $id){
     $data['updated_at'] = date('Y-m-d H:i:s');
 		$this->db->where('id', $id);
