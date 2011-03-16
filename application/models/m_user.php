@@ -207,5 +207,38 @@ class M_user extends CI_Model {
   }
 
 
-}
 
+  /**
+   * This function does a wildcard search for users.
+   * It searches matches in f_name, l_name, nick, email and the id
+   * a match is returned with an array of user data otherwhise -1 is returned
+   *
+   * @param string $search
+   * @return mix array of user data or -1 for nothing found
+   */
+  function getByWildcard($search) {
+    $prep_search = '%'.$search.'%';   //prepare the text $search so it will be a wildcard param
+    if(is_numeric($search)){  //if $search is numeric also search the id field
+      $sql = "SELECT distinct(u.id), u.* FROM users u WHERE f_name LIKE ? OR l_name LIKE ? OR nick LIKE ? OR email LIKE ? OR id = ? ORDER BY id DESC LIMIT 20";
+      $query = $this->db->query($sql, array($prep_search, $prep_search, $prep_search, $prep_search, $search));
+    } else {
+      $sql = "SELECT distinct(u.id), u.* FROM users u WHERE f_name LIKE ? OR l_name LIKE ? OR nick LIKE ? OR email LIKE ? ORDER BY id DESC LIMIT 20";
+      $query = $this->db->query($sql, array($prep_search, $prep_search, $prep_search, $prep_search));
+    }
+    //echo $this->db->last_query();
+    if($query->num_rows() > 0 ){
+      foreach ($query->result() as $row){
+        $data[] = $row;
+      }
+      return $data;
+    }else{
+      return -1;
+    }
+  }
+
+
+
+
+
+
+}

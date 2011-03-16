@@ -50,6 +50,7 @@ class Admin extends CI_Controller{
     if($this->session->userdata('role_level') > self::SUPPORT_ADM_LEVEL){
       $this->load->view('admin/v_support');
       $this->load->view('admin/v_list_users');
+      //$this->load->view('admin/v_data_table_test');
       $this->load->view('admin/v_admin');
     } else {
       redirect('/start');

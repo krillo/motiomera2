@@ -1,0 +1,1 @@
+<img src="/img/icons/<?php echo $gift; ?>" alt="cappuccino" />
