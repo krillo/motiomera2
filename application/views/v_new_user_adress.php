@@ -123,7 +123,7 @@
       <label for="location">Ort</label>
       <input id="location" name="location" type="text"/>
     </p>
-   
+
     <p>
       <label for="email">E-postadress</label>
       <input id="email" name="email" type="text"/>
@@ -142,16 +142,11 @@
     <p>
       <label for="country">Land</label>
       <input id="country" name="country" type="text"/>
-    </p>
-
-    
-      
+    </p>   
 
     <p>
       <input class="submit" type="submit" value="Gå vidare" />
     </p>
-
-
 
   </fieldset>
 </form>
