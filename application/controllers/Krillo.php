@@ -28,7 +28,8 @@ class Krillo extends CI_Controller {
     //$data['records'] = $this->m_user->getByWildcard('em');
     //print_r($data);
 
-    
+    $data = $this->m_step->create_x(3, 1, 1, '2011-03-03');
+    print_r($data);
 
 	}
 

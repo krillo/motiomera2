@@ -22,8 +22,9 @@ class Step extends CI_Controller {
     $this->all();
   }
 
+
+
   /**
-    /**
    * Show all records - limit as 3rd segment, auto populated as first parameter
    */
   function all($limit = 20) {
@@ -79,7 +80,7 @@ class Step extends CI_Controller {
     if($activity_id == 'undefined'){
       $activity_id = $this->m_activities->getDefaultActivityId();
     }
-    $step_id = $this->m_step->create($user_id, $activity_id, $count, $date, $status);
+    $step_id = $this->m_step->create_x($user_id, $activity_id, $count, $date);
     if ($view == 'showStepsPreview') {
       $this->_showStepsPreview($date);
     } else {

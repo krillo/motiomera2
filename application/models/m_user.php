@@ -189,6 +189,7 @@ class M_user extends CI_Model {
             'total_steps' => $data[0]->total_steps,
             'total_logins' => $data[0]->total_logins,
             'total_regs' => $data[0]->total_regs,
+            'total_calories' => $this->m_step->getCaloriesFromSteg($data[0]->total_steps),
             'simulation' => FALSE,
         );
         $this->session->set_userdata($session_data);
