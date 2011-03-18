@@ -9,13 +9,11 @@ class Mypage extends CI_Controller{
 
   /**
    * Constructor
-   * Don't even allow a user pass the constructor if she is not logged in or have at least COMP_ADM_LEVEL
+   * Don't even allow a user pass the constructor if she is not logged in
    */
 	function __construct(){
 		parent::__construct();
-    //$this->load->view('/include/v_header');
 	}
-
 
 
   /**
@@ -29,7 +27,6 @@ class Mypage extends CI_Controller{
       $this->load->view('v_startpage');
     }
   }
-
 
 
 

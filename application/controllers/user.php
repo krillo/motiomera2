@@ -30,6 +30,27 @@ class User extends CI_Controller{
   }
 
 
+ /**
+  * This function returns a snippet of stepdata
+  * The user_id should be passed as 3 segment
+  * If the user_id is the same as in the session, this function also updates the data in the session
+  * Call it with ajax
+  */
+  function refreshstepdata(){
+    $user_id = $this->uri->segment(3);
+    $data['records'] = $this->m_user->getById($user_id);
+    $data['total_calories'] = $this->m_step->getCaloriesFromSteg($data['records'][0]->total_steps);
+    if($this->session->userdata('user_id') == $user_id){
+        $session_data = array(
+          'total_steps' => $data['records'][0]->total_steps,
+          'total_regs' => $data['records'][0]->total_regs,
+          'total_calories' => $this->m_step->getCaloriesFromSteg($data['records'][0]->total_steps)
+        );
+        $this->session->set_userdata($session_data);
+    }    
+    $this->load->view('/snippets/v_stepdata', $data);
+  }
+
   /**
    * create a new user
    */
@@ -107,6 +128,8 @@ class User extends CI_Controller{
     $data['records'] = $this->m_user->delete($id);
     $this->all(20);
   }
+
+
 
 
 }

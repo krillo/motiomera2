@@ -100,7 +100,8 @@ class M_activities extends CI_Model {
    * @return <type>
    */
   function calcSteps($activity_id, $count){
-    $query = $this->db->query("select (multiplicity * $count) calc_steps from activities where id = $activity_id");
+    $sql = "SELECT (multiplicity * ?) calc_steps from activities where id = ?";
+    $query = $this->db->query($sql, array($count, $activity_id));
     if($query->num_rows() == 1 ){
       return $query->row()->calc_steps;
     } else {
