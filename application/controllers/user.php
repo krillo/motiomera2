@@ -34,8 +34,29 @@ class User extends CI_Controller{
    * create a new user
    */
   function newuser() {
-    $this->load->view('/include/v_header');
+    $data['title'] = 'register';
+    $this->load->view('/include/v_header', $data);
     $this->load->view('v_new_user');
+  }
+
+  function useradress() {
+    $data['title'] = 'User adress';
+    $this->load->view('/include/v_header', $data);
+    $this->load->view('v_new_user_adress');
+  }
+  /**
+   * create new company
+   */
+  function newcompany() {
+    $data['title'] = 'register company';
+    $this->load->view('/include/v_header', $data);
+    $this->load->view('v_new_company');
+  }
+
+  function companyadress() {
+    $data['title'] = ' Company adress ';
+    $this->load->view('/include/v_header', $data);
+    $this->load->view('v_new_companyadress');
   }
 
   function count(){

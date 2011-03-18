@@ -36,12 +36,12 @@
               <table width="290" cellspacing="1" cellpadding="0" border="0">
                 <tr>
                   <td class="log-in-input">E-postadress: </td>
-                  <td><input name="username" id="username" value="" class="text-field" size="17" type="text" maxlength="96" tabindex="1" /></td>
+                  <td><input name="user" id="user" value="" class="text-field" size="17" type="text" maxlength="96" tabindex="1" /></td>
                   <td class="log-in-input"><input type="checkbox" id="autologin" name="autologin" value="on" tabindex="3" /> <label for="autologin">Kom ihåg mig</label></td>
                 </tr>
                 <tr>
                   <td class="log-in-input">Lösenord: </td>
-                  <td><input name="password" id="password" value="" size="17" class="text-field" type="password" maxlength="96" tabindex="2"/></td>
+                  <td><input name="pwd" id="pwd" value="" size="17" class="text-field" type="password" maxlength="96" tabindex="2"/></td>
                   <td><input type="hidden" name="login" value="Login"/><input type="image" src="/img/icons/LoggaInIcon.gif" alt="Logga in" tabindex="4" /></td>
                 </tr>
               </table>
@@ -52,6 +52,7 @@
     </div>
 
     <div id="mmMenuTop">
+          <a href="/user/newcompany">FÖR FÖRETAG</a> |
 					<a href="/user/newuser">BLI MEDLEM</a> |
 					<a href="/user/forgotpass">GLÖMT LÖSENORDET?</a>
 		</div>
