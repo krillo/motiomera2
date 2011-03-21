@@ -13,8 +13,7 @@ class Start extends CI_Controller{
     if($this->m_user->isLoggedIn()){
       redirect('/mypage');
     } else {
-      $this->load->view('/include/v_header');
-      $this->load->view('v_startpage');
+      $this->_showHomePage();
     }
   }
 
@@ -24,20 +23,23 @@ class Start extends CI_Controller{
    * login the user
    */
   function login(){
-    if($this->m_user->authenticate($this->input->post('username'), $this->input->post('password'))){
+    if($this->m_user->authenticate($this->input->post('user'), $this->input->post('pwd'))){
       redirect('/mypage');
     } else {
       //todo: error wrong login credentials
-      $this->load->view('/include/v_header');
-      $this->load->view('v_startpage', $data);
-      die();
+      $this->_showHomePage();
     }
   }
 
 
-  function logout(){
-    $this->m_user->logout();
-    redirect('/');
+  /**
+   * Show homePage
+   */
+  function _showHomePage() {
+    $data['title'] = 'MotioMera';
+    $this->load->view('/include/v_header', $data);
+    $this->load->view('/include/v_debug');
+    $this->load->view('v_startpage');
   }
 
 

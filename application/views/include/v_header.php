@@ -27,9 +27,8 @@
       <?php if ($this->m_user->isLoggedIn()): ?>
         <div id="greeting">
           Welcome <span id="greeting-nick"><?php echo $this->session->userdata('user_nick'); ?></span><br/>
-          <a href="/start/logout">Log out</a>
+          <a href="/mypage/logout">Log out</a>
         </div>
-
       <?php else: ?>
           <div id="log-in" class="mmFontWhite">
             <form action="/start/login" method="post">

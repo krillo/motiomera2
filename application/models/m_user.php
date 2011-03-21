@@ -167,8 +167,14 @@ class M_user extends CI_Model {
    * @return <type> boolean
    */
   function authenticate($username, $password) {
+    if($username == '' OR $password == ''){
+      //todo: return no match
+      return FALSE;
+    }
     $sql = "SELECT * FROM users WHERE (email = ? OR nick = ?) AND password = ? LIMIT 1";
     $query = $this->db->query($sql, array($username, $username, $password));
+
+
     if (!$query->num_rows) {
       //todo: return no match
       return FALSE;
@@ -181,7 +187,7 @@ class M_user extends CI_Model {
         $session_data = array(
             'user_id' => $data[0]->id,
             'user_mail' => $data[0]->email,
-            'user_full_name' => $data[0]->f_name . "_" . $data[0]->l_name,
+            'user_full_name' => $data[0]->f_name . " " . $data[0]->l_name,
             'user_nick' => $data[0]->nick,
             'user_logged_in' => TRUE,
             'role_level' => $data[0]->level,
@@ -207,8 +213,12 @@ class M_user extends CI_Model {
   }
 
 
+  /**
+   * Loggs out the user by destroying the session
+   */
   function logout(){
     $this->session->sess_destroy();
+        
   }
 
 

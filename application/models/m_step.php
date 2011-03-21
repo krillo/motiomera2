@@ -147,6 +147,12 @@ class M_step extends CI_Model {
       $sp =  "call insert_steps(?,?,?,?)";
       $result = $this->db->query($sp, array($user_id, $activity_id, $count, $date));
       $data = $result->result_object();
+
+      if ($this->db->affected_rows() != 1) {
+        show_error('We encountered an unexpected error adding your car, please use the back button and try again.');
+        exit;
+      }
+
       return $data[0]->step_id;
     } else {
       //todo: nice error handling, not same is in session as in the request
