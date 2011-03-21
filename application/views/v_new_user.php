@@ -4,11 +4,11 @@
     <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url() ?>css/cmxformTemplate.css" />
 
    <script type="text/javascript">
-     $.validator.setDefaults({
-	submitHandler: function() { alert("submitted!"); }
-});
+     //$.validator.setDefaults({
+	//submitHandler: function() { alert("submitted!"); }
+//});
 
-$().ready(function() {
+$(document).ready(function() {
     //$('#register-submit').click({
     $.validator.addMethod("username",function(value,element){
       return this.optional(element)|| /^[A-Za-z0-9]{4,20}$/i.test(value);
@@ -91,7 +91,7 @@ $().ready(function() {
     
    <h1>Bli medlem</h1>
 
-<form class="cmxform" id="signupForm" method="get" action="">
+<form class="cmxform" id="signupForm" method="post" action="/user/useradress">
 	<fieldset>
     <legend>Fyll i formuläret</legend>
     <div style="float: right; font-size: 20px;"><a href="/user/newcompany">Anmäl ditt företag</a></div>

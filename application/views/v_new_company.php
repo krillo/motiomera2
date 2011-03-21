@@ -4,11 +4,11 @@
 <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url() ?>css/cmxformTemplate.css" />
 
 <script type="text/javascript">
-  $.validator.setDefaults({
-    submitHandler: function() { alert("submitted!"); }
-  });
+  //$.validator.setDefaults({
+    //submitHandler: function() { alert("submitted!"); }
+ // });
 
-  $().ready(function() {
+  $(document).ready(function() {
     //$('#register-submit').click({
     $.validator.addMethod("username",function(value,element){
       return this.optional(element)|| /^[A-Za-z0-9]{4,20}$/i.test(value);
@@ -28,7 +28,7 @@
           minlength: 0,
           maxlength: 30
         },
-        firstname: {
+        users: {
           required: true,
           maxlength: 30
         },
@@ -91,7 +91,7 @@
 
 <h1>Beställning för företag</h1>
 
-<form class="cmxform" id="signupForm" method="get" action="">
+<form class="cmxform" id="signupForm" method="post" action="/user/companyadress">
   <fieldset>
     <legend>Fyll i formuläret</legend>
 
