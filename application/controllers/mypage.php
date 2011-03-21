@@ -61,7 +61,7 @@ class Mypage extends CI_Controller{
 
   /**
    * Logs out the user.
-   * There is an issue with destroyibg the session. It is fixed by doing an redirect
+   * There is an issue with destroying the session. It is fixed by doing a redirect
    */
   function logout(){
     $this->m_user->logout();

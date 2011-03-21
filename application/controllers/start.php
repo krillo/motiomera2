@@ -32,14 +32,7 @@ class Start extends CI_Controller{
   }
 
 
-  function logout(){
-    $this->m_user->logout();
-    //$this->session->sess_destroy();
-    $this->_showHomePage();
-  }
-
-
-    /**
+  /**
    * Show homePage
    */
   function _showHomePage() {
