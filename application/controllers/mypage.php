@@ -23,8 +23,7 @@ class Mypage extends CI_Controller{
     if($this->m_user->isLoggedIn()){
       $this->_showMyPage($this->session->userdata('user_id'));
     } else {
-      $this->load->view('/include/v_header');
-      $this->load->view('v_startpage');
+      redirect('/start');
     }
   }
 
@@ -39,16 +38,19 @@ class Mypage extends CI_Controller{
     $data = $this->m_user->getById($id);
     $data['title'] = 'mypage';
     $this->load->view('/include/v_header', $data);
+    $this->load->view('/include/v_debug');
     $this->load->view('v_mypage');
-    $this->reportStepDialog();
+    $this->_reportStepDialog();
   }
 
 
+
   /**
-   * Display the "report steps data"- dialog view
+   * This function returns a snippet!
+   * The "report steps data"- dialog view
    * with all the data prepared
    */
-  function reportStepDialog(){
+  function _reportStepDialog(){
     $data = $this->m_activities->getUnique();
     $prep['activites_data'] = $this->_prepareStepList($data);
     $this->load->view('dialog/v_steps_dialog', $prep);
@@ -56,26 +58,16 @@ class Mypage extends CI_Controller{
   
 
 
-  /**
-   * login the user
-   */
-  function login(){
-    if($this->m_user->authenticate($this->input->post('username'), $this->input->post('password'))){
-      $this->_showMyPage($this->session->userdata('user_id'));
-    } else {
-      //todo error wrong login credentials
-      $this->load->view('v_startpage', $data);
-      die();
-    }
-  }
 
   /**
-   * logs out the user
+   * Logs out the user.
+   * There is an issue with destroyibg the session. It is fixed by doing an redirect
    */
   function logout(){
     $this->m_user->logout();
-    $this->load->view('v_startpage');
+    redirect('/start');
   }
+
 
 
   function steps(){
@@ -85,6 +77,8 @@ class Mypage extends CI_Controller{
     $this->load->view('v_steps', $prep);
   }
 
+
+  
   /**
    * Returns an array to match the dropdown helper
    * <option label="Basket (min)" value="18">Basket (min)</option>
