@@ -8,7 +8,7 @@
         <th>Namn</th>
         <th>Skapad</th>
         <th>Profil</th>
-        <th>Aktiverad</th>
+        <th>Aktivera</th>
         <th>Redigera</th>
       </tr>
     </thead>
@@ -28,7 +28,7 @@
         <td> <?php echo $formatEmail; ?></td>
         <td> <?php echo $formatName; ?> </td>
         <td> <?php echo $row->created_at; ?></td>
-        <td> <a style="text-decoration: underline; color: blue;" href="/pages/profil.php?mid=23332">Simulera</a> </td>
+        <td> <a style="text-decoration: underline; color: blue;" href="/admin/simulate/<?php echo $row->id; ?>">Simulera</a> </td>
         <td class="mmList1 mmRed"> </td>
         <td> <a style="text-decoration: underline; color: blue;" href="/admin/pages/medlem.php?id=23332">Redigera</a> </td>
       </tr>

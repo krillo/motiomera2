@@ -31,7 +31,7 @@ class M_user extends CI_Model {
 
 
   /**
-   * Get row by id
+   * Get user by user_id
    * @param <type> $id
    * @return <type>
    */
@@ -167,36 +167,36 @@ class M_user extends CI_Model {
    * @return <type> boolean
    */
   function authenticate($username, $password) {
-    if($username == '' OR $password == ''){
-      //todo: return no match
-      return FALSE;
+    if ($username == '' OR $password == '') {
+      return -1; //wrong user or pass
     }
     $sql = "SELECT * FROM users WHERE (email = ? OR nick = ?) AND password = ? LIMIT 1";
     $query = $this->db->query($sql, array($username, $username, $password));
-
-
     if (!$query->num_rows) {
-      //todo: return no match
-      return FALSE;
-    } else {
+      return -1;  //wrong user or pass
+    } else {      //ok user and pass
       $data = $query->result();
+      $session_data = array(
+          'user_id' => $data[0]->id,
+          'user_mail' => $data[0]->email,
+          'user_full_name' => $data[0]->f_name . " " . $data[0]->l_name,
+          'user_nick' => $data[0]->nick,
+          'user_logged_in' => FALSE,
+          'role_level' => $data[0]->level,
+          'real_user_id' => $data[0]->id,
+          'total_steps' => $data[0]->total_steps,
+          'total_logins' => $data[0]->total_logins,
+          'total_regs' => $data[0]->total_regs,
+          'total_calories' => $this->m_step->getCaloriesFromSteg($data[0]->total_steps),
+          'simulation' => FALSE,
+      );
+      $this->session->set_userdata($session_data);
       if ($data[0]->paid_until < date('Y-m-d')) {
-        //todo: return date is expired
-        return FALSE;
+        return -2;  //date is expired
       } else {
+        //all ok - login the user
         $session_data = array(
-            'user_id' => $data[0]->id,
-            'user_mail' => $data[0]->email,
-            'user_full_name' => $data[0]->f_name . " " . $data[0]->l_name,
-            'user_nick' => $data[0]->nick,
             'user_logged_in' => TRUE,
-            'role_level' => $data[0]->level,
-            'real_user_id' => $data[0]->id,
-            'total_steps' => $data[0]->total_steps,
-            'total_logins' => $data[0]->total_logins,
-            'total_regs' => $data[0]->total_regs,
-            'total_calories' => $this->m_step->getCaloriesFromSteg($data[0]->total_steps),
-            'simulation' => FALSE,
         );
         $this->session->set_userdata($session_data);
         //update user in db
@@ -207,11 +207,10 @@ class M_user extends CI_Model {
         $update_data['total_logins'] = $data[0]->total_logins + 1;
         $this->db->where('id', $id);
         $this->db->update('users', $update_data);
-        return TRUE;
+        return 1;
       }
     }
   }
-
 
   /**
    * Loggs out the user by destroying the session

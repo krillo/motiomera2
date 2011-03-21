@@ -77,6 +77,35 @@ class Admin extends CI_Controller{
   }
 
   /**
+   * This function puts all the administrators session parameters as if she were the user.
+   * Then redirect to mypage.
+   * Handle all the data here so that this the only way to simulate.
+   * Always check that the user has enough priviledges
+   */
+  function simulate() {
+    if ($this->session->userdata('role_level') > self::SUPPORT_ADM_LEVEL) {
+      $simulate_id = $this->uri->segment(3);
+      $data = $this->m_user->getById($simulate_id);
+      $session_data = array(
+          'user_id' => $data[0]->id,
+          'user_mail' => $data[0]->email,
+          'user_full_name' => $data[0]->f_name . " " . $data[0]->l_name,
+          'user_nick' => $data[0]->nick,
+          'user_logged_in' => TRUE,
+          'total_steps' => $data[0]->total_steps,
+          'total_logins' => $data[0]->total_logins,
+          'total_regs' => $data[0]->total_regs,
+          'total_calories' => $this->m_step->getCaloriesFromSteg($data[0]->total_steps),
+          'simulation' => TRUE,
+      );
+      $this->session->set_userdata($session_data);
+      redirect('/mypage');
+    }
+  }
+
+
+
+  /**
    * Show settings admin page (White Label Admin page)
    * Always check that the user has enough priviledges
    */
