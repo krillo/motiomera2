@@ -22,10 +22,14 @@
 
     $("#signupForm").validate({
       rules: {
-        co_name: {
+        firstname: {
           required: true,
           //username: true,
           minlength: 0,
+          maxlength: 30
+        },
+        lastname: {
+          required: true,
           maxlength: 30
         },
         adress: {

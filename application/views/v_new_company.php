@@ -5,11 +5,19 @@
 
 <script type="text/javascript">
   //$.validator.setDefaults({
-    //submitHandler: function() { alert("submitted!"); }
- // });
+  //submitHandler: function() { alert("submitted!"); }
+  // });
 
-  $(document).ready(function() {
-    //$('#register-submit').click({
+  $(document).ready(function(){
+    $('#register-submit').click(function(){
+      var count1 = $('#count1').attr('value');
+      var count2 = $('#count2').attr('value');
+      alert(count1 + ' ' + count2);
+     
+
+    });
+
+
     $.validator.addMethod("username",function(value,element){
       return this.optional(element)|| /^[A-Za-z0-9]{4,20}$/i.test(value);
     },"You must type min 4, max 20 letters, and no å,ä,ö.");
@@ -20,6 +28,14 @@
       return this.optional(element) || /^[A-Za-z0-9!@#$%^&*()_]{6,255}$/i.test(value);
     },"You must type min 6 max 255 letters, and no å,ä,ö.");
 
+    /*$.validator.addMethod("validatecount1", function(value, element)    {
+
+	        var noOfSelectedcount1 = $("#count1 :selected").length;
+	        if(noOfSelectedcount1 < 1) return false;
+
+	        return true;
+	    });*/
+
     $("#signupForm").validate({
       rules: {
         cname: {
@@ -28,10 +44,22 @@
           minlength: 0,
           maxlength: 30
         },
-        users: {
+        /*count1: {
           required: true,
+          minlength: 1,
           maxlength: 30
         },
+        count2: {
+          required: true,
+          minlength: 1,
+          maxlength: 30
+        },*/
+        
+        //users1: {
+          //required: true,
+          //minlength: 1,
+          //maxlength: 30
+        
         lastname: {
           required: true,
           maxlength: 30
@@ -84,7 +112,7 @@
         agree: "Please accept our policy"
       }
 
-    })
+  })
   });
 
 </script>
@@ -101,13 +129,13 @@
     </p>
 
     <p>
-      <label for="users">Antal deltagare</label>
-      <input id="users" name="users" type="text" size="4"/><span> 5 veckors tävling med stegräknare <span style="color: red;">289kr</span> ex. moms.</span>
+      <label for="count1">Antal deltagare</label>
+      <input id="count1" name="count1" type="text" size="4"/><span> 5 veckors tävling med stegräknare <span style="color: red;">289kr</span> ex. moms.</span>
     </p>
 
     <p>
-      <label></label>
-      <input size="4"/><span> 5 veckors tävling med stegräknare <span style="color: red;">159kr</span> ex. moms.</span>
+      <label for="count2"</label>
+      <input type="text" size="4" id="count2" name="count2"/><span> 5 veckors tävling med stegräknare <span style="color: red;">159kr</span> ex. moms.</span>
     </p>
 
     <p>
@@ -174,13 +202,22 @@
 
     <p>
       <label for="start">Start datum</label>
-      <input name="start" id="start" type="radio"/><span> Den stora vårtävlingen 9 maj</span>
+      <input name="start" id="start" type="radio" checked="checked"/><span> Den stora vårtävlingen 9 maj</span>
     </p>
     <p>
       <label></label>
       <input type="radio"  name="start"/>
       <select name="start_">
-        <option value="">Måndagen den 4 april</option>
+        <option value="2011-04-11">Måndagen den 11 April</option>
+        <option value="2011-04-18">Måndagen den 18 April</option>
+        <option value="2011-04-25">Måndagen den 25 April</option>
+        <option value="2011-05-02">Måndagen den 2 Maj</option>
+        <option value="2011-05-09">Måndagen den 9 Maj</option>
+        <option value="2011-05-16">Måndagen den 16 Maj</option>
+        <option value="2011-05-23">Måndagen den 23 Maj</option>
+        <option value="2011-05-30">Måndagen den 30 Maj</option>
+        <option value="2011-06-06">Måndagen den 6 Juni</option>
+        <option value="2011-06-13">Måndagen den 13 Juni</option>
       </select>
     </p>
 
@@ -232,7 +269,7 @@
 
     <div style="border-style:solid; border-width:2px;  float:right;">
       <h2 style="text-align:center; margin:1px;">Tilläggsbeställning</h2>
-      <p style="margin:auto;">Är du redan kund och vill göra en<br /> tilläggsbeställning? Logga in på din<br />administrationssida där du enkelt kan<br />lägga till fler deltagare. <a href="">Klicka här.</a></p>
+      <p style="margin:auto;">Är du redan kund och vill göra en<br /> tilläggsbeställning? Logga in på din<br />administrationssida där du enkelt kan<br />lägga till fler deltagare. <a href="http://motiomera.se/pages/skapaforetag.php">Klicka här.</a></p>
     </div>
 
     <p>
@@ -241,7 +278,7 @@
     </p>
 
     <p>
-      <input class="submit" type="submit" value="Gå vidare"/>
+      <input id="register-submit" class="submit" type="submit" value="Gå vidare"/>
     </p>
 
   </fieldset>
