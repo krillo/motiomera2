@@ -3,10 +3,9 @@
 </div>
 <div id="debug-msg"-->
 
-<li><div id="debug-link">
+<div id="debug-link">
   <a href="#" title="Debug"  onclick="m_debug(); return false;" >debug</a> &nbsp;&nbsp;
 </div>
-</li>
 <div id="debug-msg">
   <a href="#" title="Close debug" onclick="m_close_debug(); return false;" >close debug</a>
   <br/>

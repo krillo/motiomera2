@@ -22,6 +22,9 @@
 
 <?php include 'v_adminbar.php'; ?>
 
+
+<?php $simstyle = $this->session->userdata('simulation') == TRUE ? 'border:2px solid red;' : '' ?>
+    <div id="container" style="<?php echo $simstyle?>">
     <div id="header">
       <img src="<?php echo base_url(); ?>img/motiomera_header.png" />
       <?php if ($this->m_user->isLoggedIn()): ?>

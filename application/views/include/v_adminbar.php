@@ -10,6 +10,7 @@
       echo $role_level > 50? '<li><a href="/admin/support">Support</a></li>': '';
       echo $role_level > 70? '<li><a href="/admin/settings">Avancerade inställningar</a></li>': '';
       echo $role_level > 90? '<li><a href="/admin/superadmin">Superadmin</a></li><li><a href="#" title="Debug"  onclick="m_debug(); return false;" >Debug</a></li>   ': '';
+      echo $this->session->userdata('simulation') == TRUE ? '<li><a href="/admin/stopsimulate">Stop simulation</a></li>': '';
     ?>
   </ul>
 </div>

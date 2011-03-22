@@ -35,9 +35,10 @@ class Start extends CI_Controller{
    */
   function _showHomePage() {
     $data['title'] = 'MotioMera';
-    $this->load->view('/include/v_header', $data);
-    $this->load->view('/include/v_debug');
+    $this->load->view('include/v_header', $data);
+    $this->load->view('include/v_debug');
     $this->load->view('v_startpage');
+    $this->load->view('include/v_footer');
   }
 
 
@@ -47,9 +48,10 @@ class Start extends CI_Controller{
   function _showWrongLogin($errorCode) {
     $data['title'] = 'MotioMera';
     $data['errorCode'] = $errorCode;
-    $this->load->view('/include/v_header', $data);
-    $this->load->view('/include/v_debug');
+    $this->load->view('include/v_header', $data);
+    $this->load->view('include/v_debug');
     $this->load->view('v_errorpage');
+    $this->load->view('include/v_footer');
   }
 
 
