@@ -77,6 +77,65 @@ class Admin extends CI_Controller{
   }
 
   /**
+   * This function puts all the relevant session parameters as if she were the user.
+   * Then redirect to mypage.
+   * Handle all the data here so that this the only way to simulate.
+   * Always check that the user has enough priviledges
+   */
+  function simulate() {
+    if ($this->session->userdata('role_level') > self::SUPPORT_ADM_LEVEL) {
+      $real_nick = $this->session->userdata('user_nick');
+      $real_user_id = $this->session->userdata('user_id');
+      $simulate_id = $this->uri->segment(3);
+      $data = $this->m_user->getById($simulate_id);
+      $session_data = array(
+          'user_id' => $data[0]->id,
+          'user_mail' => $data[0]->email,
+          'user_full_name' => $data[0]->f_name . " " . $data[0]->l_name,
+          'user_nick' => $data[0]->nick,
+          'user_logged_in' => TRUE,
+          'total_steps' => $data[0]->total_steps,
+          'total_logins' => $data[0]->total_logins,
+          'total_regs' => $data[0]->total_regs,
+          'total_calories' => $this->m_step->getCaloriesFromSteg($data[0]->total_steps),
+          'simulation' => TRUE,
+      );
+      $this->session->set_userdata($session_data);
+      $simulate_nick = $data[0]->nick;
+      log_message('info', "$real_nick ($real_user_id) is simulating $simulate_nick ($simulate_id) ");
+      redirect('/mypage');
+    }
+  }
+
+  
+  /**
+   * This function restores all the administrators session parameters.
+   * Then redirect to mypage.
+   * Handle all the data here so that this the only way to simulate.
+   * Always check that the user has enough priviledges
+   */
+  function stopsimulate(){
+    if ($this->session->userdata('role_level') > self::SUPPORT_ADM_LEVEL) {
+      $real_user_id = $this->session->userdata('real_user_id');
+      $data = $this->m_user->getById($real_user_id);
+      $session_data = array(
+          'user_id' => $data[0]->id,
+          'user_mail' => $data[0]->email,
+          'user_full_name' => $data[0]->f_name . " " . $data[0]->l_name,
+          'user_nick' => $data[0]->nick,
+          'user_logged_in' => TRUE,
+          'total_steps' => $data[0]->total_steps,
+          'total_logins' => $data[0]->total_logins,
+          'total_regs' => $data[0]->total_regs,
+          'total_calories' => $this->m_step->getCaloriesFromSteg($data[0]->total_steps),
+          'simulation' => FALSE,
+      );
+      $this->session->set_userdata($session_data);
+      redirect('/mypage');    }
+  }
+
+
+  /**
    * Show settings admin page (White Label Admin page)
    * Always check that the user has enough priviledges
    */

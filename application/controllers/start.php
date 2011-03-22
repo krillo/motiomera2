@@ -8,8 +8,6 @@ class Start extends CI_Controller{
 
 
   function index(){
-    $param = $this->uri->segment(2);
-
     if($this->m_user->isLoggedIn()){
       redirect('/mypage');
     } else {
@@ -23,11 +21,11 @@ class Start extends CI_Controller{
    * login the user
    */
   function login(){
-    if($this->m_user->authenticate($this->input->post('user'), $this->input->post('pwd'))){
+    $loginStatus = $this->m_user->authenticate($this->input->post('user'), $this->input->post('pwd'));
+    if($loginStatus > 0){
       redirect('/mypage');
     } else {
-      //todo: error wrong login credentials
-      $this->_showHomePage();
+      redirect("/error/index/$loginStatus");
     }
   }
 
@@ -37,11 +35,24 @@ class Start extends CI_Controller{
    */
   function _showHomePage() {
     $data['title'] = 'MotioMera';
-    $this->load->view('/include/v_header', $data);
-    $this->load->view('/include/v_debug');
+    $this->load->view('include/v_header', $data);
+    $this->load->view('include/v_debug');
     $this->load->view('v_startpage');
+    $this->load->view('include/v_footer');
   }
 
+
+  /**
+   * Show error message
+   */
+  function _showWrongLogin($errorCode) {
+    $data['title'] = 'MotioMera';
+    $data['errorCode'] = $errorCode;
+    $this->load->view('include/v_header', $data);
+    $this->load->view('include/v_debug');
+    $this->load->view('v_errorpage');
+    $this->load->view('include/v_footer');
+  }
 
 
 

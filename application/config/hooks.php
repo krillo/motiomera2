@@ -17,14 +17,14 @@ $hook['post_controller_constructor'] = array(
       'filepath' => 'hooks'
     );
 */
-
+/*
 $hook['post_controller'] = array(
       'class'  => 'Template',
       'function' => 'footer',
       'filename' => 'template.php',
       'filepath' => 'hooks'
     );
-
+*/
 
 
 /* End of file hooks.php */

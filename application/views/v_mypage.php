@@ -63,3 +63,5 @@
 
 <div style="margin:25px 0  0 50px;" id="gift-area2"> TOTALT <br/>101 195 steg <br/>5 060 kcal
 </div>
+
+<div class="clear"></div>
