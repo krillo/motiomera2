@@ -25,10 +25,12 @@ class M_activities extends CI_Model {
    * @param <type> $limit
    * @return <type>
    */
-  function getAll($limit = 20){
-    $this->db->order_by("name", "asc");
-    $this->db->order_by("multiplicity", "asc");
-    $query = $this->db->get($this->table, $limit);
+  function getAll($wl_id, $limit = 20){
+    //$this->db->order_by("name", "asc");
+    //$this->db->order_by("multiplicity", "asc");
+    //$query = $this->db->get($this->table, $limit);
+    $sql = 'select * from activities where wl_id = ? order by name asc, multiplicity asc limit ?';
+    $query = $this->db->query($sql, array($wl_id, $limit));
     if($query->num_rows() > 0 ){
       foreach ($query->result() as $row){
         $data[] = $row;
@@ -38,9 +40,10 @@ class M_activities extends CI_Model {
   }
 
 
-  function getUnique(){
+  function getUnique($wl_id){
     $data = array();
-    $query = $this->db->query('select distinct(name), id, multiplicity, severity, unit from activities group by name order by name asc');
+    $sql = 'select distinct(name), id, multiplicity, severity, unit from activities where wl_id = ? group by name order by name asc';
+    $query = $this->db->query($sql, array($wl_id));
     if($query->num_rows() > 0 ){
       foreach ($query->result() as $row){
         $data[] = $row;
@@ -51,14 +54,18 @@ class M_activities extends CI_Model {
 
 
   /**
-   * This function returns all duplicate matches for a name
-   * @param <type> $id
-   * @return <type>
+   * This function returns all activities with the same name as the submitted activity_id
+   * Only return rows corresponding to correct WL-id
+   *
+   * @param int $activity_id
+   * @param int $wl_id White Label id
+   * @param boolean $raw false - nicely formatted for dropdown helper
+   * @return array
    */
-  function getSameName($id, $raw = false){
+  function getSameName($activity_id, $wl_id, $raw = false){
     $data = array();
-    $sql = "select * from activities where name like (SELECT name FROM activities where id = ?) order by multiplicity";
-    $query = $this->db->query($sql, array($id));
+    $sql = "select * from activities where name like (SELECT name FROM activities where id = ?) and wl_id = ? order by multiplicity";
+    $query = $this->db->query($sql, array($activity_id, $wl_id));
     if($query->num_rows() > 0 ){
       foreach ($query->result() as $row){
         $data[] = $row;
@@ -151,9 +158,15 @@ class M_activities extends CI_Model {
    * @param <type> $data
    * @return <type>
    */
-	function create($data){
+	function create($wl_id, $name, $multiplicity, $severity, $unit, $desc){
     $data['created_at'] = date('Y-m-d H:i:s');
     $data['updated_at'] = date('Y-m-d H:i:s');
+    $data['name'] = $name;
+    $data['multiplicity'] = $multiplicity;
+    $data['severity'] = $severity;
+    $data['unit'] = $unit;
+    $data['desc'] = $desc;
+    $data['wl_id'] = $wl_id;
 		$this->db->insert($this->table, $data);
 		return $this->db->insert_id();
 	}
@@ -166,10 +179,10 @@ class M_activities extends CI_Model {
 	}
   
 	/**
-   * delete row, id from segment 3
+   * delete row
    */
-	function delete(){
-		$this->db->where('id', $this->uri->segment(3));
+	function delete($activity_id){
+		$this->db->where('id', $activity_id);
 		$this->db->delete($this->table);
   }
 

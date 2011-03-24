@@ -26,6 +26,7 @@ class Admin extends CI_Controller{
 	}
 
 
+/*********** COMPANYADMIN ****************/
 
   /**
    * Show settings admin page (White Label Admin page)
@@ -41,6 +42,8 @@ class Admin extends CI_Controller{
     }
   }
 
+
+/*********** SUPPORT ****************/
 
   /**
    * Show support admin page
@@ -135,20 +138,78 @@ class Admin extends CI_Controller{
   }
 
 
+
+/*********** WHITE LABEL ****************/
+
   /**
-   * Show settings admin page (White Label Admin page)
+   * The White Label admin page
+   * Show settings admin page
    * Always check that the user has enough priviledges
    */
   function settings(){
     if($this->session->userdata('role_level') > self::WL_ADM_LEVEL){
       $data['title'] = 'advanced settings';
       $this->load->view('include/v_header', $data);
-      $this->load->view('admin/v_advanced_settings');
+      $this->load->view('admin/v_adv_settings');
     } else {
       redirect('/start');
     }
   }
 
+  /**
+   * List activites 
+   */
+  function activities($limit = 20){
+    if($this->session->userdata('role_level') > self::WL_ADM_LEVEL){
+      $wl_id = $this->session->userdata('wl_id');
+      $data['records'] = $this->m_activities->getAll($wl_id, $limit);
+      $this->load->view('admin/v_adv_settings_activities', $data);
+    } else {
+      redirect('/start');
+    }
+  }
+
+
+  /**
+   * create a new activity
+   * all parameters via post
+   */
+  function create_activity() {
+    if ($this->session->userdata('role_level') > self::WL_ADM_LEVEL) {
+      $wl_id = $this->session->userdata('wl_id');
+      $name = $this->input->post('name');
+      $multiplicity = $this->input->post('multiplicity');
+      $severity = $this->input->post('severity');
+      $unit = $this->input->post('unit');
+      $desc = $this->input->post('desc');
+      $this->m_activities->create($wl_id, $name, $multiplicity, $severity, $unit, $desc);
+      $this->activities();
+    } else {
+      redirect('/start');
+    }
+  }
+
+
+	/**
+   * Delete activity
+   * activiy_id as segment 3
+   * the user must have at least WL admin level
+   */
+	function delete_activity(){
+    if($this->session->userdata('role_level') > self::WL_ADM_LEVEL){
+      $activity_id = $this->uri->segment(3);
+      $this->m_activities->delete($activity_id);
+      $this->activities();
+    } else {
+      redirect('/start');
+    }
+  }
+
+
+
+
+
+  /*********** SUPERADMIN ****************/
 
   /**
    * Show settings admin page (White Label Admin page)

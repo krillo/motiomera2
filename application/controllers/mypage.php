@@ -52,7 +52,8 @@ class Mypage extends CI_Controller{
    * with all the data prepared
    */
   function _reportStepDialog(){
-    $data = $this->m_activities->getUnique();
+    $wl_id = $this->session->userdata('wl_id');
+    $data = $this->m_activities->getUnique($wl_id);
     $prep['activites_data'] = $this->_prepareStepList($data);
     $this->load->view('dialog/v_steps_dialog', $prep);
   }
@@ -70,18 +71,20 @@ class Mypage extends CI_Controller{
   }
 
 
-
+/*
   function steps(){
-    $data = $this->m_activities->getUnique();
+    $wl_id = $this->session->userdata('wl_id');
+    $data = $this->m_activities->getUnique($wl_id);
     $prep['activites_data'] = $this->_prepareStepList($data);
     //print_r($prep); die();
     $this->load->view('v_steps', $prep);
   }
-
+*/
 
   
   /**
    * Returns an array to match the dropdown helper
+   *
    * <option label="Basket (min)" value="18">Basket (min)</option>
    * @param <type> $data
    * @return string

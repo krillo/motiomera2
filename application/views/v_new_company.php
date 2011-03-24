@@ -9,12 +9,36 @@
   // });
 
   $(document).ready(function(){
+
+
+    //check if amount is submitted and are numbers
     $('#register-submit').click(function(){
       var count1 = $('#count1').attr('value');
       var count2 = $('#count2').attr('value');
-      alert(count1 + ' ' + count2);
-     
-
+      if(count1 == '' && count2 == ''){
+        alert('both empty');
+        //snyggt felmeddelande
+        return false;
+      }
+      if(count1 != ''){
+        alert(count1);
+        var c1 = parseInt(count1);
+        if(isNaN(c1)){
+          alert('c1 is not a number');
+          //snyggt felmeddelande
+          return false;
+        }
+      }
+      if(count2 != ''){
+        alert(count2);
+        var c2 = parseInt(count2);
+        if(isNaN(c2)){
+          alert('c2 is not a number');
+          //snyggt felmeddelande
+          return false;
+        }
+      }
+      return true;
     });
 
 
@@ -92,10 +116,10 @@
 
       messages: {
         email: {
-          required: "Please provide a email"
+          required: "Please provide an email"
         },
         email2: {
-          required: "Please provide a email",
+          required: "Please provide an email",
           equalTo: "Please enter the same email as above"
         },
         password: {

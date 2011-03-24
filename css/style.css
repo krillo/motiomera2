@@ -32,7 +32,7 @@ body {color:#333;font-family:Arial,Verdana;font-size:11px;}
 
 .input-text{width:65px;}
 #header{float:left;position:relative;}
-#greeting{position:absolute;top:30px;right:20px;color:#fff;}
+#greeting{position:absolute;top:30px;right:40px;color:#fff;}
 #greeting-nick{font-weight:bold;text-transform:capitalize;}
 #greeting a{color:#fff;}
 #log-in {
