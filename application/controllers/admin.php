@@ -174,7 +174,7 @@ class Admin extends CI_Controller{
    * create a new activity
    * all parameters via post
    */
-  function create_activity() {
+  function createactivity() {
     if ($this->session->userdata('role_level') > self::WL_ADM_LEVEL) {
       $wl_id = $this->session->userdata('wl_id');
       $name = $this->input->post('name');
@@ -189,13 +189,32 @@ class Admin extends CI_Controller{
     }
   }
 
+  /**
+   * update an activity
+   * all parameters via post
+   */
+  function updateactivity() {
+    if ($this->session->userdata('role_level') > self::WL_ADM_LEVEL) {
+      $wl_id = $this->session->userdata('wl_id');
+      $activity_id = $this->input->post('activityid');
+      $name = $this->input->post('name');
+      $multiplicity = $this->input->post('multiplicity');
+      $severity = $this->input->post('severity');
+      $unit = $this->input->post('unit');
+      $desc = $this->input->post('desc');
+      $status = $this->m_activities->update($activity_id, $wl_id, $name, $multiplicity, $severity, $unit, $desc);
+      $this->activities();
+    } else {
+      redirect('/start');
+    }
+  }
 
 	/**
    * Delete activity
    * activiy_id as segment 3
    * the user must have at least WL admin level
    */
-	function delete_activity(){
+	function deleteactivity(){
     if($this->session->userdata('role_level') > self::WL_ADM_LEVEL){
       $activity_id = $this->uri->segment(3);
       $this->m_activities->delete($activity_id);

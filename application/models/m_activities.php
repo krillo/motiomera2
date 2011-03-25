@@ -147,7 +147,7 @@ class M_activities extends CI_Model {
     return $data;
 	}
 
-	// get persons with paging
+
 	function getPagedList($limit = 10, $offset = 0){
 		$this->db->order_by('id','asc');
 		return $this->db->get($this->table, $limit, $offset);
@@ -170,20 +170,51 @@ class M_activities extends CI_Model {
 		$this->db->insert($this->table, $data);
 		return $this->db->insert_id();
 	}
-  
-	// update person by id
-	function update($data){
+
+  /**
+   * Update a record
+   *
+   * @param int $id
+   * @param int $wl_id
+   * @param string $name
+   * @param string $multiplicity
+   * @param string $severity
+   * @param string $unit
+   * @param string $desc
+   * @return int 1 for success and -1 for error
+   */    
+	function update($id, $wl_id, $name, $multiplicity, $severity, $unit, $desc){
     $data['updated_at'] = date('Y-m-d H:i:s');
-		$this->db->where('id', $this->uri->segment(3));
-		$this->db->update($this->table, $data);
+    $data['name'] = $name;
+    $data['multiplicity'] = $multiplicity;
+    $data['severity'] = $severity;
+    $data['unit'] = $unit;
+    $data['desc'] = $desc;
+    $data['wl_id'] = $wl_id;
+		$this->db->where('id', $id);
+		$this->db->update('activities', $data);
+    if ($this->db->affected_rows() == 1) {
+      return 1;
+    }else{
+      return -1;
+    }
 	}
   
-	/**
-   * delete row
+
+  /**
+   * Delete a row
+   * 
+   * @param <type> $activity_id
+   * @return int 1 for success and -1 for error
    */
 	function delete($activity_id){
 		$this->db->where('id', $activity_id);
 		$this->db->delete($this->table);
+    if ($this->db->affected_rows() == 1) {
+      return 1;
+    }else{
+      return -1;
+    }
   }
 
 

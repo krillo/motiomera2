@@ -2,7 +2,7 @@
   $(function() {
 
     var $tabs = $('#tabs').tabs();
-    //$tabs.tabs('select', 1);
+    $tabs.tabs('select', 1);
     //var selected = $tabs.tabs('option', 'selected');
     //alert(selected);
   });
