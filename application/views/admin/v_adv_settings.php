@@ -1,17 +1,11 @@
 <script>
   $(function() {
-
     var $tabs = $('#tabs').tabs();
-    $tabs.tabs('select', 1);
-    //var selected = $tabs.tabs('option', 'selected');
-    //alert(selected);
+    //$tabs.tabs('select', 1);
   });
 </script>
 
-
-
-<div class="demo">
-
+<div class="">
 <div id="tabs">
 	<ul>
 		<li><a href="#settings">General</a></li>
@@ -31,6 +25,6 @@
 	</div>
 </div>
 
-</div><!-- End demo -->
+</div>
 
 

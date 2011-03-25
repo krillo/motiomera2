@@ -3,7 +3,7 @@
 
   });
 
-
+ 
   function addRow(rowId){
       var name         = $('#name'+rowId).attr('value');
       var multiplicity = $('#multiplicity'+rowId).attr('value');

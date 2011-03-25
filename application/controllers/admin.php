@@ -37,10 +37,60 @@ class Admin extends CI_Controller{
       $data['title'] = 'companyadmin';
       $this->load->view('include/v_header', $data);
       $this->load->view('admin/v_company_admin');
+      $this->load->view('include/v_footer');
     } else {
       redirect('/start');
     }
   }
+
+  function teams(){
+    if($this->session->userdata('role_level') > self::COMP_ADM_LEVEL){
+      $this->load->view('admin/v_test');
+    } else {
+      redirect('/start');
+    }
+  }
+
+  function companysettings(){
+    if($this->session->userdata('role_level') > self::COMP_ADM_LEVEL){
+      $this->load->view('admin/v_test');
+    } else {
+      redirect('/start');
+    }
+  }
+
+  function competitors(){
+    if($this->session->userdata('role_level') > self::COMP_ADM_LEVEL){
+      $this->load->view('admin/v_test');
+    } else {
+      redirect('/start');
+    }
+  }
+
+   function additionalorders(){
+    if($this->session->userdata('role_level') > self::COMP_ADM_LEVEL){
+      $this->load->view('admin/v_test');
+    } else {
+      redirect('/start');
+    }
+  }
+
+   function keys(){
+    if($this->session->userdata('role_level') > self::COMP_ADM_LEVEL){
+      $this->load->view('admin/v_test');
+    } else {
+      redirect('/start');
+    }
+  }
+
+   function reclamation(){
+    if($this->session->userdata('role_level') > self::COMP_ADM_LEVEL){
+      $this->load->view('admin/v_test');
+    } else {
+      redirect('/start');
+    }
+  }
+
 
 
 /*********** SUPPORT ****************/
@@ -54,9 +104,34 @@ class Admin extends CI_Controller{
       $data['title'] = 'support';
       $this->load->view('include/v_header', $data);
       $this->load->view('admin/v_support');
-      $this->load->view('admin/v_list_users');
-      //$this->load->view('admin/v_data_table_test');
+      $this->load->view('include/v_footer');
+    } else {
+      redirect('/start');
+    }
+  }
+
+  /**
+   * List users
+   * returns a search page and result snippet
+   */
+  function supportlegacy($limit = 20){
+    if($this->session->userdata('role_level') > self::SUPPORT_ADM_LEVEL){
+      $this->load->view('admin/v_data_table_test');
       $this->load->view('admin/v_admin');
+    } else {
+      redirect('/start');
+    }
+  }
+
+
+
+  /**
+   * List users
+   * returns a search page and result snippet
+   */
+  function users($limit = 20){
+    if($this->session->userdata('role_level') > self::SUPPORT_ADM_LEVEL){
+      $this->load->view('admin/v_list_users');
     } else {
       redirect('/start');
     }
