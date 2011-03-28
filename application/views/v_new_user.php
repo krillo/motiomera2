@@ -9,30 +9,27 @@
   //});
 
   $(document).ready(function() {
-    //$('#register-submit').click({
     $.validator.addMethod("username",function(value,element){
       return this.optional(element)|| /^[A-Za-z0-9]{4,20}$/i.test(value);
     },"You must type min 4, max 20 letters, and no å,ä,ö.");
     
     $.validator.addMethod("password",function(value,element){
-      //return this.optional(element) || /^(?=.*\d)(?=.*[a-z]).{6,255}$/i.test(value);
-      //return this.optional(element) || /^[A-Za-z\d]+$/i.test(value);
       return this.optional(element) || /^[A-Za-z0-9!@#$%^&*()_]{6,255}$/i.test(value);
     },"You must type min 6 max 255 letters, and no å,ä,ö.");
 
-    $('#signupForm').submit(function(e){ // <<< This selector needs to point to your form.
-        if ($('#muni').val() == "") {
-            //alert("Please select anyone");
-            e.preventDefault();
-            return false;
-        }});
+    $('#signupForm').submit(function(e){ 
+      if ($('#muni').val() == "") {
+        alert("Vänligen välj en kommun.");
+        e.preventDefault();
+        return false;
+      }});
 
-       $('#signupForm').submit(function(e){ // <<< This selector needs to point to your form.
-        if ($('#question').val() == "") {
-            //alert("Please select anyone");
-            e.preventDefault();
-            return false;
-        }});
+    $('#signupForm').submit(function(e){ 
+      if ($('#source').val() == "") {
+        alert("Vänligen välj ett svar.");
+        e.preventDefault();
+        return false;
+      }});
 
 
 
@@ -51,10 +48,6 @@
         lastname: {
           required: true,
           maxlength: 30
-        },
-        muni: {
-          required: true,
-          muni: true
         },
         email: {
           required: true,
@@ -76,10 +69,6 @@
           minlength: 6,
           maxlength: 255,
           equalTo: "#password"
-        },
-        question: {
-          required:true,
-          question: true
         },
         agree: {
           required: true
@@ -108,35 +97,38 @@
         agree: "Please accept our policy"
       }
 
-    })
+    });
   });
 
 </script>
 
+
 <h1>Bli medlem</h1>
 
-<form class="cmxform" id="signupForm" method="post" action="/user/useradress">
+      <div style="border: 2px solid red;">   <?php echo validation_errors(); ?> </div>
+
+<form class="cmxform" id="signupForm" method="post" action="/validate/userreg">
   <fieldset>
     <legend>Fyll i formuläret</legend>
     <div style="float: right; font-size: 20px;"><a href="/user/newcompany">Anmäl ditt företag</a></div>
     <p>
       <label for="username">Välj ett alias</label>
-      <input id="username" name="username" type="text" />
+      <input id="username" name="username" type="text" value="<?php echo set_value('username'); ?>"/>
     </p>
 
     <p>
       <label for="firstname">Förnamn</label>
-      <input id="firstname" name="firstname" type="text" />
+      <input id="firstname" name="firstname" type="text" value="<?php echo set_value('firstname'); ?>" />
     </p>
 
     <p>
       <label for="lastname">Efternamn</label>
-      <input id="lastname" name="lastname" type="text" />
+      <input id="lastname" name="lastname" type="text" value="<?php echo set_value('lastname'); ?>" />
     </p>
 
     <p>
-      <label for="gender">Kön</label>
-      <select name="gender" id="gender">
+      <label for="sex">Kön</label>
+      <select name="sex" id="sex">
         <option value="kvinna">Kvinna</option>
         <option value="man">Man</option>
       </select>
@@ -441,27 +433,27 @@
 
     <p>
       <label for="email">E-postadress</label>
-      <input id="email" name="email" type="text"/><em> Har du inget e-postkonto? <a href="http://motiomera.se/pages/vanligafragor.php#Fraga_IngenEpost"> Läs mer här.</a></em>
+      <input id="email" name="email" type="text" value="<?php echo set_value('email'); ?>"/><em> Har du inget e-postkonto? <a href="http://motiomera.se/pages/vanligafragor.php#Fraga_IngenEpost"> Läs mer här.</a></em>
     </p>
 
     <p>
       <label for="email2">Upprepa</label>
-      <input id="email2" name="email2" type="text" />
+      <input id="email2" name="email2" type="text" value="<?php echo set_value('email2'); ?>"/>
     </p>
 
     <p>
       <label for="password">Välj lösenord</label>
-      <input id="password" name="password"  type="text" class="required"/>
+      <input id="password" name="password"  type="text" class="required" value="<?php echo set_value('password'); ?>"/>
     </p>
 
     <p>
       <label for="password2">Upprepa</label>
-      <input id="password2" name="password2" type="text" class="required"/>
+      <input id="password2" name="password2" type="text" class="required" value="<?php echo set_value('password2'); ?>"/>
     </p>
 
     <p>
       <label for="membership">Medlemskap</label>
-      <input name="key" id="key" value="" type="radio" /><span> <b>Jag har företagsnyckel</b> </span> <a href=""> Läs mer här.</a>
+      <input name="membership" id="membership" value="" type="radio" /><span> <b>Jag har företagsnyckel</b> </span> <a href=""> Läs mer här.</a>
     </p>
 
     <p>
@@ -470,8 +462,8 @@
     </p>
 
     <p>
-      <label for="question">Hur hörde du talas om Motiomera?</label>
-      <select name="question" id="question">
+      <label for="source">Hur hörde du talas om Motiomera?</label>
+      <select name="source" id="source">
         <option value="">Välj...</option>
         <option value="email">Email</option>
         <option value="telefon">Telefon</option>
@@ -492,7 +484,7 @@
 
     <p>
       <label for="agree">Ja, jag godkänner <a href="http://www.integritetspolicy.se/" target="_blank">Allers integritetspolicy</a> och är över 16 år. </label>
-      <input type="checkbox" class="checkbox" id="agree" name="agree" />
+      <input type="checkbox" class="checkbox" id="agree" name="agree"/>
     </p>
 
     <p>

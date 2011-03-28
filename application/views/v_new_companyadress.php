@@ -4,9 +4,9 @@
 <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url() ?>css/cmxformTemplate.css" />
 
 <script type="text/javascript">
-  $.validator.setDefaults({
+  /*$.validator.setDefaults({
     submitHandler: function() { alert("submitted!"); }
-  });
+  });*/
 
   $().ready(function() {
     //$('#register-submit').click({
@@ -20,15 +20,22 @@
       return this.optional(element) || /^[A-Za-z0-9!@#$%^&*()_]{6,255}$/i.test(value);
     },"You must type min 6 max 255 letters, and no å,ä,ö.");
 
+    $('#signupForm').submit(function(e){ // <<< This selector needs to point to your form.
+        if ($('#country').val() == "") {
+            alert("Vänligen välj ett land.");
+            e.preventDefault();
+            return false;
+        }});
+
     $("#signupForm").validate({
       rules: {
-        co_name: {
+        company: {
           required: true,
           //username: true,
           minlength: 0,
           maxlength: 30
         },
-        adress: {
+        street: {
           required: true
           //maxlength: 30
         },
@@ -36,11 +43,11 @@
           required: true
           //maxlength: 30
         },
-        pnumber: {
-          required: true
-          //email: true
+        zip: {
+          required: true,
+          number: true
         },
-        location: {
+        city: {
           required: true
           //email: true,
           //equalTo: "#email"
@@ -51,12 +58,17 @@
           minlength: 6,
           maxlength: 255
         },
-        country: {
+        phone: {
           required: true,
-          minlength: 6,
-          maxlength: 255
-          //equalTo: "#password"
+          number: true
         },
+        /*country: {
+          required: true,
+          country: true
+          //minlength: 6,
+          //maxlength: 255
+          //equalTo: "#password"
+        },*/
         agree: {
           required: true
         }
@@ -81,6 +93,9 @@
           maxlength: "",
           equalTo: "Please enter the same password as above"
         },
+        country: {
+          required: "Please select a country."
+        },
         agree: "Please accept our policy"
       }
 
@@ -91,20 +106,22 @@
 
 <h1>Ange Er adress</h1>
 
-<form class="cmxform" id="signupForm" method="get" action="">
+<div style="border: 2px solid red;">   <?php echo validation_errors(); ?> </div>
+
+<form class="cmxform" id="signupForm" method="post" action="/validate/companyaddress">
   <fieldset>
     <legend>Fyll i formuläret</legend>
 
     <h1 style="color: red;">Faktureringsadress<span style="color:grey; font-size: 15px;"> (<span style="color:red;"> *</span> = obligatoriska uppgifter.)</span></h1>
 
     <p>
-      <label for="co_name">Företagsnamn <span style="color:red;">*</span></label>
-      <input id="co_name" name="co_name" type="text" />
+      <label for="company">Företagsnamn <span style="color:red;">*</span></label>
+      <input id="comåany" name="company" type="text" />
     </p>
 
     <p>
-      <label for="adress">Gatuadress <span style="color:red;">*</span></label>
-      <input id="adress" name="adress" type="text"/>
+      <label for="street">Gatuadress <span style="color:red;">*</span></label>
+      <input id="street" name="street" type="text"/>
     </p>
 
     <p>
@@ -123,13 +140,13 @@
     </p>
 
     <p>
-      <label for="pnumber">Postnummer <span style="color:red;">*</span></label>
-      <input id="pnumber" name="pnumber" type="text"/>
+      <label for="zip">Postnummer <span style="color:red;">*</span></label>
+      <input id="zip" name="zip" type="text"/>
     </p>
 
     <p>
-      <label for="location">Ort <span style="color:red;">*</span></label>
-      <input id="location" name="location" type="text"/>
+      <label for="city">Ort <span style="color:red;">*</span></label>
+      <input id="city" name="city" type="text"/>
     </p>
 
     <p>
@@ -138,8 +155,8 @@
     </p>
 
     <p>
-      <label for="phnumber">Telefonnummer</label>
-      <input id="phnumber" name="phnumber" type="text"/>
+      <label for="phone">Telefonnummer <span style="color:red;">*</span></label>
+      <input id="phone" name="phone" type="text"/>
     </p>
 
     <p>
@@ -149,7 +166,14 @@
 
     <p>
       <label for="country">Land <span style="color:red;">*</span></label>
-      <input id="country" name="country" type="text"/>
+      <select id="country" name="country">
+        <option value="">Välj...</option>
+        <option value="sweden">Sverige</option>
+        <option value="denmark">Danmark</option>
+        <option value="norway">Norge</option>
+        <option value="finland">Finland</option>
+        <option value="island">Island</option>
+      </select><span> Utanför Sverige? Läs mer <a href="">här</a></span>
     </p>
 
     <h1 style="color:red;">Leveransadress <span style="color:grey; font-size: 15px;">(Skickas till annan adress än ovan? Ange den här.)</span></h1>
@@ -206,7 +230,14 @@
 
     <p>
       <label for="lev_country">Land</label>
-      <input id="lev_country" name="lev_country" type="text"/>
+      <select id="lev_country" name="lev_country">
+        <option value="">Välj...</option>
+        <option value="sweden">Sverige</option>
+        <option value="denmark">Danmark</option>
+        <option value="norway">Norge</option>
+        <option value="finland">Finland</option>
+        <option value="island">Island</option>
+      </select>
     </p>
 
     <p>

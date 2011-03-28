@@ -9,13 +9,13 @@
   // });
 
   $(document).ready(function(){
-    $('#register-submit').click(function(){
+    /*$('#register-submit').click(function(){
       var count1 = $('#count1').attr('value');
       var count2 = $('#count2').attr('value');
       alert(count1 + ' ' + count2);
      
 
-    });
+    });*/
 
 
     $.validator.addMethod("username",function(value,element){
@@ -28,6 +28,25 @@
       return this.optional(element) || /^[A-Za-z0-9!@#$%^&*()_]{6,255}$/i.test(value);
     },"You must type min 6 max 255 letters, and no å,ä,ö.");
 
+    $.validator.addMethod('numericOnly', function (value) {
+      return /[0-9 ]/.test(value);
+    }, 'Please only enter numeric values (0-9)');
+
+
+    $('#signupForm').submit(function(e){ // <<< This selector needs to point to your form.
+        if ($('#bransch').val() == "") {
+            alert("Please select a bransch.");
+            e.preventDefault();
+            return false;
+        }});
+
+      $('#signupForm').submit(function(e){ // <<< This selector needs to point to your form.
+        if ($('#source').val() == "") {
+            alert("Please select one answer.");
+            e.preventDefault();
+            return false;
+        }});
+
     /*$.validator.addMethod("validatecount1", function(value, element)    {
 
 	        var noOfSelectedcount1 = $("#count1 :selected").length;
@@ -38,52 +57,17 @@
 
     $("#signupForm").validate({
       rules: {
-        cname: {
+        company: {
           required: true,
           //username: true,
           minlength: 0,
           maxlength: 30
         },
-        /*count1: {
-          required: true,
-          minlength: 1,
-          maxlength: 30
+        count1: {
+          numericOnly:true
         },
         count2: {
-          required: true,
-          minlength: 1,
-          maxlength: 30
-        },*/
-        
-        //users1: {
-          //required: true,
-          //minlength: 1,
-          //maxlength: 30
-        
-        lastname: {
-          required: true,
-          maxlength: 30
-        },
-        email: {
-          required: true,
-          email: true
-        },
-        email2: {
-          required: true,
-          email: true,
-          equalTo: "#email"
-        },
-        password: {
-          required: true,
-          password: true,
-          minlength: 6,
-          maxlength: 255
-        },
-        password2: {
-          required: true,
-          minlength: 6,
-          maxlength: 255,
-          equalTo: "#password"
+          numericOnly: true
         },
         agree: {
           required: true
@@ -91,8 +75,8 @@
       },
 
       messages: {
-        email: {
-          required: "Please provide a email"
+        company: {
+          required: "Please type a company name"
         },
         email2: {
           required: "Please provide a email",
@@ -119,23 +103,25 @@
 
 <h1>Beställning för företag</h1>
 
-<form class="cmxform" id="signupForm" method="post" action="/user/companyadress">
+<div style="border: 2px solid red;">   <?php echo validation_errors(); ?> </div>
+
+<form class="cmxform" id="signupForm" method="post" action="/validate/companyreg">
   <fieldset>
     <legend>Fyll i formuläret</legend>
 
     <p>
-      <label for="cname">Företagets namn</label>
-      <input id="cname" name="cname" type="text" />
+      <label for="company">Företagets namn</label>
+      <input id="company" name="company" type="text" value="<?php echo set_value('company'); ?>"/>
     </p>
 
     <p>
       <label for="count1">Antal deltagare</label>
-      <input id="count1" name="count1" type="text" size="4"/><span> 5 veckors tävling med stegräknare <span style="color: red;">289kr</span> ex. moms.</span>
+      <input id="count1" name="count1" type="text" size="4" value="<?php echo set_value('count1'); ?>"/><span> 5 veckors tävling <b>med</b> stegräknare <span style="color: red;">289kr</span> ex. moms.</span>
     </p>
 
     <p>
       <label for="count2"</label>
-      <input type="text" size="4" id="count2" name="count2"/><span> 5 veckors tävling med stegräknare <span style="color: red;">159kr</span> ex. moms.</span>
+      <input type="text" size="4" id="count2" name="count2" value="<?php echo set_value('count2'); ?>"/><span> 5 veckors tävling <b>utan</b> stegräknare <span style="color: red;">159kr</span> ex. moms.</span>
     </p>
 
     <p>
@@ -192,13 +178,13 @@
       </select>
     </p>
 
-    <p>
+    <!--p>
       <label for="route">Gemensam rutt</label>
       <select name="route" id="route">
         <option value="yes">Ja</option>
         <option value="no">Nej</option>
       </select><span> Mer info klicka <a href="">här</a></span>
-    </p>
+    </p-->
 
     <p>
       <label for="start">Start datum</label>
@@ -247,8 +233,8 @@
     </p>
 
     <p>
-      <label for="question">Hur hörde du talas om Motiomera?</label>
-      <select name="question" id="question">
+      <label for="source">Hur hörde du talas om Motiomera?</label>
+      <select name="source" id="source">
         <option value="">Välj...</option>
         <option value="email">Email</option>
         <option value="telefon">Telefon</option>
@@ -269,7 +255,7 @@
 
     <div style="border-style:solid; border-width:2px;  float:right;">
       <h2 style="text-align:center; margin:1px;">Tilläggsbeställning</h2>
-      <p style="margin:auto;">Är du redan kund och vill göra en<br /> tilläggsbeställning? Logga in på din<br />administrationssida där du enkelt kan<br />lägga till fler deltagare. <a href="http://motiomera.se/pages/skapaforetag.php">Klicka här.</a></p>
+      <p style="margin:auto;">Är du redan kund och vill göra en<br /> tilläggsbeställning? Logga in på din<br />administrationssida där du enkelt kan<br />lägga till fler deltagare. <a href="http://motiomera.se/pages/foretaglogin.php">Klicka här.</a></p>
     </div>
 
     <p>
