@@ -151,6 +151,7 @@
     </p>
 
     <p>
+      <input class="" type="hidden" value="<?php echo $this->session->userdata('user_id'); ?>"  name="user_id" />
       <input class="submit" type="submit" value="Gå vidare" />
     </p>
 

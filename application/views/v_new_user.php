@@ -129,8 +129,8 @@
     <p>
       <label for="sex">Kön</label>
       <select name="sex" id="sex">
-        <option value="kvinna">Kvinna</option>
-        <option value="man">Man</option>
+        <option value="female">Kvinna</option>
+        <option value="male">Man</option>
       </select>
     </p>
 

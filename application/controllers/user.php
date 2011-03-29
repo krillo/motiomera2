@@ -58,12 +58,15 @@ class User extends CI_Controller{
     $data['title'] = 'Register';
     $this->load->view('/include/v_header', $data);
     $this->load->view('v_new_user');
+    $this->load->view('include/v_footer');
   }
 
   function useradress() {
     $data['title'] = 'User adress';
     $this->load->view('/include/v_header', $data);
+    $this->load->view('include/v_debug');
     $this->load->view('v_new_user_adress');
+    $this->load->view('include/v_footer');
   }
   /**
    * create new company
@@ -72,12 +75,14 @@ class User extends CI_Controller{
     $data['title'] = 'Register company';
     $this->load->view('/include/v_header', $data);
     $this->load->view('v_new_company');
+    $this->load->view('include/v_footer');
   }
 
   function companyadress() {
     $data['title'] = 'Company adress ';
     $this->load->view('/include/v_header', $data);
     $this->load->view('v_new_companyadress');
+    $this->load->view('include/v_footer');
   }
   /**
    * create new password to user
@@ -86,6 +91,7 @@ class User extends CI_Controller{
     $data['title'] = 'Forgot password';
     $this->load->view('/include/v_header', $data);
     $this->load->view('v_new_password');
+    $this->load->view('include/v_footer');
   }
 
   function count(){

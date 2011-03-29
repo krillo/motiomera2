@@ -104,6 +104,80 @@ class M_user extends CI_Model {
 		return $this->db->insert_id();
 	}
 
+
+  /**
+   * Creates a new post with the most basic parameters
+   *
+   * @param <string> $email
+   * @param <string> $password
+   * @param <string> $f_name
+   * @param <string> $l_name
+   * @param <string> $nick
+   * @param <string> $sex
+   * @param <string> $source
+   * @param <string> $muni
+   * @return <int> on success the row id else -1
+   */
+	function create_x($email, $password, $f_name, $l_name, $nick, $sex, $source, $muni){
+    $data = array(
+      'email' => $email,
+      'password' => $password,
+      'f_name' => $f_name,
+      'l_name' => $l_name,
+      'nick' => $nick,
+      'sex' => $sex,
+      //'muni' => $muni,
+      //'source' => $source,
+      'status' => 1,      
+      'level' => 11,
+      'email_confirmed' => 0,
+      'browser' => $this->session->userdata('user_agent'),
+      'ip' => $this->session->userdata('ip_address'),
+      'wl_id' => 1,  //$this->session->userdata('wl_id'),  //todo: get wl_id from config file
+      'created_at' => date('Y-m-d H:i:s'),
+      'updated_at' => date('Y-m-d H:i:s'),
+    );
+		$this->db->insert('users', $data);
+    if($this->db->affected_rows() == 1){
+      $user_id = $this->db->insert_id();
+      $session_data = array(
+          'user_id' => $user_id,
+          'user_mail' => $email,
+          'user_full_name' => $f_name . " " . $l_name,
+          'user_nick' => $nick,
+          'real_user_id' => $user_id,
+          'simulation' => FALSE,
+      );
+      $this->session->set_userdata($session_data);
+      return $this->db->insert_id();
+    } else {
+      return -1;
+    }
+  }
+
+  
+  function update_x() {
+      $data = array(
+        'email' => $email,
+        'password' => $password,
+        'f_name' => $f_name,
+        'l_name' => $l_name,
+        'nick' => $nick,
+        'sex' => $sex,
+        'status' => 1,
+        'level' => 11,
+        'email_confirmed' => 0,
+        'browser' => $this->session->userdata('user_agent'),
+        'ip' => $this->session->userdata('ip_address'),
+        'wl_id' => 1,
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s'),
+      );
+      $this->db->where('id', $id);
+      $this->db->update($this->table, $data);
+  }
+
+
 	// update person by id
 	function update($id){
     $data = array(

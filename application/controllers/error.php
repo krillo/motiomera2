@@ -25,6 +25,9 @@ class Error extends CI_Controller {
         break;
 
       default:
+        $this->_showDefaultViews();
+        $data['message'] = 'Knas!!!';
+        $this->load->view('v_message', $data);
         break;
     }
   }
