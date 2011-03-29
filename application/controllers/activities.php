@@ -68,8 +68,9 @@ class Activities extends CI_Controller{
    * 3rd segment takes an activity id
    */
   function same(){
-    $id =  $this->uri->segment(3);
-    $data['severity_data'] = $this->m_activities->getSameName($id, true);
+    $activity_id =  $this->uri->segment(3);
+    $wl_id = $this->session->userdata('wl_id');
+    $data['severity_data'] = $this->m_activities->getSameName($activity_id, $wl_id, true);
     $this->load->view('include/v_severitydropdown', $data);
   }
 
@@ -120,12 +121,20 @@ class Activities extends CI_Controller{
 	}
 
 	/**
-   * Delete row - id as segment 3
+   * Delete activity
+   * activiy_id as segment 3
+   * the user must have at least WL admin level
    */
 	function delete(){
-    //$id = $this->uri->segment(3);
-    $data['records'] = $this->m_activities->delete();
-    $this->all(20);
+    //if($this->session->userdata('role_level') > self::WL_ADM_LEVEL){
+      $activity_id = $this->uri->segment(3);
+      $data['records'] = $this->m_activities->delete($activity_id);
+      $this->all(20);
+    /*} else {
+      redirect('/start');
+    } 
+    */
+
   }
 
 

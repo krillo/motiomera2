@@ -26,6 +26,7 @@ class Admin extends CI_Controller{
 	}
 
 
+/*********** COMPANYADMIN ****************/
 
   /**
    * Show settings admin page (White Label Admin page)
@@ -36,11 +37,63 @@ class Admin extends CI_Controller{
       $data['title'] = 'companyadmin';
       $this->load->view('include/v_header', $data);
       $this->load->view('admin/v_company_admin');
+      $this->load->view('include/v_footer');
     } else {
       redirect('/start');
     }
   }
 
+  function teams(){
+    if($this->session->userdata('role_level') > self::COMP_ADM_LEVEL){
+      $this->load->view('admin/v_test');
+    } else {
+      redirect('/start');
+    }
+  }
+
+  function companysettings(){
+    if($this->session->userdata('role_level') > self::COMP_ADM_LEVEL){
+      $this->load->view('admin/v_test');
+    } else {
+      redirect('/start');
+    }
+  }
+
+  function competitors(){
+    if($this->session->userdata('role_level') > self::COMP_ADM_LEVEL){
+      $this->load->view('admin/v_test');
+    } else {
+      redirect('/start');
+    }
+  }
+
+   function additionalorders(){
+    if($this->session->userdata('role_level') > self::COMP_ADM_LEVEL){
+      $this->load->view('admin/v_test');
+    } else {
+      redirect('/start');
+    }
+  }
+
+   function keys(){
+    if($this->session->userdata('role_level') > self::COMP_ADM_LEVEL){
+      $this->load->view('admin/v_test');
+    } else {
+      redirect('/start');
+    }
+  }
+
+   function reclamation(){
+    if($this->session->userdata('role_level') > self::COMP_ADM_LEVEL){
+      $this->load->view('admin/v_test');
+    } else {
+      redirect('/start');
+    }
+  }
+
+
+
+/*********** SUPPORT ****************/
 
   /**
    * Show support admin page
@@ -51,9 +104,34 @@ class Admin extends CI_Controller{
       $data['title'] = 'support';
       $this->load->view('include/v_header', $data);
       $this->load->view('admin/v_support');
-      $this->load->view('admin/v_list_users');
-      //$this->load->view('admin/v_data_table_test');
+      $this->load->view('include/v_footer');
+    } else {
+      redirect('/start');
+    }
+  }
+
+  /**
+   * List users
+   * returns a search page and result snippet
+   */
+  function supportlegacy($limit = 20){
+    if($this->session->userdata('role_level') > self::SUPPORT_ADM_LEVEL){
+      $this->load->view('admin/v_data_table_test');
       $this->load->view('admin/v_admin');
+    } else {
+      redirect('/start');
+    }
+  }
+
+
+
+  /**
+   * List users
+   * returns a search page and result snippet
+   */
+  function users($limit = 20){
+    if($this->session->userdata('role_level') > self::SUPPORT_ADM_LEVEL){
+      $this->load->view('admin/v_list_users');
     } else {
       redirect('/start');
     }
@@ -135,20 +213,97 @@ class Admin extends CI_Controller{
   }
 
 
+
+/*********** WHITE LABEL ****************/
+
   /**
-   * Show settings admin page (White Label Admin page)
+   * The White Label admin page
+   * Show settings admin page
    * Always check that the user has enough priviledges
    */
   function settings(){
     if($this->session->userdata('role_level') > self::WL_ADM_LEVEL){
       $data['title'] = 'advanced settings';
       $this->load->view('include/v_header', $data);
-      $this->load->view('admin/v_advanced_settings');
+      $this->load->view('admin/v_adv_settings');
     } else {
       redirect('/start');
     }
   }
 
+  /**
+   * List activites 
+   */
+  function activities($limit = 20){
+    if($this->session->userdata('role_level') > self::WL_ADM_LEVEL){
+      $wl_id = $this->session->userdata('wl_id');
+      $data['records'] = $this->m_activities->getAll($wl_id, $limit);
+      $this->load->view('admin/v_adv_settings_activities', $data);
+    } else {
+      redirect('/start');
+    }
+  }
+
+
+  /**
+   * create a new activity
+   * all parameters via post
+   */
+  function createactivity() {
+    if ($this->session->userdata('role_level') > self::WL_ADM_LEVEL) {
+      $wl_id = $this->session->userdata('wl_id');
+      $name = $this->input->post('name');
+      $multiplicity = $this->input->post('multiplicity');
+      $severity = $this->input->post('severity');
+      $unit = $this->input->post('unit');
+      $desc = $this->input->post('desc');
+      $this->m_activities->create($wl_id, $name, $multiplicity, $severity, $unit, $desc);
+      $this->activities();
+    } else {
+      redirect('/start');
+    }
+  }
+
+  /**
+   * update an activity
+   * all parameters via post
+   */
+  function updateactivity() {
+    if ($this->session->userdata('role_level') > self::WL_ADM_LEVEL) {
+      $wl_id = $this->session->userdata('wl_id');
+      $activity_id = $this->input->post('activityid');
+      $name = $this->input->post('name');
+      $multiplicity = $this->input->post('multiplicity');
+      $severity = $this->input->post('severity');
+      $unit = $this->input->post('unit');
+      $desc = $this->input->post('desc');
+      $status = $this->m_activities->update($activity_id, $wl_id, $name, $multiplicity, $severity, $unit, $desc);
+      $this->activities();
+    } else {
+      redirect('/start');
+    }
+  }
+
+	/**
+   * Delete activity
+   * activiy_id as segment 3
+   * the user must have at least WL admin level
+   */
+	function deleteactivity(){
+    if($this->session->userdata('role_level') > self::WL_ADM_LEVEL){
+      $activity_id = $this->uri->segment(3);
+      $this->m_activities->delete($activity_id);
+      $this->activities();
+    } else {
+      redirect('/start');
+    }
+  }
+
+
+
+
+
+  /*********** SUPERADMIN ****************/
 
   /**
    * Show settings admin page (White Label Admin page)

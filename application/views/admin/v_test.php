@@ -6,4 +6,5 @@
 
 ?>
 
-advanced settings page
+
+<h2>Just a test page</h2>

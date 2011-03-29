@@ -15,7 +15,7 @@
         var date        = $('#step-date').attr('value');
         $.ajax({
           type: "POST",
-          url: "http://m2.dev:8888/index.php/step/showStepsPreview",
+          url: "<?php echo base_url() ?>step/showStepsPreview",
           data: "user_id="+ user_id +"&date="+ date,
           success: function(data){
             $('#preview-step-list').fadeIn();
@@ -40,7 +40,7 @@
       var activity_id = $('#activity-cat-id').attr('value');
       $.ajax({
         type: "POST",
-        url: "http://m2.dev:8888/index.php/activities/same/" + activity_id,
+        url: "<?php echo base_url() ?>activities/same/" + activity_id,
         success: function(data) {
           $('#step-severity').html(data).fadeIn();
         }
@@ -58,7 +58,7 @@
       var activity_id = $('#activity_id').attr('value');
       $.ajax({
         type: "POST",
-        url: "http://m2.dev:8888/index.php/step/create",
+        url: "<?php echo base_url() ?>step/create",
         data: "user_id="+ user_id +"&count="+ count +"&date="+ date +"&activity_id="+ activity_id +"&view=showStepsPreview&status=VALID",
         success: function(data){
           $('#preview-step-list').fadeIn();
@@ -76,7 +76,7 @@
     var date = $('#step-date').attr('value');
      $.ajax({
         type: "POST",
-        url: "http://m2.dev:8888/index.php/step/delete/" + rowId +"/showStepsPreview/" + date,
+        url: "<?php echo base_url() ?>step/delete/" + rowId +"/showStepsPreview/" + date,
         data: '',
         success: function(data){
           $('#preview-step-list').show();
