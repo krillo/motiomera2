@@ -277,8 +277,6 @@ class M_user extends CI_Model {
         //update user in db
         $id = $data[0]->id;
         $update_data['last_login'] = date('Y-m-d H:i:s');
-        $update_data['ip'] = $this->session->userdata('ip_address');
-        $update_data['browser'] = $this->session->userdata('user_agent');
         $update_data['total_logins'] = $data[0]->total_logins + 1;
         $this->db->where('id', $id);
         $this->db->update('users', $update_data);
