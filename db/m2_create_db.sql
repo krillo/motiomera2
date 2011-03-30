@@ -345,7 +345,6 @@ DROP TABLE IF EXISTS `m2`.`steps` ;
 
 CREATE  TABLE IF NOT EXISTS `m2`.`steps` (
   `id` INT NOT NULL AUTO_INCREMENT ,
-  `user_id` INT NOT NULL ,
   `activity_id` INT NOT NULL ,
   `count` INT NULL DEFAULT NULL ,
   `steps` INT NULL DEFAULT NULL ,
@@ -353,12 +352,19 @@ CREATE  TABLE IF NOT EXISTS `m2`.`steps` (
   `status` ENUM('TEMP','VALID','DEL') CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NOT NULL ,
   `created_at` DATETIME NULL DEFAULT NULL ,
   `updated_at` DATETIME NULL DEFAULT NULL ,
+  `users_id` INT NOT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `fk_steps_activities1` (`activity_id` ASC) ,
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
+  INDEX `fk_steps_users1` (`users_id` ASC) ,
   CONSTRAINT `fk_steps_activities1`
     FOREIGN KEY (`activity_id` )
     REFERENCES `m2`.`activities` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_steps_users1`
+    FOREIGN KEY (`users_id` )
+    REFERENCES `m2`.`users` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
