@@ -57,7 +57,7 @@
 
 
     $('#signupForm').submit(function(e){ // <<< This selector needs to point to your form.
-        if ($('#bransch').val() == "") {
+        if ($('#trade').val() == "") {
             alert("Please select a bransch.");
             e.preventDefault();
             return false;
@@ -216,8 +216,8 @@
     </p>
 
     <p>
-      <label for="bransch">Vilken bransch tillhör företaget?</label>
-      <select name="bransch" id="bransch">
+      <label for="trade">Vilken bransch tillhör företaget?</label>
+      <select name="trade" id="trade">
         <option value="">Välj...</option>
         <option value="">Bemanning &amp; Arbetsförmedling</option>
         <option value="it">Data, It &amp; Telekommunikation</option>

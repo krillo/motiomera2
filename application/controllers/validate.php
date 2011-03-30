@@ -35,7 +35,7 @@ class Validate extends CI_Controller {
     $this->form_validation->set_rules('company', 'Company', 'required|min_length[0]|max_length[30]');
     $this->form_validation->set_rules('count1', 'count1', 'numeric');
     $this->form_validation->set_rules('count2', 'count2', 'numeric');
-    $this->form_validation->set_rules('bransch', 'Bransch', 'required');
+    $this->form_validation->set_rules('trade', 'Trade', 'required');
     $this->form_validation->set_rules('source', 'Source', 'required');
     $this->form_validation->set_rules('agree', 'Agree', 'required');
 
@@ -46,9 +46,9 @@ class Validate extends CI_Controller {
       $company = $this->input->post('company');
       $count1 = $this->input->post('count1');
       $count2 = $this->input->post('count2');
-      //$bransch = $this->input->post('bransch');
+      //$trade = $this->input->post('trade');
       //$source = $this->input->post('source');
-      $user_id = $this->m_user->create_x($company, $count1, $count2, $bransch, $source);
+      $user_id = $this->m_user->create_x($company, $count1, $count2, $trade, $source);
       if($user_id >0) {
         redirect('/user/companyadress');
         $this->load->view('v_new_companyadress');
