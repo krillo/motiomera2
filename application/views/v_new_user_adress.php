@@ -9,18 +9,8 @@
   });*/
 
   $().ready(function() {
-    /*$.validator.addMethod("username",function(value,element){
-      return this.optional(element)|| /^[A-Za-z0-9]{4,20}$/i.test(value);
-    },"You must type min 4, max 20 letters, and no å,ä,ö.");
-    
-    $.validator.addMethod("password",function(value,element){
-      //return this.optional(element) || /^(?=.*\d)(?=.*[a-z]).{6,255}$/i.test(value);
-      //return this.optional(element) || /^[A-Za-z\d]+$/i.test(value);
-      return this.optional(element) || /^[A-Za-z0-9!@#$%^&*()_]{6,255}$/i.test(value);
-    },"You must type min 6 max 255 letters, and no å,ä,ö.");*/
-
     $('#signupForm').submit(function(e){ // <<< This selector needs to point to your form.
-        if ($('#country1').val() == "") {
+        if ($('#country').val() == "") {
             alert("Vänligen välj ett land.");
             e.preventDefault();
             return false;
@@ -48,19 +38,13 @@
         city: {
           required: true         
         },
-        email: {
+        country: {
           required: true,
-          email: true,
-          minlength: 6,
-          maxlength: 255
-        },
-       /* country1: {
-          required: true,
-          country1: true
+          country: true
           //minlength: 6,
           //maxlength: 255
           
-        },*/
+        },
         agree: {
           required: true
         }
@@ -70,9 +54,9 @@
         email: {
           required: "Please provide a email"
         },
-        /*country1: {
+        country: {
           required: "Please select one country"
-        },*/
+        },
         agree: "Please accept our policy"
       }
 
@@ -119,18 +103,13 @@
     </p>
 
     <p>
-      <label for="email">E-postadress</label>
-      <input id="email" name="email" type="text"/>
-    </p>
-
-    <p>
       <label for="phone">Telefonnummer</label>
       <input id="phone" name="phone" type="text"/>
     </p>
 
     <p>
-      <label for="mobnumber">Mobilnummer</label>
-      <input id="mobnumber" name="mobnumber" type="text"/>
+      <label for="mobile">Mobilnummer</label>
+      <input id="mobile" name="mobile" type="text"/>
     </p>
 
     <!--p>

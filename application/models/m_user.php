@@ -126,13 +126,11 @@ class M_user extends CI_Model {
       'l_name' => $l_name,
       'nick' => $nick,
       'sex' => $sex,
-      //'muni' => $muni,
-      //'source' => $source,
+      'municipal_id' => $muni,
+      //'sources_id' => $source,
       'status' => 1,      
       'level' => 11,
       'email_confirmed' => 0,
-      'browser' => $this->session->userdata('user_agent'),
-      'ip' => $this->session->userdata('ip_address'),
       'wl_id' => 1,  //$this->session->userdata('wl_id'),  //todo: get wl_id from config file
       'created_at' => date('Y-m-d H:i:s'),
       'updated_at' => date('Y-m-d H:i:s'),
@@ -155,26 +153,28 @@ class M_user extends CI_Model {
     }
   }
 
-  
-  function update_x() {
+  /**
+   * This function updates names
+   *
+   * @param <type> $id
+   * @param <type> $f_name
+   * @param <type> $l_name
+   * @return <type>
+   */
+  function updateName($id, $f_name,$l_name) {
       $data = array(
-        'email' => $email,
-        'password' => $password,
         'f_name' => $f_name,
         'l_name' => $l_name,
-        'nick' => $nick,
-        'sex' => $sex,
-        'status' => 1,
-        'level' => 11,
-        'email_confirmed' => 0,
-        'browser' => $this->session->userdata('user_agent'),
-        'ip' => $this->session->userdata('ip_address'),
-        'wl_id' => 1,
-        'created_at' => date('Y-m-d H:i:s'),
         'updated_at' => date('Y-m-d H:i:s'),
       );
       $this->db->where('id', $id);
-      $this->db->update($this->table, $data);
+      $this->db->update('users', $data);
+    if($this->db->affected_rows() == 1){
+      return $id;
+    } else {
+      return -1;
+    }
+
   }
 
 
