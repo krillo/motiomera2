@@ -35,20 +35,18 @@ class Validate extends CI_Controller {
     $this->form_validation->set_rules('company', 'Company', 'required|min_length[0]|max_length[30]');
     $this->form_validation->set_rules('count1', 'count1', 'numeric');
     $this->form_validation->set_rules('count2', 'count2', 'numeric');
-    $this->form_validation->set_rules('bransch', 'Bransch', 'required');
+    $this->form_validation->set_rules('trade', 'Trade', 'required');
     $this->form_validation->set_rules('source', 'Source', 'required');
     $this->form_validation->set_rules('agree', 'Agree', 'required');
-
-
     if ($this->form_validation->run() == FALSE) {
       $this->load->view('v_new_company'); //reload same page
     } else { //success
       $company = $this->input->post('company');
       $count1 = $this->input->post('count1');
       $count2 = $this->input->post('count2');
-      //$bransch = $this->input->post('bransch');
+      //$trade = $this->input->post('trade');
       //$source = $this->input->post('source');
-      $user_id = $this->m_user->create_x($company, $count1, $count2, $bransch, $source);
+      $user_id = $this->m_user->create_x($company, $count1, $count2, $trade, $source);
       if($user_id >0) {
         redirect('/user/companyadress');
         $this->load->view('v_new_companyadress');
@@ -102,29 +100,42 @@ class Validate extends CI_Controller {
     $this->form_validation->set_rules('firstname', 'Firstname', 'required|min_length[0]|max_length[30]');
     $this->form_validation->set_rules('lastname', 'Lastname', 'required|min_length[0]|max_length[30]');
     $this->form_validation->set_rules('street', 'Street', 'required');
+    $this->form_validation->set_rules('co', 'Co');
     $this->form_validation->set_rules('zip', 'Zip', 'required|numeric');
     $this->form_validation->set_rules('city', 'City', 'required');
-    $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
     $this->form_validation->set_rules('phone', 'Phone', 'numeric');
-    $this->form_validation->set_rules('mobnumber', 'Mobnumber', 'numeric');
+    $this->form_validation->set_rules('mobile', 'Mobile', 'numeric');
     $this->form_validation->set_rules('country', 'Country', 'required');
 
     if ($this->form_validation->run() == FALSE) {
       $this->load->view('v_new_user_adress');  //reload same page
-    } else { //success
+    } else { //validation is successful
+      $id = $this->input->post('user_id');
       $f_name = $this->input->post('firstname');
       $l_name = $this->input->post('lastname');
-      $street = $this->input->post('street');
+      $address1 = $this->input->post('street');
+      $co = $this->input->post('co');
       $zip = $this->input->post('zip');
       $city = $this->input->post('city');
-      $email = $this->input->post('email');
       $phone = $this->input->post('phone');
-      $mobnumber = $this->input->post('mobnumber');
+      $mobile = $this->input->post('mobile');
       $country = $this->input->post('country');
-      $user_id = $this->m_user->create_x($f_name, $l_name, $street, $zip, $city, $email, $phone, $mobnumber, $country);
+      $user_id = $this->m_user->updateName($id, $f_name, $l_name);
       if($user_id > 0) {
-        redirect('/user/useradress');
-        $this->load->view('v_new_user_adress');
+        $type = 'PRIVATE';
+        $company_id = NULL;
+        $company_name = NULL;
+        $ref_name = NULL;
+        $address2 = NULL;
+        $organisation_no = NULL;
+        $tax_code = NULL;
+        $email = NULL;
+        $row_id = $this->m_address->create($company_id, $user_id, $type, $company_name, $ref_name, $address1, $address2, $co, $zip, $city, $email, $phone, $mobile, $country, $organisation_no, $tax_code);
+        if($row_id > 0) {
+          redirect('/user/receipt');
+        } else {
+          redirect('/error/index/0');
+        }
     } else {
       redirect('/error/index/0');
     }

@@ -84,6 +84,14 @@ class User extends CI_Controller{
     $this->load->view('v_new_companyadress');
     $this->load->view('include/v_footer');
   }
+
+  function receipt(){
+    $data['title'] = 'Receipt';
+    $this->load->view('/include/v_header', $data);
+    $this->load->view('v_user_receipt');
+    $this->load->view('include/v_footer');
+  }
+
   /**
    * create new password to user
    */
