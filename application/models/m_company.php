@@ -1,12 +1,12 @@
 <?php
 
 /**
- * The roles
+ * The Companys
  *
  * @author Kristian Erendi 2011
  */
-class M_temp extends CI_Model {
-  private $table = 'temp';
+class M_company extends CI_Model {
+  private $table = 'companys';
 
 
   /**
@@ -24,14 +24,13 @@ class M_temp extends CI_Model {
     }
   }
 
-
   /**
    * Get by user_id
    * @param <type> $id
    * @return <type>
    */
   function getById($id){
-    $sql = "SELECT * FROM temp WHERE id  = ?";
+    $sql = "SELECT * FROM companys WHERE id  = ?";
     $query = $this->db->query($sql, array($id));
     if($query->num_rows() > 0 ){
       foreach ($query->result() as $row){
@@ -40,6 +39,46 @@ class M_temp extends CI_Model {
       return $data;
     }else{
       //todo error handling
+      return -1;
+    }
+  }
+
+  /**
+   * Get the company by (the administrators) user_id
+   * @param <int> $user_id
+   * @return <array>
+   */
+  function getByUserId($user_id){
+    $sql = "SELECT * FROM companys WHERE user_id  = ?";
+    $query = $this->db->query($sql, array($user_id));
+    if($query->num_rows() > 0 ){
+      foreach ($query->result() as $row){
+        $data[] = $row;
+      }
+      return $data;
+    }else{
+      //todo: error handling
+      return -1;
+    }
+  }
+
+
+
+  /**
+   * Get the company by (the administrators) user_id
+   * @param <int> $user_id
+   * @return <array>
+   */
+  function getCompanyContestByUserId($user_id){
+    $sql = "SELECT c.id company_id, c.*, t.id contest_id, t.*  FROM companys c, contests t WHERE c.user_id  = ? AND c.id = t.company_id";
+    $query = $this->db->query($sql, array($user_id));
+    if($query->num_rows() > 0 ){
+      foreach ($query->result() as $row){
+        $data[] = $row;
+      }
+      return $data;
+    }else{
+      //todo: error handling
       return -1;
     }
   }

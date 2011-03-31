@@ -1,12 +1,12 @@
 <?php
 
 /**
- * The roles
+ * The Keys
  *
  * @author Kristian Erendi 2011
  */
-class M_temp extends CI_Model {
-  private $table = 'temp';
+class M_key extends CI_Model {
+  private $table = 'keys';
 
 
   /**
@@ -31,7 +31,7 @@ class M_temp extends CI_Model {
    * @return <type>
    */
   function getById($id){
-    $sql = "SELECT * FROM temp WHERE id  = ?";
+    $sql = "SELECT * FROM companys WHERE id  = ?";
     $query = $this->db->query($sql, array($id));
     if($query->num_rows() > 0 ){
       foreach ($query->result() as $row){
@@ -94,3 +94,5 @@ class M_temp extends CI_Model {
 
 
 }
+
+

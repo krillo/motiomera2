@@ -7,7 +7,7 @@
 
 
 
-<h2>Administrationssida för Tomelilla kommun</h2>
+<h2>Administrationssida för <?php echo $company[0]->name; ?></h2>
 <p>
 Så fort dina deltagare aktiverat sina MotioMera-konton kan du se dem under fliken <b>Deltagare</b> nedan.
 Deltagarna blir automatiskt indelade i lag. Du kan ändra lagindelningen genom att klicka på fliken <b>Lag</b>.
@@ -17,12 +17,12 @@ Vill du anmäla fler deltagare till tävlingen gör du det under fliken <b>Till�
 <h3>Viktiga datum</h3>
 <table class="sortable sorted">
     <tr>
-    <td class="mmList1">2011-03-28</td>
+    <td class="mmList1"><?php echo $contest[0]->start; ?></td>
     <td class="mmList1">Måndag</td>
     <td class="mmList1">Startdatum för er företagstävling</td>
   </tr>
     <tr>
-    <td class="mmList1">2011-05-01</td>
+    <td class="mmList1"><?php echo $contest[0]->stop; ?></td>
     <td class="mmList1">Söndag</td>
     <td class="mmList1">Slutdatum för er företagstävling</td>
   </tr>

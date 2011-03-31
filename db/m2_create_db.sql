@@ -56,125 +56,6 @@ COLLATE = utf8_unicode_ci;
 
 
 -- -----------------------------------------------------
--- Table `m2`.`companys`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `m2`.`companys` ;
-
-CREATE  TABLE IF NOT EXISTS `m2`.`companys` (
-  `id` INT NOT NULL AUTO_INCREMENT ,
-  `wl_id` INT NOT NULL ,
-  `customer_id` VARCHAR(45) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL DEFAULT NULL ,
-  `is_valid` TINYINT(1) NULL DEFAULT NULL ,
-  `source` VARCHAR(45) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL DEFAULT NULL ,
-  `tmp_password` VARCHAR(45) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL DEFAULT NULL ,
-  `created_at` DATETIME NULL DEFAULT NULL ,
-  `updated_at` DATETIME NULL DEFAULT NULL ,
-  PRIMARY KEY (`id`) ,
-  INDEX `fk_companys_white_label1` (`wl_id` ASC) ,
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
-  CONSTRAINT `fk_companys_white_label1`
-    FOREIGN KEY (`wl_id` )
-    REFERENCES `m2`.`white_label` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_unicode_ci;
-
-
--- -----------------------------------------------------
--- Table `m2`.`trades`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `m2`.`trades` ;
-
-CREATE  TABLE IF NOT EXISTS `m2`.`trades` (
-  `id` INT NOT NULL AUTO_INCREMENT ,
-  `wl_id` INT NOT NULL ,
-  `name` VARCHAR(45) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL DEFAULT NULL ,
-  `created_at` DATETIME NULL DEFAULT NULL ,
-  `updated_at` DATETIME NULL DEFAULT NULL ,
-  PRIMARY KEY (`id`) ,
-  INDEX `fk_trades_white_label1` (`wl_id` ASC) ,
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
-  CONSTRAINT `fk_trades_white_label1`
-    FOREIGN KEY (`wl_id` )
-    REFERENCES `m2`.`white_label` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_unicode_ci;
-
-
--- -----------------------------------------------------
--- Table `m2`.`drives`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `m2`.`drives` ;
-
-CREATE  TABLE IF NOT EXISTS `m2`.`drives` (
-  `id` INT NOT NULL AUTO_INCREMENT ,
-  `wl_id` INT NOT NULL ,
-  `name` VARCHAR(45) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL DEFAULT NULL ,
-  `nof_weeks` INT NULL DEFAULT NULL ,
-  `start` DATETIME NULL DEFAULT NULL ,
-  `stop` DATETIME NULL DEFAULT NULL ,
-  `created_at` DATETIME NULL DEFAULT NULL ,
-  `updated_at` DATETIME NULL DEFAULT NULL ,
-  PRIMARY KEY (`id`) ,
-  INDEX `fk_drives_white_label1` (`wl_id` ASC) ,
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
-  CONSTRAINT `fk_drives_white_label1`
-    FOREIGN KEY (`wl_id` )
-    REFERENCES `m2`.`white_label` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_unicode_ci;
-
-
--- -----------------------------------------------------
--- Table `m2`.`contest`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `m2`.`contest` ;
-
-CREATE  TABLE IF NOT EXISTS `m2`.`contest` (
-  `id` INT NOT NULL AUTO_INCREMENT ,
-  `company_id` INT NOT NULL ,
-  `drive_id` INT NULL DEFAULT NULL ,
-  `trade_id` INT NULL DEFAULT NULL ,
-  `start` DATETIME NULL DEFAULT NULL ,
-  `stop` DATETIME NULL DEFAULT NULL ,
-  `nof_weeks` INT NULL DEFAULT NULL ,
-  `route_xxx` INT NULL DEFAULT NULL ,
-  `created_at` DATETIME NULL DEFAULT NULL ,
-  `updated_at` DATETIME NULL DEFAULT NULL ,
-  PRIMARY KEY (`id`) ,
-  INDEX `fk_contest_trades` (`trade_id` ASC) ,
-  INDEX `fk_contest_drives1` (`drive_id` ASC) ,
-  INDEX `fk_contest_companys1` (`company_id` ASC) ,
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
-  CONSTRAINT `fk_contest_trades`
-    FOREIGN KEY (`trade_id` )
-    REFERENCES `m2`.`trades` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_contest_drives1`
-    FOREIGN KEY (`drive_id` )
-    REFERENCES `m2`.`drives` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_contest_companys1`
-    FOREIGN KEY (`company_id` )
-    REFERENCES `m2`.`companys` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_unicode_ci;
-
-
--- -----------------------------------------------------
 -- Table `m2`.`municipals`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `m2`.`municipals` ;
@@ -307,6 +188,133 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `m2`.`companys`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `m2`.`companys` ;
+
+CREATE  TABLE IF NOT EXISTS `m2`.`companys` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `wl_id` INT NOT NULL ,
+  `user_id` INT NOT NULL ,
+  `name` VARCHAR(45) NULL ,
+  `customer_id` VARCHAR(45) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL DEFAULT NULL ,
+  `is_valid` TINYINT(1) NULL DEFAULT NULL ,
+  `source` VARCHAR(45) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL DEFAULT NULL ,
+  `tmp_password` VARCHAR(45) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL DEFAULT NULL ,
+  `created_at` DATETIME NULL DEFAULT NULL ,
+  `updated_at` DATETIME NULL DEFAULT NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `fk_companys_white_label1` (`wl_id` ASC) ,
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
+  INDEX `fk_companys_users1` (`user_id` ASC) ,
+  CONSTRAINT `fk_companys_white_label1`
+    FOREIGN KEY (`wl_id` )
+    REFERENCES `m2`.`white_label` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_companys_users1`
+    FOREIGN KEY (`user_id` )
+    REFERENCES `m2`.`users` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+-- -----------------------------------------------------
+-- Table `m2`.`trades`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `m2`.`trades` ;
+
+CREATE  TABLE IF NOT EXISTS `m2`.`trades` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `wl_id` INT NOT NULL ,
+  `name` VARCHAR(45) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL DEFAULT NULL ,
+  `created_at` DATETIME NULL DEFAULT NULL ,
+  `updated_at` DATETIME NULL DEFAULT NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `fk_trades_white_label1` (`wl_id` ASC) ,
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
+  CONSTRAINT `fk_trades_white_label1`
+    FOREIGN KEY (`wl_id` )
+    REFERENCES `m2`.`white_label` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+-- -----------------------------------------------------
+-- Table `m2`.`drives`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `m2`.`drives` ;
+
+CREATE  TABLE IF NOT EXISTS `m2`.`drives` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `wl_id` INT NOT NULL ,
+  `name` VARCHAR(45) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL DEFAULT NULL ,
+  `nof_weeks` INT NULL DEFAULT NULL ,
+  `start` DATETIME NULL DEFAULT NULL ,
+  `stop` DATETIME NULL DEFAULT NULL ,
+  `created_at` DATETIME NULL DEFAULT NULL ,
+  `updated_at` DATETIME NULL DEFAULT NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `fk_drives_white_label1` (`wl_id` ASC) ,
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
+  CONSTRAINT `fk_drives_white_label1`
+    FOREIGN KEY (`wl_id` )
+    REFERENCES `m2`.`white_label` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+-- -----------------------------------------------------
+-- Table `m2`.`contests`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `m2`.`contests` ;
+
+CREATE  TABLE IF NOT EXISTS `m2`.`contests` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `company_id` INT NOT NULL ,
+  `drive_id` INT NULL DEFAULT NULL ,
+  `trade_id` INT NULL DEFAULT NULL ,
+  `start` DATETIME NULL DEFAULT NULL ,
+  `stop` DATETIME NULL DEFAULT NULL ,
+  `nof_weeks` INT NULL DEFAULT NULL ,
+  `route_xxx` INT NULL DEFAULT NULL ,
+  `created_at` DATETIME NULL DEFAULT NULL ,
+  `updated_at` DATETIME NULL DEFAULT NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `fk_contest_trades` (`trade_id` ASC) ,
+  INDEX `fk_contest_drives1` (`drive_id` ASC) ,
+  INDEX `fk_contest_companys1` (`company_id` ASC) ,
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
+  CONSTRAINT `fk_contest_trades`
+    FOREIGN KEY (`trade_id` )
+    REFERENCES `m2`.`trades` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_contest_drives1`
+    FOREIGN KEY (`drive_id` )
+    REFERENCES `m2`.`drives` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_contest_companys1`
+    FOREIGN KEY (`company_id` )
+    REFERENCES `m2`.`companys` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+-- -----------------------------------------------------
 -- Table `m2`.`keys`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `m2`.`keys` ;
@@ -325,7 +333,7 @@ CREATE  TABLE IF NOT EXISTS `m2`.`keys` (
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
   CONSTRAINT `fk_keys_contest1`
     FOREIGN KEY (`contest_id` )
-    REFERENCES `m2`.`contest` (`id` )
+    REFERENCES `m2`.`contests` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_keys_users1`
@@ -346,24 +354,24 @@ DROP TABLE IF EXISTS `m2`.`steps` ;
 CREATE  TABLE IF NOT EXISTS `m2`.`steps` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `activity_id` INT NOT NULL ,
+  `user_id` INT NOT NULL ,
   `count` INT NULL DEFAULT NULL ,
   `steps` INT NULL DEFAULT NULL ,
   `date` DATE NULL DEFAULT NULL ,
   `status` ENUM('TEMP','VALID','DEL') CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NOT NULL ,
   `created_at` DATETIME NULL DEFAULT NULL ,
   `updated_at` DATETIME NULL DEFAULT NULL ,
-  `users_id` INT NOT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `fk_steps_activities1` (`activity_id` ASC) ,
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
-  INDEX `fk_steps_users1` (`users_id` ASC) ,
+  INDEX `fk_steps_users1` (`user_id` ASC) ,
   CONSTRAINT `fk_steps_activities1`
     FOREIGN KEY (`activity_id` )
     REFERENCES `m2`.`activities` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_steps_users1`
-    FOREIGN KEY (`users_id` )
+    FOREIGN KEY (`user_id` )
     REFERENCES `m2`.`users` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -543,9 +551,45 @@ COMMIT;
 SET AUTOCOMMIT=0;
 USE `m2`;
 INSERT INTO `m2`.`users` (`id`, `municipal_id`, `wl_id`, `level`, `email`, `email_confirmed`, `password`, `f_name`, `l_name`, `nick`, `sex`, `born`, `descr`, `last_login`, `img_filename`, `avatar_filename`, `customer_id`, `paid_until`, `trophy_start`, `status`, `company_key_temp`, `sources_id`, `total_steps`, `total_steps_current`, `total_logins`, `total_regs`, `created_at`, `updated_at`) VALUES ('1', '1', '1', '99', 'krillo@gmail.com', '1', 'kapten', 'krillo', 'superadmin', '99', 'MALE', '1977-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, '2012-03-03 12:00:00', '2011-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
-INSERT INTO `m2`.`users` (`id`, `municipal_id`, `wl_id`, `level`, `email`, `email_confirmed`, `password`, `f_name`, `l_name`, `nick`, `sex`, `born`, `descr`, `last_login`, `img_filename`, `avatar_filename`, `customer_id`, `paid_until`, `trophy_start`, `status`, `company_key_temp`, `sources_id`, `total_steps`, `total_steps_current`, `total_logins`, `total_regs`, `created_at`, `updated_at`) VALUES ('2', '3', '1', '41', 'emma@boyhappy.se', '1', 'kapten', 'emma', 'p', '41', 'FEMALE', '1977-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, '2012-03-03 12:00:00', '2011-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
+INSERT INTO `m2`.`users` (`id`, `municipal_id`, `wl_id`, `level`, `email`, `email_confirmed`, `password`, `f_name`, `l_name`, `nick`, `sex`, `born`, `descr`, `last_login`, `img_filename`, `avatar_filename`, `customer_id`, `paid_until`, `trophy_start`, `status`, `company_key_temp`, `sources_id`, `total_steps`, `total_steps_current`, `total_logins`, `total_regs`, `created_at`, `updated_at`) VALUES ('2', '3', '1', '51', 'emma@boyhappy.se', '1', 'kapten', 'emma', 'p', '41', 'FEMALE', '1977-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, '2012-03-03 12:00:00', '2011-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
 INSERT INTO `m2`.`users` (`id`, `municipal_id`, `wl_id`, `level`, `email`, `email_confirmed`, `password`, `f_name`, `l_name`, `nick`, `sex`, `born`, `descr`, `last_login`, `img_filename`, `avatar_filename`, `customer_id`, `paid_until`, `trophy_start`, `status`, `company_key_temp`, `sources_id`, `total_steps`, `total_steps_current`, `total_logins`, `total_regs`, `created_at`, `updated_at`) VALUES ('3', '2', '1', '19', 'user@boyhappy.se', '1', 'kapten', 'normal', 'user', '19', 'FEMALE', '1977-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, '2012-03-03 12:00:00', '2011-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
 INSERT INTO `m2`.`users` (`id`, `municipal_id`, `wl_id`, `level`, `email`, `email_confirmed`, `password`, `f_name`, `l_name`, `nick`, `sex`, `born`, `descr`, `last_login`, `img_filename`, `avatar_filename`, `customer_id`, `paid_until`, `trophy_start`, `status`, `company_key_temp`, `sources_id`, `total_steps`, `total_steps_current`, `total_logins`, `total_regs`, `created_at`, `updated_at`) VALUES ('4', '2', '2', '19', 'user2@boyhappy.se', '1', 'kapten', 'wl2', 'user', 'wl19', 'MALE', '1977-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, '2012-03-03 12:00:00', '2011-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
 INSERT INTO `m2`.`users` (`id`, `municipal_id`, `wl_id`, `level`, `email`, `email_confirmed`, `password`, `f_name`, `l_name`, `nick`, `sex`, `born`, `descr`, `last_login`, `img_filename`, `avatar_filename`, `customer_id`, `paid_until`, `trophy_start`, `status`, `company_key_temp`, `sources_id`, `total_steps`, `total_steps_current`, `total_logins`, `total_regs`, `created_at`, `updated_at`) VALUES ('5', '3', '2', '71', 'admin2@boyhappy.se', '1', 'kapten', 'wl2-admin', 'admin', 'wl71', 'MALE', '1977-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, '2012-03-03 12:00:00', '2011-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
+INSERT INTO `m2`.`users` (`id`, `municipal_id`, `wl_id`, `level`, `email`, `email_confirmed`, `password`, `f_name`, `l_name`, `nick`, `sex`, `born`, `descr`, `last_login`, `img_filename`, `avatar_filename`, `customer_id`, `paid_until`, `trophy_start`, `status`, `company_key_temp`, `sources_id`, `total_steps`, `total_steps_current`, `total_logins`, `total_regs`, `created_at`, `updated_at`) VALUES ('6', '1', '1', '41', 'novo@boyhappy.se', '1', 'kapten', 'novoboy', 'admin', 'novo', 'FEMALE', '1977-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, '2012-03-03 12:00:00', '2011-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `m2`.`companys`
+-- -----------------------------------------------------
+SET AUTOCOMMIT=0;
+USE `m2`;
+INSERT INTO `m2`.`companys` (`id`, `wl_id`, `user_id`, `name`, `customer_id`, `is_valid`, `source`, `tmp_password`, `created_at`, `updated_at`) VALUES ('1', '1', '1', 'Boy Interactive Ltd', '1111', '1', NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
+INSERT INTO `m2`.`companys` (`id`, `wl_id`, `user_id`, `name`, `customer_id`, `is_valid`, `source`, `tmp_password`, `created_at`, `updated_at`) VALUES ('2', '1', '6', 'Triserpiaan global', '2222', '1', NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
+INSERT INTO `m2`.`companys` (`id`, `wl_id`, `user_id`, `name`, `customer_id`, `is_valid`, `source`, `tmp_password`, `created_at`, `updated_at`) VALUES ('3', '2', '5', 'Vourff Ag', '3333', '1', NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `m2`.`drives`
+-- -----------------------------------------------------
+SET AUTOCOMMIT=0;
+USE `m2`;
+INSERT INTO `m2`.`drives` (`id`, `wl_id`, `name`, `nof_weeks`, `start`, `stop`, `created_at`, `updated_at`) VALUES ('1', '1', 'Vårkampanjen 2011', '5', '2011-03-29 00:00:00', '2011-05-02 00:00:00', '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`drives` (`id`, `wl_id`, `name`, `nof_weeks`, `start`, `stop`, `created_at`, `updated_at`) VALUES ('2', '1', 'Kullakampanjen 2011', '2', '2011-04-11 00:00:00', '2011-04-24 00:00:00', '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`drives` (`id`, `wl_id`, `name`, `nof_weeks`, `start`, `stop`, `created_at`, `updated_at`) VALUES ('3', '2', 'Transporters campaign', '6', '2011-03-14 00:00:00', '2011-04-24 00:00:00', '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `m2`.`contests`
+-- -----------------------------------------------------
+SET AUTOCOMMIT=0;
+USE `m2`;
+INSERT INTO `m2`.`contests` (`id`, `company_id`, `drive_id`, `trade_id`, `start`, `stop`, `nof_weeks`, `route_xxx`, `created_at`, `updated_at`) VALUES ('1', '1', NULL, NULL, '2010-02-28 00:00:00', '2010-04-02 00:00:00', '6', NULL, '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`contests` (`id`, `company_id`, `drive_id`, `trade_id`, `start`, `stop`, `nof_weeks`, `route_xxx`, `created_at`, `updated_at`) VALUES ('2', '1', '1', NULL, '2011-03-29 00:00:00', '2011-05-02 00:00:00', '5', NULL, '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`contests` (`id`, `company_id`, `drive_id`, `trade_id`, `start`, `stop`, `nof_weeks`, `route_xxx`, `created_at`, `updated_at`) VALUES ('3', '3', '1', NULL, '2011-03-29 00:00:00', '2011-05-02 00:00:00', '5', NULL, '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`contests` (`id`, `company_id`, `drive_id`, `trade_id`, `start`, `stop`, `nof_weeks`, `route_xxx`, `created_at`, `updated_at`) VALUES ('4', '2', '2', NULL, '2011-04-11 00:00:00', '2011-04-24 00:00:00', '2', NULL, '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`contests` (`id`, `company_id`, `drive_id`, `trade_id`, `start`, `stop`, `nof_weeks`, `route_xxx`, `created_at`, `updated_at`) VALUES ('5', '1', '2', NULL, '2011-04-11 00:00:00', '2011-04-24 00:00:00', '2', NULL, '2011-03-03 00:00:00', '2011-03-03 00:00:00');
 
 COMMIT;

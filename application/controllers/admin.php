@@ -12,12 +12,16 @@ class Admin extends CI_Controller{
   /**
    * Constructor
    * Don't even allow a user pass the constructor if she is not logged in or have at least COMP_ADM_LEVEL
+   * For security reasons some models are not autoloaded but loaded here.
+   *
    */
 	function __construct(){
 		parent::__construct();
     if(!$this->m_user->isLoggedIn() || $this->session->userdata('role_level') < self::COMP_ADM_LEVEL){
       $this->load->view('v_startpage');
-    } 
+    } else {
+      $this->load->model('m_company');
+    }
 	}
 
 
@@ -34,7 +38,13 @@ class Admin extends CI_Controller{
    */
   function companyadmin(){
     if($this->session->userdata('role_level') > self::COMP_ADM_LEVEL){
-      $data['title'] = 'companyadmin';
+      $data['title'] = 'Company admin page';
+      $user_id = $this->session->userdata('user_id');
+      //$data['records'] = $this->m_company->getCompanyContestByUserId($user_id);
+      $data['company'] = $this->m_company->getByUserId($user_id);
+      //print_r($data);
+      $company_id = $data['company'][0]->id;
+      $data['contest'] = $this->m_contest->getCurrentContest($company_id);
       $this->load->view('include/v_header', $data);
       $this->load->view('admin/v_company_admin');
       $this->load->view('include/v_footer');

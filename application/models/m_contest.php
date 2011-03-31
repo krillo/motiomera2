@@ -1,12 +1,12 @@
 <?php
 
 /**
- * The roles
+ * The Contests
  *
  * @author Kristian Erendi 2011
  */
-class M_temp extends CI_Model {
-  private $table = 'temp';
+class M_contest extends CI_Model {
+  private $table = 'contests';
 
 
   /**
@@ -31,7 +31,7 @@ class M_temp extends CI_Model {
    * @return <type>
    */
   function getById($id){
-    $sql = "SELECT * FROM temp WHERE id  = ?";
+    $sql = "SELECT * FROM companys WHERE id  = ?";
     $query = $this->db->query($sql, array($id));
     if($query->num_rows() > 0 ){
       foreach ($query->result() as $row){
@@ -43,6 +43,27 @@ class M_temp extends CI_Model {
       return -1;
     }
   }
+
+
+  
+  function getCurrentContest($company_id){
+    $sql = "SELECT * FROM contests WHERE company_id = ?  AND (start <= ? AND stop >= ? )";
+    $query = $this->db->query($sql, array($company_id, date('Y-m-d'), date('Y-m-d')));
+    if($query->num_rows() > 0 ){
+      foreach ($query->result() as $row){
+        $data[] = $row;
+      }
+      return $data;
+    }else{
+      //todo error handling
+      return -1;
+    }
+  }
+
+
+
+
+
 
 
   /**
@@ -94,3 +115,4 @@ class M_temp extends CI_Model {
 
 
 }
+
