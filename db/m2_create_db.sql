@@ -445,6 +445,29 @@ COLLATE = utf8_unicode_ci;
 
 
 -- -----------------------------------------------------
+-- Table `m2`.`contest_dates`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `m2`.`contest_dates` ;
+
+CREATE  TABLE IF NOT EXISTS `m2`.`contest_dates` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `contest_id` INT NOT NULL ,
+  `date` DATETIME NOT NULL ,
+  `type` INT NOT NULL ,
+  `created_at` DATETIME NULL ,
+  `updated_at` DATETIME NULL ,
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
+  INDEX `fk_contest_dates_contests1` (`contest_id` ASC) ,
+  CONSTRAINT `fk_contest_dates_contests1`
+    FOREIGN KEY (`contest_id` )
+    REFERENCES `m2`.`contests` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- procedure insert_steps
 -- -----------------------------------------------------
 
@@ -586,10 +609,21 @@ COMMIT;
 -- -----------------------------------------------------
 SET AUTOCOMMIT=0;
 USE `m2`;
-INSERT INTO `m2`.`contests` (`id`, `company_id`, `drive_id`, `trade_id`, `start`, `stop`, `nof_weeks`, `route_xxx`, `created_at`, `updated_at`) VALUES ('1', '1', NULL, NULL, '2010-02-28 00:00:00', '2010-04-02 00:00:00', '6', NULL, '2011-03-03 00:00:00', '2011-03-03 00:00:00');
-INSERT INTO `m2`.`contests` (`id`, `company_id`, `drive_id`, `trade_id`, `start`, `stop`, `nof_weeks`, `route_xxx`, `created_at`, `updated_at`) VALUES ('2', '1', '1', NULL, '2011-03-29 00:00:00', '2011-05-02 00:00:00', '5', NULL, '2011-03-03 00:00:00', '2011-03-03 00:00:00');
-INSERT INTO `m2`.`contests` (`id`, `company_id`, `drive_id`, `trade_id`, `start`, `stop`, `nof_weeks`, `route_xxx`, `created_at`, `updated_at`) VALUES ('3', '3', '1', NULL, '2011-03-29 00:00:00', '2011-05-02 00:00:00', '5', NULL, '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`contests` (`id`, `company_id`, `drive_id`, `trade_id`, `start`, `stop`, `nof_weeks`, `route_xxx`, `created_at`, `updated_at`) VALUES ('1', '1', NULL, NULL, '2010-02-28 00:00:00', '2010-05-01 00:00:00', '6', NULL, '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`contests` (`id`, `company_id`, `drive_id`, `trade_id`, `start`, `stop`, `nof_weeks`, `route_xxx`, `created_at`, `updated_at`) VALUES ('2', '1', '1', NULL, '2011-03-29 00:00:00', '2011-05-01 00:00:00', '5', NULL, '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`contests` (`id`, `company_id`, `drive_id`, `trade_id`, `start`, `stop`, `nof_weeks`, `route_xxx`, `created_at`, `updated_at`) VALUES ('3', '3', '1', NULL, '2011-03-29 00:00:00', '2011-05-01 00:00:00', '5', NULL, '2011-03-03 00:00:00', '2011-03-03 00:00:00');
 INSERT INTO `m2`.`contests` (`id`, `company_id`, `drive_id`, `trade_id`, `start`, `stop`, `nof_weeks`, `route_xxx`, `created_at`, `updated_at`) VALUES ('4', '2', '2', NULL, '2011-04-11 00:00:00', '2011-04-24 00:00:00', '2', NULL, '2011-03-03 00:00:00', '2011-03-03 00:00:00');
 INSERT INTO `m2`.`contests` (`id`, `company_id`, `drive_id`, `trade_id`, `start`, `stop`, `nof_weeks`, `route_xxx`, `created_at`, `updated_at`) VALUES ('5', '1', '2', NULL, '2011-04-11 00:00:00', '2011-04-24 00:00:00', '2', NULL, '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `m2`.`contest_dates`
+-- -----------------------------------------------------
+SET AUTOCOMMIT=0;
+USE `m2`;
+INSERT INTO `m2`.`contest_dates` (`id`, `contest_id`, `date`, `type`, `created_at`, `updated_at`) VALUES ('1', '2', '2011-05-02 00:00:00', '1', '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`contest_dates` (`id`, `contest_id`, `date`, `type`, `created_at`, `updated_at`) VALUES ('1', '2', '2011-05-03 00:00:00', '2', '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`contest_dates` (`id`, `contest_id`, `date`, `type`, `created_at`, `updated_at`) VALUES ('1', '2', '2011-05-08 00:00:00', '3', '2011-03-03 00:00:00', '2011-03-03 00:00:00');
 
 COMMIT;

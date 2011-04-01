@@ -33,18 +33,24 @@ class Admin extends CI_Controller{
 /*********** COMPANYADMIN ****************/
 
   /**
-   * Show settings admin page (White Label Admin page)
+   * Show company admin page
    * Always check that the user has enough priviledges
    */
   function companyadmin(){
     if($this->session->userdata('role_level') > self::COMP_ADM_LEVEL){
       $data['title'] = 'Company admin page';
       $user_id = $this->session->userdata('user_id');
-      //$data['records'] = $this->m_company->getCompanyContestByUserId($user_id);
       $data['company'] = $this->m_company->getByUserId($user_id);
-      //print_r($data);
       $company_id = $data['company'][0]->id;
       $data['contest'] = $this->m_contest->getCurrentContest($company_id);
+      $contest_id = $data['contest'][0]->id;
+      $data['contest_dates'] = $this->m_contest_dates->getDatesByContestId($contest_id);
+
+      $start = date('Y-m-d', strtotime($data['contest'][0]->start));
+      $data['start'] = $start;
+      $stop = date('Y-m-d', strtotime($data['contest'][0]->stop));
+      $data['stop'] = $stop;
+
       $this->load->view('include/v_header', $data);
       $this->load->view('admin/v_company_admin');
       $this->load->view('include/v_footer');

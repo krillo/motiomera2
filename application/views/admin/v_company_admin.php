@@ -17,33 +17,32 @@ Vill du anmäla fler deltagare till tävlingen gör du det under fliken <b>Till�
 <h3>Viktiga datum</h3>
 <table class="sortable sorted">
     <tr>
-    <td class="mmList1"><?php echo $contest[0]->start; ?></td>
+    <td class="mmList1"><?php echo $start; ?></td>
     <td class="mmList1">Måndag</td>
     <td class="mmList1">Startdatum för er företagstävling</td>
   </tr>
     <tr>
-    <td class="mmList1"><?php echo $contest[0]->stop; ?></td>
+    <td class="mmList1"><?php echo $stop; ?></td>
     <td class="mmList1">Söndag</td>
     <td class="mmList1">Slutdatum för er företagstävling</td>
   </tr>
     <tr>
-    <td class="mmList1">2011-05-02</td>
+    <td class="mmList1"><?php echo $contest_dates['LAST_REG']; ?></td>
     <td class="mmList1">Måndag</td>
     <td class="mmList1">Sista dagen för registrering av steg</td>
   </tr>
     <tr>
-    <td class="mmList1">2011-05-03</td>
+    <td class="mmList1"><?php echo $contest_dates['SEND_RESULT_EMAIL']; ?></td>
     <td class="mmList1">Tisdag</td>
     <td class="mmList1">Tävlingsresultatet skickas per mail till alla deltagare</td>
   </tr>
     <tr>
-    <td class="mmList1">2011-05-08</td>
+    <td class="mmList1"><?php echo $contest_dates['LAST_ADMIN_DAY']; ?></td>
     <td class="mmList1">Söndag</td>
     <td class="mmList1">Administrationssidan är tillgänglig tom detta datum</td>
   </tr>
 </table>
 <br/>
-
 
 
 <div class="">
