@@ -17,7 +17,7 @@ class Validate extends CI_Controller {
     $this->form_validation->set_rules('city', 'City', 'required');
     $this->form_validation->set_rules('email', 'Email', 'required|valid_email|min_length[6]|max_length[255]');
     $this->form_validation->set_rules('phone', 'Phone', 'required|numeric');
-    $this->form_validation->set_rules('mobnumber', 'Mobnumber', 'numeric');
+    $this->form_validation->set_rules('mobile', 'Mobile', 'numeric');
     $this->form_validation->set_rules('country', 'Country', 'required');
 
 
@@ -28,13 +28,17 @@ class Validate extends CI_Controller {
     }
   }
 
-
-
-
+/**
+ * This function validates first step of a company registration.
+ * On succcess it continues to the next registration page.
+ * On fail it shows error page.
+ */
   function companyreg() {
     $this->form_validation->set_rules('company', 'Company', 'required|min_length[0]|max_length[30]');
     $this->form_validation->set_rules('count1', 'count1', 'numeric');
     $this->form_validation->set_rules('count2', 'count2', 'numeric');
+    $this->form_validation->set_rules('length', 'length');
+    $this->form_validation->set_rules('start', 'Start');
     $this->form_validation->set_rules('trade', 'Trade', 'required');
     $this->form_validation->set_rules('source', 'Source', 'required');
     $this->form_validation->set_rules('agree', 'Agree', 'required');
@@ -44,9 +48,11 @@ class Validate extends CI_Controller {
       $company = $this->input->post('company');
       $count1 = $this->input->post('count1');
       $count2 = $this->input->post('count2');
-      //$trade = $this->input->post('trade');
-      //$source = $this->input->post('source');
-      $user_id = $this->m_user->create_x($company, $count1, $count2, $trade, $source);
+      $nof_weeks = $this->input->post('length');
+      $start = $this->input->post('start');
+      $trade = $this->input->post('trade');
+      $source = $this->input->post('source');
+      $user_id = $this->m_company->create($company, $count1, $count2, $nof_weeks, $start, $trade, $source);
       if($user_id >0) {
         redirect('/user/companyadress');
         $this->load->view('v_new_companyadress');
@@ -95,7 +101,11 @@ class Validate extends CI_Controller {
   }
 
 
-
+  /**
+   * This function validates the useraddress.
+   * It updates post and redirect to receipt page.
+   * On fail it shows error.
+   */
   function useraddress() {
     $this->form_validation->set_rules('firstname', 'Firstname', 'required|min_length[0]|max_length[30]');
     $this->form_validation->set_rules('lastname', 'Lastname', 'required|min_length[0]|max_length[30]');
@@ -106,7 +116,6 @@ class Validate extends CI_Controller {
     $this->form_validation->set_rules('phone', 'Phone', 'numeric');
     $this->form_validation->set_rules('mobile', 'Mobile', 'numeric');
     $this->form_validation->set_rules('country', 'Country', 'required');
-
     if ($this->form_validation->run() == FALSE) {
       $this->load->view('v_new_user_adress');  //reload same page
     } else { //validation is successful

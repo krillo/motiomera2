@@ -160,8 +160,8 @@
     </p>
 
     <p>
-      <label for="mobnumber">Mobilnummer</label>
-      <input id="mobnumber" name="mobnumber" type="text"/>
+      <label for="mobile">Mobilnummer</label>
+      <input id="mobile" name="mobile" type="text"/>
     </p>
 
     <p>

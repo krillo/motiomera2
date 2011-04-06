@@ -4,6 +4,8 @@ class User extends CI_Controller{
 
 	function __construct(){
 		parent::__construct();
+    $this->load->model('m_municipal');
+    $this->load->model('m_source');
 	}
 
 	function index(){
@@ -56,7 +58,10 @@ class User extends CI_Controller{
    */
   function newuser() {
     $data['title'] = 'Register';
+    $data['records'] = $this->m_municipal->getAll();
+    $data['source'] = $this->m_source->getAll();
     $this->load->view('/include/v_header', $data);
+    $this->load->view('include/v_debug');
     $this->load->view('v_new_user');
     $this->load->view('include/v_footer');
   }

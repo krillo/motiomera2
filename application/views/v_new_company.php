@@ -128,7 +128,7 @@
     </p>
 
     <p>
-      <label for="count2"</label>
+      <label for="count2"></label>
       <input type="text" size="4" id="count2" name="count2" value="<?php echo set_value('count2'); ?>"/><span> 5 veckors tävling <b>utan</b> stegräknare <span style="color: red;">159kr</span> ex. moms.</span>
     </p>
 

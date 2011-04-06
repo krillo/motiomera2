@@ -15,17 +15,17 @@
     
     $.validator.addMethod("password",function(value,element){
       return this.optional(element) || /^[A-Za-z0-9!@#$%^&*()_]{6,255}$/i.test(value);
-    },"You must type min 6 max 255 letters, and no å,ä,ö.");
+    },"You must type min 6 max 255 letters, and no å,ä,ö.");  
 
-    $('#signupForm').submit(function(e){ 
-      if ($('#muni').val() == "") {
+    $('#signupForm').submit(function(e){
+      if ($('#muni').val() == "0") {
         alert("Vänligen välj en kommun.");
         e.preventDefault();
         return false;
       }});
 
     $('#signupForm').submit(function(e){ 
-      if ($('#source').val() == "") {
+      if ($('#source').val() == "0") {
         alert("Vänligen välj ett svar.");
         e.preventDefault();
         return false;
@@ -102,10 +102,9 @@
 
 </script>
 
-
 <h1>Bli medlem</h1>
 
-      <div style="border: 2px solid red;">   <?php echo validation_errors(); ?> </div>
+<div style="border: 2px solid red;">   <?php echo validation_errors(); ?> </div>
 
 <form class="cmxform" id="signupForm" method="post" action="/validate/userreg">
   <fieldset>
@@ -128,19 +127,31 @@
 
     <p>
       <label for="sex">Kön</label>
-      <select name="sex" id="sex">
+      <?php
+      $this->load->helper('form');
+      $options = array(
+          'female' => 'Kvinna',
+          'male' => 'Man',
+      );
+      echo form_dropdown('sex', $options, 'female');
+      ?>
+      <!--select name="sex" id="sex">
         <option value="female">Kvinna</option>
         <option value="male">Man</option>
-      </select>
+      </select-->
     </p>
 
     <p>
       <label for="muni">Kommun</label>
-      <select name="muni" id="muni">
+      <?php
+      $this->load->helper('form');
+      echo form_dropdown('muni', $records, 'Choose...', 'id="muni"');
+      ?>
+      <!--select name="muni" id="muni">
         <option label="Välj..." value="">Välj...</option>
         <option label="Helsingborg" value="1">Helsingborg</option>
         <option label="Båstad" value="3">Båstad</option>
-      </select>
+      </select-->
     </p>
 
     <p>
@@ -175,7 +186,11 @@
 
     <p>
       <label for="source">Hur hörde du talas om Motiomera?</label>
-      <select name="source" id="source">
+      <?php
+      echo form_dropdown('source', $source, 'Choose...', 'id="source"');
+
+      ?>
+      <!--select name="source" id="source">
         <option value="">Välj...</option>
         <option value="email">Email</option>
         <option value="telefon">Telefon</option>
@@ -191,7 +206,7 @@
         <option value="event">Mässa eller event</option>
         <option value="tidigarekund">Kund sedan tidigare</option>
         <option value="annat">Annat sätt</option>
-      </select>
+      </select-->
     </p>
 
     <p>
