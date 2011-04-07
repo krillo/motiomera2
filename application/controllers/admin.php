@@ -75,9 +75,18 @@ class Admin extends CI_Controller{
     }
   }
 
+  /**
+   * Show the competitors page
+   * The contest_id is passed as segment 3
+   */
   function competitors(){
     if($this->session->userdata('role_level') > self::COMP_ADM_LEVEL){
-      $this->load->view('admin/v_test');
+      $contest_id = $this->uri->segment(3);
+      $data['competitors'] = $this->m_user->getByContestId($contest_id);
+      $data['teams'] = $this->m_key->getTeamsByContestId($contest_id);
+      $data['competition_data'] = $this->m_key->getTeamDataByContestId($contest_id);
+      $this->load->view('admin/v_company_admin_competitors', $data);
+      $this->load->view('include/v_debug');
     } else {
       redirect('/start');
     }
@@ -91,15 +100,48 @@ class Admin extends CI_Controller{
     }
   }
 
-   function keys(){
-    if($this->session->userdata('role_level') > self::COMP_ADM_LEVEL){
-      $this->load->view('admin/v_test');
+
+  /**
+   * Show the keys page
+   * If the user is a support admin, then add more views
+   * The contest_id is passed as segment 3
+   */
+  function keys() {
+    if ($this->session->userdata('role_level') > self::COMP_ADM_LEVEL) {
+      $contest_id = $this->uri->segment(3);
+      $data['contest_id'] = $contest_id;
+      if($this->session->userdata('role_level') > self::SUPPORT_ADM_LEVEL){
+        $this->load->view('snippets/v_add_keys', $data);
+      }
+      $data['free_keys'] = $this->m_key->getFreeKeysByContestId($contest_id);
+      $this->load->view('admin/v_company_admin_keys', $data);
+      $this->load->view('include/v_debug');
     } else {
       redirect('/start');
     }
   }
 
-   function reclamation(){
+  /**
+   * Add keys to the company
+   * Call this from jquery
+   *
+   * The company_id is passed as segment 3
+   * The counts is passed as segment 4
+   */
+  function addkeys(){
+    if($this->session->userdata('role_level') > self::SUPPORT_ADM_LEVEL){
+      $contest_id = $this->uri->segment(3);
+      $nbr = $this->uri->segment(4);
+      $data['new_keys'] = $this->m_key->generateKeys($contest_id, true);  //don't generate any teams (true)
+      $this->load->view('snippets/v_test_snippet', $data);
+      $this->load->view('include/v_debug');
+    } else {
+      redirect('/start');
+    }
+  }
+
+
+  function reclamation(){
     if($this->session->userdata('role_level') > self::COMP_ADM_LEVEL){
       $this->load->view('admin/v_test');
     } else {

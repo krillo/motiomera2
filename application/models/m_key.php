@@ -46,6 +46,161 @@ class M_key extends CI_Model {
 
 
   /**
+   * Get all teams by contest id
+   * @param <type> $contest_id
+   * @return <type>
+   */
+  function getTeamsByContestId($contest_id){
+    $sql = "SELECT * FROM teams t WHERE id in (SELECT team_id FROM `keys` WHERE contest_id = ? )";
+    $query = $this->db->query($sql, array($contest_id));
+    if($query->num_rows() > 0 ){
+      foreach ($query->result() as $row){
+        $data[$row->id] = $row->name;
+      }
+      return $data;
+    }else{
+      //todo error handling
+      return -1;
+    }
+  }
+
+
+
+  /**
+   * Collect some contest data:
+   * 1. All competitors
+   * 2. All registered users in the contest
+   * 3. All users in the competition but not placed in any team
+   *
+   * @param <type> $contest_id
+   * @return <type>
+   */
+  function getTeamDataByContestId($contest_id) {
+    $sql = "SELECT count(id) total  FROM  `keys` WHERE contest_id = ?";
+    $query = $this->db->query($sql, array($contest_id));
+    if ($query->num_rows() == 1) {
+      foreach ($query->result() as $row) {
+        $data['total_keys'] = $row->total;
+      }
+      $sql = "SELECT count(id) users  FROM  `keys` WHERE contest_id = ? AND user_id IS NOT NULL";
+      $query = $this->db->query($sql, array($contest_id));
+      if ($query->num_rows() == 1) {
+        foreach ($query->result() as $row) {
+          $data['total_used_keys'] = $row->users;
+        }
+        $sql = "SELECT count(id) users FROM `keys` WHERE contest_id = ? AND user_id IS NOT NULL AND team_id IS NULL";
+        $query = $this->db->query($sql, array($contest_id));
+        if ($query->num_rows() == 1) {
+          foreach ($query->result() as $row) {
+            $data['total_users_no_team'] = $row->users;
+          }
+          return $data;
+        } else {
+          return -1;
+        }
+      } else {
+        return -1;
+      }
+    } else {
+      return -1;
+    }
+  }
+
+
+
+  function getFreeKeysByContestId($contest_id) {
+    $sql = "SELECT id, `key`  FROM  `keys` WHERE contest_id = ? AND user_id IS NULL";
+    $query = $this->db->query($sql, array($contest_id));
+    if ($query->num_rows() > 0) {
+      foreach ($query->result() as $row) {
+        $data[$row->id] = $row->key;
+      }
+      return $data;
+    } else {
+      return -1;
+    }
+  }
+
+
+  public function addKeys($contest_id, $keys, $team_id = null){
+    foreach ($keys as $key) {
+      $sql = "INSERT INTO `keys` (contest_id, `key`, team_id, created_at, updated_at) values(?, ?, ?, ?, ?)";
+      $query = $this->db->query($sql, array($contest_id, $key, $team_id, date('Y-m-d H:i:s'), date('Y-m-d H:i:s')));
+    }
+  }
+
+
+
+  /**
+   * Generates keys and places them into teams if parameter $skipteam is false or omitted
+   * Returns array of the created keys
+   *
+   * @param <type> $count
+   * @param <type> $order_id
+   * @param <type> $skipteam
+   * @return string
+   */
+  function generateKeys($count, $skipteam = false){
+    $generatedKeys = array();
+    $letters = "ACDEFGHJKLMNPQRSTUVWXY345679";
+    for ($i = 0; $i < $count; $i++) {
+      $key = "";
+      for ($j = 0; $j < 8; $j++) {
+        $key.= $letters[mt_rand(0, strlen($letters) - 1) ];
+      }
+      if ($this->isKeyAvalible($key)) {
+        //$this->addKey($contest_id, $key);
+        $generatedKeys[] = $key;
+      } else {
+        $i--;
+      }
+    }
+    if (!$skipteam){
+      $this->generateTeams();
+    }
+    return $generatedKeys;
+  }
+
+
+  /**
+   * Checks in the db if key is available
+   *
+   * @param <type> $key
+   * @return bool true of false
+   */
+  function isKeyAvalible($key){
+    $sql = "SELECT id FROM `keys` WHERE `key`  = ?";
+    $query = $this->db->query($sql, array($key));
+    if($query->num_rows() > 0 ){
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+
+  /**
+   * Writes a array of keys to the db.
+   * @param <type> $contest_id
+   * @param <type> $keys
+   * @param <type> $team_id
+   */
+  public function addKeysToDb($contest_id, $keys, $team_id = null){
+    foreach ($keys as $key) {
+      $sql = "INSERT INTO `keys` (contest_id, `key`, team_id, created_at, updated_at) values(?, ?, ?, ?, ?)";
+      $query = $this->db->query($sql, array($contest_id, $key, $team_id, date('Y-m-d H:i:s'), date('Y-m-d H:i:s')));
+    }
+  }
+
+
+
+
+
+
+
+
+
+  /**
    * Count all records.
    * Returns count and which table their from
    * @return array
@@ -55,12 +210,6 @@ class M_key extends CI_Model {
     $data['table'] = $this->table;
     $data['count'] = $query;
     return $data;
-	}
-
-	// get persons with paging
-	function getPagedList($limit = 10, $offset = 0){
-		$this->db->order_by('id','asc');
-		return $this->db->get($this->table, $limit, $offset);
 	}
 
 	/**
