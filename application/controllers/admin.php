@@ -29,77 +29,146 @@ class Admin extends CI_Controller{
     redirect('/start');
 	}
 
+  /** 
+   * Call this function from all functions in this class to prevent anybody with lower access to run the function
+   * If the users level in the session object is is higher than required then proceede into tghe function else redirect to start page
+   *   
+   * @param <type> $level
+   * @return <type> 
+   */
+  function auth($level){
+    if($this->session->userdata('role_level') > $level){
+      return;
+    } else {
+      redirect('/start');
+    }
+  }
 
-/*********** COMPANYADMIN ****************/
+
+
+
+  /****************************** COMPANYADMIN **************************************/
+  /****************************** COMPANYADMIN **************************************/
 
   /**
-   * Show company admin page
-   * Always check that the user has enough priviledges
+   * Show the company admin page
+   * Always check that the user has enough priviledges<br/>
+   *
+   * Displays a full HTML page
    */
-  function companyadmin(){
-    if($this->session->userdata('role_level') > self::COMP_ADM_LEVEL){
-      $data['title'] = 'Company admin page';
-      $user_id = $this->session->userdata('user_id');
-      $data['company'] = $this->m_company->getByUserId($user_id);
-      $company_id = $data['company'][0]->id;
-      $data['contest'] = $this->m_contest->getCurrentContest($company_id);
-      $contest_id = $data['contest'][0]->id;
-      $data['contest_dates'] = $this->m_contest_dates->getDatesByContestId($contest_id);
+  function companyadmin() {
+    $this->auth(self::COMP_ADM_LEVEL);
+    $data['title'] = 'Company admin page';
+    $user_id = $this->session->userdata('user_id');
+    $data['company'] = $this->m_company->getByUserId($user_id);
+    $company_id = $data['company'][0]->id;
+    $data['contest'] = $this->m_contest->getCurrentContest($company_id);
+    $contest_id = $data['contest'][0]->id;
+    $data['contest_dates'] = $this->m_contest_dates->getDatesByContestId($contest_id);
 
-      $start = date('Y-m-d', strtotime($data['contest'][0]->start));
-      $data['start'] = $start;
-      $stop = date('Y-m-d', strtotime($data['contest'][0]->stop));
-      $data['stop'] = $stop;
+    $start = date('Y-m-d', strtotime($data['contest'][0]->start));
+    $data['start'] = $start;
+    $stop = date('Y-m-d', strtotime($data['contest'][0]->stop));
+    $data['stop'] = $stop;
 
-      $this->load->view('include/v_header', $data);
-      $this->load->view('admin/v_company_admin');
-      $this->load->view('include/v_footer');
-    } else {
-      redirect('/start');
-    }
+    $this->load->view('include/v_header', $data);
+    $this->load->view('admin/v_company_admin');
+    $this->load->view('include/v_footer');
   }
 
-  function teams(){
-    if($this->session->userdata('role_level') > self::COMP_ADM_LEVEL){
-      $this->load->view('admin/v_test');
-    } else {
-      redirect('/start');
-    }
+
+  function companysettings() {
+    $this->auth(self::COMP_ADM_LEVEL);
+    $this->load->view('admin/v_test');
   }
 
-  function companysettings(){
-    if($this->session->userdata('role_level') > self::COMP_ADM_LEVEL){
-      $this->load->view('admin/v_test');
-    } else {
-      redirect('/start');
+
+  /**
+   * Show the teams page
+   * The contest_id is passed as segment 3
+   *
+   * Displays a partial HTML page
+   */
+  function teams($contest_id = null) {
+    $this->auth(self::COMP_ADM_LEVEL);
+    if($contest_id == null){
+      $contest_id = $this->uri->segment(3);
     }
+    $data['competition_data'] = $this->m_key->getTeamDataByContestId($contest_id);
+    $data['teams'] = $this->m_team->getAllByContestId($contest_id);
+    $this->load->view('admin/v_company_admin_teams', $data);
+    $this->load->view('include/v_debug');
   }
+
+
+
+  /**
+   * Show the page for editing a team
+   * 
+   * Displays a partial HTML page
+   */
+  function teamedit() {
+    $this->auth(self::COMP_ADM_LEVEL);
+    $team_id = $this->uri->segment(3);
+    $data['team'] = $this->m_team->getById($team_id);
+    $data['users'] = $this->m_key->getUsersByTeamId($team_id);
+    $this->load->view('admin/v_company_admin_teams_edit', $data);
+    $this->load->view('include/v_debug');
+  }
+
+
+  /**
+   * Renames a team and shows the same page as function temaedit()
+   *
+   * Displays a partial HTML page
+   */
+  function renameteam() {
+    $this->auth(self::COMP_ADM_LEVEL);
+    $team_id = $this->uri->segment(3);
+    $new_name = urldecode($this->uri->segment(4));
+    $data['team'] = $this->m_team->updateName($team_id, $new_name);
+    $this->teamedit();
+  }
+
+
+  /**
+   * Remove team from db, but first reset all key references to null
+   *
+   */
+  function teamdelete(){
+    $this->auth(self::COMP_ADM_LEVEL);
+    $team_id = $this->uri->segment(3);
+    $contest_id = urldecode($this->uri->segment(4));
+    $this->m_key->removeTeam($team_id);
+    $this->m_team->delete($team_id, $contest_id);
+    $this->teams($contest_id);
+  }
+
+
 
   /**
    * Show the competitors page
    * The contest_id is passed as segment 3
+   *
+   * Displays a partial HTML page
    */
-  function competitors(){
-    if($this->session->userdata('role_level') > self::COMP_ADM_LEVEL){
-      $contest_id = $this->uri->segment(3);
-      $data['competitors'] = $this->m_user->getByContestId($contest_id);
-      $data['teams'] = $this->m_key->getTeamsByContestId($contest_id);
-      $data['competition_data'] = $this->m_key->getTeamDataByContestId($contest_id);
-      $this->load->view('admin/v_company_admin_competitors', $data);
-      $this->load->view('include/v_debug');
-    } else {
-      redirect('/start');
-    }
+  function competitors() {
+    $this->auth(self::COMP_ADM_LEVEL);
+    $contest_id = $this->uri->segment(3);
+    $data['competitors'] = $this->m_user->getByContestId($contest_id);
+    $data['teams'] = $this->m_team->getActiveTeamsByContestId($contest_id);
+    $data['competition_data'] = $this->m_key->getTeamDataByContestId($contest_id);
+    $this->load->view('admin/v_company_admin_competitors', $data);
+    $this->load->view('include/v_debug');
   }
 
-   function additionalorders(){
-    if($this->session->userdata('role_level') > self::COMP_ADM_LEVEL){
-      $this->load->view('admin/v_test');
-    } else {
-      redirect('/start');
-    }
-  }
 
+
+
+   function additionalorders() {
+    $this->auth(self::COMP_ADM_LEVEL);
+    $this->load->view('admin/v_test');
+  }
 
   /**
    * Show the keys page
@@ -107,51 +176,44 @@ class Admin extends CI_Controller{
    * The contest_id is passed as segment 3
    */
   function keys() {
-    if ($this->session->userdata('role_level') > self::COMP_ADM_LEVEL) {
-      $contest_id = $this->uri->segment(3);
-      $data['contest_id'] = $contest_id;
-      if($this->session->userdata('role_level') > self::SUPPORT_ADM_LEVEL){
-        $this->load->view('snippets/v_add_keys', $data);
-      }
-      $data['free_keys'] = $this->m_key->getFreeKeysByContestId($contest_id);
-      $this->load->view('admin/v_company_admin_keys', $data);
-      $this->load->view('include/v_debug');
-    } else {
-      redirect('/start');
+    $this->auth(self::COMP_ADM_LEVEL);
+    $contest_id = $this->uri->segment(3);
+    $data['contest_id'] = $contest_id;
+    if ($this->session->userdata('role_level') > self::SUPPORT_ADM_LEVEL) {
+      $this->load->view('snippets/v_keys_add', $data);
     }
+    $data['free_keys'] = $this->m_key->getFreeKeysByContestId($contest_id);
+    $this->load->view('admin/v_company_admin_keys', $data);
   }
 
   /**
-   * Add keys to the company
+   * Add keys to the current contest
    * Call this from jquery
+   * It returns a list of all available keys
+   * Notice that you have to be at least SUPPORT_ADM_LEVEL to run this function
    *
-   * The company_id is passed as segment 3
-   * The counts is passed as segment 4
+   * The contest_id is passed as segment 3
+   * The count is passed as segment 4
    */
-  function addkeys(){
-    if($this->session->userdata('role_level') > self::SUPPORT_ADM_LEVEL){
-      $contest_id = $this->uri->segment(3);
-      $nbr = $this->uri->segment(4);
-      $data['new_keys'] = $this->m_key->generateKeys($contest_id, true);  //don't generate any teams (true)
-      $this->load->view('snippets/v_test_snippet', $data);
-      $this->load->view('include/v_debug');
-    } else {
-      redirect('/start');
-    }
+  function addkeys() {
+    $this->auth(self::SUPPORT_ADM_LEVEL);
+    $contest_id = $this->uri->segment(3);
+    $nbr = $this->uri->segment(4);
+    $keys = $this->m_key->generateKeys($nbr);
+    $this->m_key->addKeysToDb($contest_id, $keys);
+    $data['free_keys'] = $this->m_key->getFreeKeysByContestId($contest_id);
+    $this->load->view('snippets/v_keys_list', $data);
   }
 
 
-  function reclamation(){
-    if($this->session->userdata('role_level') > self::COMP_ADM_LEVEL){
-      $this->load->view('admin/v_test');
-    } else {
-      redirect('/start');
-    }
+  function reclamation() {
+    $this->auth(self::SUPPORT_ADM_LEVEL);
+    $this->load->view('admin/v_test');
   }
 
 
-
-/*********** SUPPORT ****************/
+  /****************************** SUPPORT **************************************/
+  /****************************** SUPPORT **************************************/
 
   /**
    * Show support admin page

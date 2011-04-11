@@ -9,6 +9,90 @@ class M_team extends CI_Model {
   private $table = 'teams';
 
 
+  /**
+   * Gets all the records, defaults to limit the result to 20 rows
+   * @param <type> $limit
+   * @return <type>
+   */
+  function getAll($limit = 20){
+    $query = $this->db->get($this->table, $limit);
+    if($query->num_rows() > 0 ){
+      foreach ($query->result() as $row){
+        $data[] = $row;
+      }
+      return $data;
+    }
+  }
+
+
+   /**
+   * Get by user_id
+   * @param <type> $id
+   * @return <type>
+   */
+  function getById($id){
+    $sql = "SELECT * FROM teams WHERE id  = ?";
+    $query = $this->db->query($sql, array($id));
+    if($query->num_rows() > 0 ){
+      foreach ($query->result() as $row){
+        $data[] = $row;
+      }
+      return $data;
+    }else{
+      //todo error handling
+      return -1;
+    }
+  }
+
+
+  /**
+   * Get all teams by contest_id also calculate how many users there are in each team
+   * 
+   * @param <type> $id
+   * @return <type>
+   */
+  function getAllByContestId($contest_id){
+    $sql = "SELECT * FROM teams WHERE contest_id  = ? ";
+    $query = $this->db->query($sql, array($contest_id));
+    if($query->num_rows() > 0 ){
+      foreach ($query->result() as $row){
+        $sql = "SELECT count(id) count FROM `keys` WHERE team_id  = " . $row->id;
+        $query2 = $this->db->query($sql);
+        $count = $query2->result();
+        $row->nof_users = $count[0]->count;
+        $data[] = $row;
+      }
+      return $data;
+    }else{
+      //todo error handling
+      return -1;
+    }
+  }
+
+
+
+  /**
+   * Get all teams that have any coupled keys by contest id
+   * @param <type> $contest_id
+   * @return <type>
+   */
+  function getActiveTeamsByContestId($contest_id){
+    $sql = "SELECT * FROM teams t WHERE id in (SELECT team_id FROM `keys` WHERE contest_id = ? )";
+    $query = $this->db->query($sql, array($contest_id));
+    if($query->num_rows() > 0 ){
+      foreach ($query->result() as $row){
+        $data[$row->id] = $row->name;
+      }
+      return $data;
+    }else{
+      //todo error handling
+      return -1;
+    }
+  }
+
+
+
+
 
 	function genereraTeams(){
 		global $db;
@@ -98,40 +182,7 @@ class M_team extends CI_Model {
 
 
 
-  /**
-   * Gets all the records, defaults to limit the result to 20 rows
-   * @param <type> $limit
-   * @return <type>
-   */
-  function getAll($limit = 20){
-    $query = $this->db->get($this->table, $limit);
-    if($query->num_rows() > 0 ){
-      foreach ($query->result() as $row){
-        $data[] = $row;
-      }
-      return $data;
-    }
-  }
 
-
-  /**
-   * Get by user_id
-   * @param <type> $id
-   * @return <type>
-   */
-  function getById($id){
-    $sql = "SELECT * FROM temp WHERE id  = ?";
-    $query = $this->db->query($sql, array($id));
-    if($query->num_rows() > 0 ){
-      foreach ($query->result() as $row){
-        $data[] = $row;
-      }
-      return $data;
-    }else{
-      //todo error handling
-      return -1;
-    }
-  }
 
 
   /**
@@ -164,6 +215,31 @@ class M_team extends CI_Model {
 		return $this->db->insert_id();
 	}
 
+
+
+  /**
+   * Update the name
+   * 
+   * @param <type> $id
+   * @param <type> $name
+   * @return int id or -1 if the update fails
+   */
+  function updateName($id, $name) {
+      $data = array(
+        'name' => $name,
+        'updated_at' => date('Y-m-d H:i:s'),
+      );
+      $this->db->where('id', $id);
+      $this->db->update('teams', $data);
+    if($this->db->affected_rows() == 1){
+      return $id;
+    } else {
+      return -1;
+    }
+
+  }
+
+
 	// update person by id
 	function update($id, $data){
     $data['updated_at'] = date('Y-m-d H:i:s');
@@ -172,11 +248,11 @@ class M_team extends CI_Model {
 	}
 
 	/**
-   * delete row, id from segment 3
+   * delete team
    */
 	function delete($id){
 		$this->db->where('id', $id);
-		$this->db->delete($this->table);
+		$this->db->delete('teams');
   }
 
 

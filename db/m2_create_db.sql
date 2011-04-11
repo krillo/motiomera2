@@ -131,7 +131,7 @@ DROP TABLE IF EXISTS `m2`.`users` ;
 
 CREATE  TABLE IF NOT EXISTS `m2`.`users` (
   `id` INT NOT NULL AUTO_INCREMENT ,
-  `municipal_id` INT NOT NULL ,
+  `municipal_id` INT NULL ,
   `wl_id` INT NOT NULL ,
   `level` INT NOT NULL ,
   `email` VARCHAR(45) NULL ,
@@ -196,6 +196,7 @@ CREATE  TABLE IF NOT EXISTS `m2`.`companys` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `wl_id` INT NOT NULL ,
   `user_id` INT NOT NULL ,
+  `source_id` INT NULL ,
   `name` VARCHAR(45) NULL ,
   `customer_id` VARCHAR(45) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL DEFAULT NULL ,
   `is_valid` TINYINT(1) NULL DEFAULT NULL ,
@@ -207,6 +208,7 @@ CREATE  TABLE IF NOT EXISTS `m2`.`companys` (
   INDEX `fk_companys_white_label1` (`wl_id` ASC) ,
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
   INDEX `fk_companys_users1` (`user_id` ASC) ,
+  INDEX `fk_companys_sources1` (`source_id` ASC) ,
   CONSTRAINT `fk_companys_white_label1`
     FOREIGN KEY (`wl_id` )
     REFERENCES `m2`.`white_label` (`id` )
@@ -215,6 +217,11 @@ CREATE  TABLE IF NOT EXISTS `m2`.`companys` (
   CONSTRAINT `fk_companys_users1`
     FOREIGN KEY (`user_id` )
     REFERENCES `m2`.`users` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_companys_sources1`
+    FOREIGN KEY (`source_id` )
+    REFERENCES `m2`.`sources` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -315,6 +322,29 @@ COLLATE = utf8_unicode_ci;
 
 
 -- -----------------------------------------------------
+-- Table `m2`.`teams`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `m2`.`teams` ;
+
+CREATE  TABLE IF NOT EXISTS `m2`.`teams` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `contest_id` INT NOT NULL ,
+  `name` VARCHAR(45) NULL ,
+  `total_steps` INT NULL ,
+  `created_at` DATETIME NULL ,
+  `updated_at` DATETIME NULL ,
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
+  INDEX `fk_teams_contests1` (`contest_id` ASC) ,
+  CONSTRAINT `fk_teams_contests1`
+    FOREIGN KEY (`contest_id` )
+    REFERENCES `m2`.`contests` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `m2`.`keys`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `m2`.`keys` ;
@@ -322,23 +352,29 @@ DROP TABLE IF EXISTS `m2`.`keys` ;
 CREATE  TABLE IF NOT EXISTS `m2`.`keys` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `contest_id` INT NOT NULL ,
-  `users_id` INT NOT NULL ,
-  `teams_id` INT NULL DEFAULT NULL ,
+  `user_id` INT NULL ,
+  `team_id` INT NULL ,
   `key` VARCHAR(45) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL DEFAULT NULL ,
   `created_at` DATETIME NULL DEFAULT NULL ,
   `updated_at` DATETIME NULL DEFAULT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `fk_keys_contest1` (`contest_id` ASC) ,
-  INDEX `fk_keys_users1` (`users_id` ASC) ,
+  INDEX `fk_keys_users1` (`user_id` ASC) ,
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
+  INDEX `fk_keys_teams1` (`team_id` ASC) ,
   CONSTRAINT `fk_keys_contest1`
     FOREIGN KEY (`contest_id` )
     REFERENCES `m2`.`contests` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_keys_users1`
-    FOREIGN KEY (`users_id` )
+    FOREIGN KEY (`user_id` )
     REFERENCES `m2`.`users` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_keys_teams1`
+    FOREIGN KEY (`team_id` )
+    REFERENCES `m2`.`teams` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -453,7 +489,7 @@ CREATE  TABLE IF NOT EXISTS `m2`.`contest_dates` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `contest_id` INT NOT NULL ,
   `date` DATETIME NOT NULL ,
-  `type` INT NOT NULL ,
+  `type` VARCHAR(45) NOT NULL ,
   `created_at` DATETIME NULL ,
   `updated_at` DATETIME NULL ,
   PRIMARY KEY (`id`) ,
@@ -573,12 +609,13 @@ COMMIT;
 -- -----------------------------------------------------
 SET AUTOCOMMIT=0;
 USE `m2`;
-INSERT INTO `m2`.`users` (`id`, `municipal_id`, `wl_id`, `level`, `email`, `email_confirmed`, `password`, `f_name`, `l_name`, `nick`, `sex`, `born`, `descr`, `last_login`, `img_filename`, `avatar_filename`, `customer_id`, `paid_until`, `trophy_start`, `status`, `company_key_temp`, `sources_id`, `total_steps`, `total_steps_current`, `total_logins`, `total_regs`, `created_at`, `updated_at`) VALUES ('1', '1', '1', '99', 'krillo@gmail.com', '1', 'kapten', 'krillo', 'superadmin', '99', 'MALE', '1977-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, '2012-03-03 12:00:00', '2011-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
-INSERT INTO `m2`.`users` (`id`, `municipal_id`, `wl_id`, `level`, `email`, `email_confirmed`, `password`, `f_name`, `l_name`, `nick`, `sex`, `born`, `descr`, `last_login`, `img_filename`, `avatar_filename`, `customer_id`, `paid_until`, `trophy_start`, `status`, `company_key_temp`, `sources_id`, `total_steps`, `total_steps_current`, `total_logins`, `total_regs`, `created_at`, `updated_at`) VALUES ('2', '3', '1', '51', 'emma@boyhappy.se', '1', 'kapten', 'emma', 'p', '41', 'FEMALE', '1977-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, '2012-03-03 12:00:00', '2011-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
-INSERT INTO `m2`.`users` (`id`, `municipal_id`, `wl_id`, `level`, `email`, `email_confirmed`, `password`, `f_name`, `l_name`, `nick`, `sex`, `born`, `descr`, `last_login`, `img_filename`, `avatar_filename`, `customer_id`, `paid_until`, `trophy_start`, `status`, `company_key_temp`, `sources_id`, `total_steps`, `total_steps_current`, `total_logins`, `total_regs`, `created_at`, `updated_at`) VALUES ('3', '2', '1', '19', 'user@boyhappy.se', '1', 'kapten', 'normal', 'user', '19', 'FEMALE', '1977-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, '2012-03-03 12:00:00', '2011-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
-INSERT INTO `m2`.`users` (`id`, `municipal_id`, `wl_id`, `level`, `email`, `email_confirmed`, `password`, `f_name`, `l_name`, `nick`, `sex`, `born`, `descr`, `last_login`, `img_filename`, `avatar_filename`, `customer_id`, `paid_until`, `trophy_start`, `status`, `company_key_temp`, `sources_id`, `total_steps`, `total_steps_current`, `total_logins`, `total_regs`, `created_at`, `updated_at`) VALUES ('4', '2', '2', '19', 'user2@boyhappy.se', '1', 'kapten', 'wl2', 'user', 'wl19', 'MALE', '1977-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, '2012-03-03 12:00:00', '2011-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
-INSERT INTO `m2`.`users` (`id`, `municipal_id`, `wl_id`, `level`, `email`, `email_confirmed`, `password`, `f_name`, `l_name`, `nick`, `sex`, `born`, `descr`, `last_login`, `img_filename`, `avatar_filename`, `customer_id`, `paid_until`, `trophy_start`, `status`, `company_key_temp`, `sources_id`, `total_steps`, `total_steps_current`, `total_logins`, `total_regs`, `created_at`, `updated_at`) VALUES ('5', '3', '2', '71', 'admin2@boyhappy.se', '1', 'kapten', 'wl2-admin', 'admin', 'wl71', 'MALE', '1977-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, '2012-03-03 12:00:00', '2011-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
-INSERT INTO `m2`.`users` (`id`, `municipal_id`, `wl_id`, `level`, `email`, `email_confirmed`, `password`, `f_name`, `l_name`, `nick`, `sex`, `born`, `descr`, `last_login`, `img_filename`, `avatar_filename`, `customer_id`, `paid_until`, `trophy_start`, `status`, `company_key_temp`, `sources_id`, `total_steps`, `total_steps_current`, `total_logins`, `total_regs`, `created_at`, `updated_at`) VALUES ('6', '1', '1', '41', 'novo@boyhappy.se', '1', 'kapten', 'novoboy', 'admin', 'novo', 'FEMALE', '1977-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, '2012-03-03 12:00:00', '2011-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
+INSERT INTO `m2`.`users` (`id`, `municipal_id`, `wl_id`, `level`, `email`, `email_confirmed`, `password`, `f_name`, `l_name`, `nick`, `sex`, `born`, `descr`, `last_login`, `img_filename`, `avatar_filename`, `customer_id`, `paid_until`, `trophy_start`, `status`, `company_key_temp`, `sources_id`, `total_steps`, `total_steps_current`, `total_logins`, `total_regs`, `created_at`, `updated_at`) VALUES ('1', '1', '1', '99', 'krillo@gmail.com', '1', 'kapten', 'krillo', 'superadmin', '99', 'MALE', '1977-03-03 12:00:00', NULL, NULL, NULL, 'avatar1.gif', NULL, '2012-03-03 12:00:00', '2011-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
+INSERT INTO `m2`.`users` (`id`, `municipal_id`, `wl_id`, `level`, `email`, `email_confirmed`, `password`, `f_name`, `l_name`, `nick`, `sex`, `born`, `descr`, `last_login`, `img_filename`, `avatar_filename`, `customer_id`, `paid_until`, `trophy_start`, `status`, `company_key_temp`, `sources_id`, `total_steps`, `total_steps_current`, `total_logins`, `total_regs`, `created_at`, `updated_at`) VALUES ('2', '3', '1', '51', 'emma@boyhappy.se', '1', 'kapten', 'emma', 'p', '41', 'FEMALE', '1977-03-03 12:00:00', NULL, NULL, NULL, 'avatar7.gif', NULL, '2012-03-03 12:00:00', '2011-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
+INSERT INTO `m2`.`users` (`id`, `municipal_id`, `wl_id`, `level`, `email`, `email_confirmed`, `password`, `f_name`, `l_name`, `nick`, `sex`, `born`, `descr`, `last_login`, `img_filename`, `avatar_filename`, `customer_id`, `paid_until`, `trophy_start`, `status`, `company_key_temp`, `sources_id`, `total_steps`, `total_steps_current`, `total_logins`, `total_regs`, `created_at`, `updated_at`) VALUES ('3', '2', '1', '19', 'user@boyhappy.se', '1', 'kapten', 'normal', 'user', '19', 'FEMALE', '1977-03-03 12:00:00', NULL, NULL, NULL, 'avatar2.gif', NULL, '2012-03-03 12:00:00', '2011-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
+INSERT INTO `m2`.`users` (`id`, `municipal_id`, `wl_id`, `level`, `email`, `email_confirmed`, `password`, `f_name`, `l_name`, `nick`, `sex`, `born`, `descr`, `last_login`, `img_filename`, `avatar_filename`, `customer_id`, `paid_until`, `trophy_start`, `status`, `company_key_temp`, `sources_id`, `total_steps`, `total_steps_current`, `total_logins`, `total_regs`, `created_at`, `updated_at`) VALUES ('4', '2', '2', '19', 'user2@boyhappy.se', '1', 'kapten', 'wl2', 'user', 'wl19', 'MALE', '1977-03-03 12:00:00', NULL, NULL, NULL, 'avatar3.gif', NULL, '2012-03-03 12:00:00', '2011-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
+INSERT INTO `m2`.`users` (`id`, `municipal_id`, `wl_id`, `level`, `email`, `email_confirmed`, `password`, `f_name`, `l_name`, `nick`, `sex`, `born`, `descr`, `last_login`, `img_filename`, `avatar_filename`, `customer_id`, `paid_until`, `trophy_start`, `status`, `company_key_temp`, `sources_id`, `total_steps`, `total_steps_current`, `total_logins`, `total_regs`, `created_at`, `updated_at`) VALUES ('5', '3', '2', '71', 'admin2@boyhappy.se', '1', 'kapten', 'wl2-admin', 'admin', 'wl71', 'MALE', '1977-03-03 12:00:00', NULL, NULL, NULL, 'avatar3.gif', NULL, '2012-03-03 12:00:00', '2011-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
+INSERT INTO `m2`.`users` (`id`, `municipal_id`, `wl_id`, `level`, `email`, `email_confirmed`, `password`, `f_name`, `l_name`, `nick`, `sex`, `born`, `descr`, `last_login`, `img_filename`, `avatar_filename`, `customer_id`, `paid_until`, `trophy_start`, `status`, `company_key_temp`, `sources_id`, `total_steps`, `total_steps_current`, `total_logins`, `total_regs`, `created_at`, `updated_at`) VALUES ('6', '1', '1', '41', 'novo@boyhappy.se', '1', 'kapten', 'novoboy', 'admin', 'novo', 'FEMALE', '1977-03-03 12:00:00', NULL, NULL, NULL, 'avatar5.gif', NULL, '2012-03-03 12:00:00', '2011-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
+INSERT INTO `m2`.`users` (`id`, `municipal_id`, `wl_id`, `level`, `email`, `email_confirmed`, `password`, `f_name`, `l_name`, `nick`, `sex`, `born`, `descr`, `last_login`, `img_filename`, `avatar_filename`, `customer_id`, `paid_until`, `trophy_start`, `status`, `company_key_temp`, `sources_id`, `total_steps`, `total_steps_current`, `total_logins`, `total_regs`, `created_at`, `updated_at`) VALUES ('7', '3', '1', '19', 'jams@boyhappy.se', '1', 'kapten', 'James', 'Withouse', 'Bullbull', 'MALE', '1977-03-03 12:00:00', NULL, NULL, NULL, 'avatar6.gif', NULL, '2012-03-03 12:00:00', '2012-03-03 12:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2012-03-03 12:00:00', '2012-03-03 12:00:00');
 
 COMMIT;
 
@@ -587,9 +624,9 @@ COMMIT;
 -- -----------------------------------------------------
 SET AUTOCOMMIT=0;
 USE `m2`;
-INSERT INTO `m2`.`companys` (`id`, `wl_id`, `user_id`, `name`, `customer_id`, `is_valid`, `source`, `tmp_password`, `created_at`, `updated_at`) VALUES ('1', '1', '1', 'Boy Interactive Ltd', '1111', '1', NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
-INSERT INTO `m2`.`companys` (`id`, `wl_id`, `user_id`, `name`, `customer_id`, `is_valid`, `source`, `tmp_password`, `created_at`, `updated_at`) VALUES ('2', '1', '6', 'Triserpiaan global', '2222', '1', NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
-INSERT INTO `m2`.`companys` (`id`, `wl_id`, `user_id`, `name`, `customer_id`, `is_valid`, `source`, `tmp_password`, `created_at`, `updated_at`) VALUES ('3', '2', '5', 'Vourff Ag', '3333', '1', NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
+INSERT INTO `m2`.`companys` (`id`, `wl_id`, `user_id`, `source_id`, `name`, `customer_id`, `is_valid`, `source`, `tmp_password`, `created_at`, `updated_at`) VALUES ('1', '1', '1', NULL, 'Boy Interactive Ltd', '1111', '1', NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
+INSERT INTO `m2`.`companys` (`id`, `wl_id`, `user_id`, `source_id`, `name`, `customer_id`, `is_valid`, `source`, `tmp_password`, `created_at`, `updated_at`) VALUES ('2', '1', '6', NULL, 'Triserpiaan global', '2222', '1', NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
+INSERT INTO `m2`.`companys` (`id`, `wl_id`, `user_id`, `source_id`, `name`, `customer_id`, `is_valid`, `source`, `tmp_password`, `created_at`, `updated_at`) VALUES ('3', '2', '5', NULL, 'Vourff Ag', '3333', '1', NULL, NULL, '2011-03-03 12:00:00', '2011-03-03 12:00:00');
 
 COMMIT;
 
@@ -612,8 +649,40 @@ USE `m2`;
 INSERT INTO `m2`.`contests` (`id`, `company_id`, `drive_id`, `trade_id`, `start`, `stop`, `nof_weeks`, `route_xxx`, `created_at`, `updated_at`) VALUES ('1', '1', NULL, NULL, '2010-02-28 00:00:00', '2010-05-01 00:00:00', '6', NULL, '2011-03-03 00:00:00', '2011-03-03 00:00:00');
 INSERT INTO `m2`.`contests` (`id`, `company_id`, `drive_id`, `trade_id`, `start`, `stop`, `nof_weeks`, `route_xxx`, `created_at`, `updated_at`) VALUES ('2', '1', '1', NULL, '2011-03-29 00:00:00', '2011-05-01 00:00:00', '5', NULL, '2011-03-03 00:00:00', '2011-03-03 00:00:00');
 INSERT INTO `m2`.`contests` (`id`, `company_id`, `drive_id`, `trade_id`, `start`, `stop`, `nof_weeks`, `route_xxx`, `created_at`, `updated_at`) VALUES ('3', '3', '1', NULL, '2011-03-29 00:00:00', '2011-05-01 00:00:00', '5', NULL, '2011-03-03 00:00:00', '2011-03-03 00:00:00');
-INSERT INTO `m2`.`contests` (`id`, `company_id`, `drive_id`, `trade_id`, `start`, `stop`, `nof_weeks`, `route_xxx`, `created_at`, `updated_at`) VALUES ('4', '2', '2', NULL, '2011-04-11 00:00:00', '2011-04-24 00:00:00', '2', NULL, '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`contests` (`id`, `company_id`, `drive_id`, `trade_id`, `start`, `stop`, `nof_weeks`, `route_xxx`, `created_at`, `updated_at`) VALUES ('4', '2', '2', NULL, '2011-04-04 00:00:00', '2011-04-17 00:00:00', '2', NULL, '2011-03-03 00:00:00', '2011-03-03 00:00:00');
 INSERT INTO `m2`.`contests` (`id`, `company_id`, `drive_id`, `trade_id`, `start`, `stop`, `nof_weeks`, `route_xxx`, `created_at`, `updated_at`) VALUES ('5', '1', '2', NULL, '2011-04-11 00:00:00', '2011-04-24 00:00:00', '2', NULL, '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `m2`.`teams`
+-- -----------------------------------------------------
+SET AUTOCOMMIT=0;
+USE `m2`;
+INSERT INTO `m2`.`teams` (`id`, `contest_id`, `name`, `total_steps`, `created_at`, `updated_at`) VALUES ('1', '2', 'Bull bull', NULL, '2011-03-03', '2011-03-03');
+INSERT INTO `m2`.`teams` (`id`, `contest_id`, `name`, `total_steps`, `created_at`, `updated_at`) VALUES ('2', '2', 'Aller no daller', NULL, '2011-03-03', '2011-03-03');
+INSERT INTO `m2`.`teams` (`id`, `contest_id`, `name`, `total_steps`, `created_at`, `updated_at`) VALUES ('3', '2', 'Beachers', NULL, '2011-03-03', '2011-03-03');
+INSERT INTO `m2`.`teams` (`id`, `contest_id`, `name`, `total_steps`, `created_at`, `updated_at`) VALUES ('4', '2', 'Knallers', NULL, '2011-03-03', '2011-03-03');
+INSERT INTO `m2`.`teams` (`id`, `contest_id`, `name`, `total_steps`, `created_at`, `updated_at`) VALUES ('5', '4', 'Autobahn', NULL, '2011-03-03', '2011-03-03');
+INSERT INTO `m2`.`teams` (`id`, `contest_id`, `name`, `total_steps`, `created_at`, `updated_at`) VALUES ('6', '4', 'Tour de France', NULL, '2011-03-03', '2011-03-03');
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `m2`.`keys`
+-- -----------------------------------------------------
+SET AUTOCOMMIT=0;
+USE `m2`;
+INSERT INTO `m2`.`keys` (`id`, `contest_id`, `user_id`, `team_id`, `key`, `created_at`, `updated_at`) VALUES ('1', '2', '1', '1', '112', '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`keys` (`id`, `contest_id`, `user_id`, `team_id`, `key`, `created_at`, `updated_at`) VALUES ('2', '2', '2', NULL, '113', '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`keys` (`id`, `contest_id`, `user_id`, `team_id`, `key`, `created_at`, `updated_at`) VALUES ('3', '2', '3', '2', '114', '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`keys` (`id`, `contest_id`, `user_id`, `team_id`, `key`, `created_at`, `updated_at`) VALUES ('4', '2', '6', '2', '115', '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`keys` (`id`, `contest_id`, `user_id`, `team_id`, `key`, `created_at`, `updated_at`) VALUES ('5', '2', '7', '2', '116', '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`keys` (`id`, `contest_id`, `user_id`, `team_id`, `key`, `created_at`, `updated_at`) VALUES ('6', '2', NULL, NULL, '117', '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`keys` (`id`, `contest_id`, `user_id`, `team_id`, `key`, `created_at`, `updated_at`) VALUES ('7', '2', NULL, NULL, '118', '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`keys` (`id`, `contest_id`, `user_id`, `team_id`, `key`, `created_at`, `updated_at`) VALUES ('8', '4', '4', NULL, '119', '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`keys` (`id`, `contest_id`, `user_id`, `team_id`, `key`, `created_at`, `updated_at`) VALUES ('9', '4', '5', NULL, '120', '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`keys` (`id`, `contest_id`, `user_id`, `team_id`, `key`, `created_at`, `updated_at`) VALUES ('10', '4', NULL, NULL, '121', '2011-03-03 00:00:00', '2011-03-03 00:00:00');
 
 COMMIT;
 
@@ -622,8 +691,11 @@ COMMIT;
 -- -----------------------------------------------------
 SET AUTOCOMMIT=0;
 USE `m2`;
-INSERT INTO `m2`.`contest_dates` (`id`, `contest_id`, `date`, `type`, `created_at`, `updated_at`) VALUES ('1', '2', '2011-05-02 00:00:00', '1', '2011-03-03 00:00:00', '2011-03-03 00:00:00');
-INSERT INTO `m2`.`contest_dates` (`id`, `contest_id`, `date`, `type`, `created_at`, `updated_at`) VALUES ('1', '2', '2011-05-03 00:00:00', '2', '2011-03-03 00:00:00', '2011-03-03 00:00:00');
-INSERT INTO `m2`.`contest_dates` (`id`, `contest_id`, `date`, `type`, `created_at`, `updated_at`) VALUES ('1', '2', '2011-05-08 00:00:00', '3', '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`contest_dates` (`id`, `contest_id`, `date`, `type`, `created_at`, `updated_at`) VALUES ('1', '2', '2011-05-02 00:00:00', 'LAST_REG', '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`contest_dates` (`id`, `contest_id`, `date`, `type`, `created_at`, `updated_at`) VALUES ('2', '2', '2011-05-03 00:00:00', 'SEND_RESULT_EMAIL', '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`contest_dates` (`id`, `contest_id`, `date`, `type`, `created_at`, `updated_at`) VALUES ('3', '2', '2011-05-08 00:00:00', 'LAST_ADMIN_DAY', '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`contest_dates` (`id`, `contest_id`, `date`, `type`, `created_at`, `updated_at`) VALUES ('4', '4', '2011-05-02 00:00:00', 'LAST_REG', '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`contest_dates` (`id`, `contest_id`, `date`, `type`, `created_at`, `updated_at`) VALUES ('5', '4', '2011-05-03 00:00:00', 'SEND_RESULT_EMAIL', '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`contest_dates` (`id`, `contest_id`, `date`, `type`, `created_at`, `updated_at`) VALUES ('6', '4', '2011-05-08 00:00:00', 'LAST_ADMIN_DAY', '2011-03-03 00:00:00', '2011-03-03 00:00:00');
 
 COMMIT;

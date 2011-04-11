@@ -6,7 +6,7 @@ Om någon av deltagarna har fått förhinder kan alltså nycklarna användas av 
 </p>
 
 <h2>Nycklar som inte har använts ännu (<?php echo $count; ?> st):</h2>
-<p>
+<p id="key-list">
   <?php
   if($count > 0){
     foreach ($free_keys as $key => $row){
@@ -14,8 +14,7 @@ Om någon av deltagarna har fått förhinder kan alltså nycklarna användas av 
     }
   } else {
     echo 'Inga lediga nycklar.';
-  }
-  
+  }  
   ?>
 </p>
 
