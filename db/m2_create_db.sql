@@ -330,6 +330,7 @@ CREATE  TABLE IF NOT EXISTS `m2`.`teams` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `contest_id` INT NOT NULL ,
   `name` VARCHAR(45) NULL ,
+  `img_filename` VARCHAR(128) NULL ,
   `total_steps` INT NULL ,
   `created_at` DATETIME NULL ,
   `updated_at` DATETIME NULL ,
@@ -659,12 +660,13 @@ COMMIT;
 -- -----------------------------------------------------
 SET AUTOCOMMIT=0;
 USE `m2`;
-INSERT INTO `m2`.`teams` (`id`, `contest_id`, `name`, `total_steps`, `created_at`, `updated_at`) VALUES ('1', '2', 'Bull bull', NULL, '2011-03-03', '2011-03-03');
-INSERT INTO `m2`.`teams` (`id`, `contest_id`, `name`, `total_steps`, `created_at`, `updated_at`) VALUES ('2', '2', 'Aller no daller', NULL, '2011-03-03', '2011-03-03');
-INSERT INTO `m2`.`teams` (`id`, `contest_id`, `name`, `total_steps`, `created_at`, `updated_at`) VALUES ('3', '2', 'Beachers', NULL, '2011-03-03', '2011-03-03');
-INSERT INTO `m2`.`teams` (`id`, `contest_id`, `name`, `total_steps`, `created_at`, `updated_at`) VALUES ('4', '2', 'Knallers', NULL, '2011-03-03', '2011-03-03');
-INSERT INTO `m2`.`teams` (`id`, `contest_id`, `name`, `total_steps`, `created_at`, `updated_at`) VALUES ('5', '4', 'Autobahn', NULL, '2011-03-03', '2011-03-03');
-INSERT INTO `m2`.`teams` (`id`, `contest_id`, `name`, `total_steps`, `created_at`, `updated_at`) VALUES ('6', '4', 'Tour de France', NULL, '2011-03-03', '2011-03-03');
+INSERT INTO `m2`.`teams` (`id`, `contest_id`, `name`, `img_filename`, `total_steps`, `created_at`, `updated_at`) VALUES ('1', '2', 'Bull bull', 'team_avatar1.jpg', NULL, '2011-03-03', '2011-03-03');
+INSERT INTO `m2`.`teams` (`id`, `contest_id`, `name`, `img_filename`, `total_steps`, `created_at`, `updated_at`) VALUES ('2', '2', 'Aller no daller', 'team_avatar2.jpg', NULL, '2011-03-03', '2011-03-03');
+INSERT INTO `m2`.`teams` (`id`, `contest_id`, `name`, `img_filename`, `total_steps`, `created_at`, `updated_at`) VALUES ('3', '2', 'Beachers', 'team_avatar3.jpg', NULL, '2011-03-03', '2011-03-03');
+INSERT INTO `m2`.`teams` (`id`, `contest_id`, `name`, `img_filename`, `total_steps`, `created_at`, `updated_at`) VALUES ('4', '2', 'Knallers', 'team_avatar4.jpg', NULL, '2011-03-03', '2011-03-03');
+INSERT INTO `m2`.`teams` (`id`, `contest_id`, `name`, `img_filename`, `total_steps`, `created_at`, `updated_at`) VALUES ('5', '4', 'Autobahn', 'team_avatar5.jpg', NULL, '2011-03-03', '2011-03-03');
+INSERT INTO `m2`.`teams` (`id`, `contest_id`, `name`, `img_filename`, `total_steps`, `created_at`, `updated_at`) VALUES ('6', '4', 'Tour de France', 'team_avatar6.jpg', NULL, '2011-03-03', '2011-03-03');
+INSERT INTO `m2`.`teams` (`id`, `contest_id`, `name`, `img_filename`, `total_steps`, `created_at`, `updated_at`) VALUES ('7', '4', 'The Strövers', 'team_avatar4.jpg', NULL, '2011-03-03', '2011-03-03');
 
 COMMIT;
 
