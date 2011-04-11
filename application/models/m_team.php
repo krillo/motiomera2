@@ -52,7 +52,7 @@ class M_team extends CI_Model {
    * @return <type>
    */
   function getAllByContestId($contest_id){
-    $sql = "SELECT * FROM teams WHERE contest_id  = ? ";
+    $sql = "SELECT * FROM teams WHERE contest_id  = ? ORDER BY name ASC";
     $query = $this->db->query($sql, array($contest_id));
     if($query->num_rows() > 0 ){
       foreach ($query->result() as $row){

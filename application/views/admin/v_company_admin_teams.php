@@ -22,7 +22,7 @@
         url: "<?php echo base_url() ?>admin/teamedit/" + teamId,
         data: '',
         success: function(data){
-          $('#edit-team').html(data);
+          $('#edit-team').show().html(data);
 
         }
       });
@@ -64,6 +64,7 @@ Du kan också byta namn på lagen och lägga till egna lagsymboler om du vill.
   <table class="admin-table">
     <thead>
       <tr>
+        <th></th>
         <th>Team</th>
         <th>Members</th>
         <th>Edit</th>
@@ -75,6 +76,7 @@ Du kan också byta namn på lagen och lägga till egna lagsymboler om du vill.
     foreach ($teams as $team):
     ?>
       <tr>
+        <td> <img src="/img/team_avatars/<?php echo $team->img_filename; ?>" class="avatar-mini"> </td>
         <td> <?php echo $team->name; ?></td>
         <td> <?php echo $team->nof_users; ?></td>
         <td><a href="" onclick="editRow(<?php echo $team->id; ?>);return false;" class="manipulation"><span class="ui-icon ui-icon-pencil"></span></a></td>

@@ -97,7 +97,6 @@ class Admin extends CI_Controller{
     $data['competition_data'] = $this->m_key->getTeamDataByContestId($contest_id);
     $data['teams'] = $this->m_team->getAllByContestId($contest_id);
     $this->load->view('admin/v_company_admin_teams', $data);
-    $this->load->view('include/v_debug');
   }
 
 
@@ -113,7 +112,6 @@ class Admin extends CI_Controller{
     $data['team'] = $this->m_team->getById($team_id);
     $data['users'] = $this->m_key->getUsersByTeamId($team_id);
     $this->load->view('admin/v_company_admin_teams_edit', $data);
-    $this->load->view('include/v_debug');
   }
 
 

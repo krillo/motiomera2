@@ -18,17 +18,19 @@
 
 
   function deleteteam(teamId, contestId){
-     $.ajax({
+    var x=window.confirm("Are you sure you want to delete the team?");
+    if (x){
+      $.ajax({
         type: "POST",
         url: "<?php echo base_url() ?>admin/teamdelete/" + teamId  +'/'+ contestId,
         data: '',
         success: function(data){
           $('#edit-team').hide();
           $('#teams').html(data);
-
         }
       });
-      return false;
+    }
+    return false;
   }
 </script>
 
