@@ -155,7 +155,7 @@ class M_step extends CI_Model {
 
       return $data[0]->step_id;
     } else {
-      //todo: nice error handling, not same is in session as in the request
+      //todo: nice error handling, not same id in session as in the request
       echo "user id ok, " . $user_id;
       return -1;
     }
@@ -199,5 +199,23 @@ class M_step extends CI_Model {
 
     //todo don't know how to return success or fail?!?!?
   }
+
+
+  /**
+   * Just check if testdata is present or not
+   * @return boolean
+   */
+  function isTestDataLoaded() {
+    $sql = 'select count(id) count from steps';
+    $query = $this->db->query($sql);
+    if ($query->num_rows() > 0) {
+      $result = $query->result();
+      if($result[0]->count > 0){
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
+
 
 }

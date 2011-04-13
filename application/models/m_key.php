@@ -63,16 +63,18 @@ class M_key extends CI_Model {
   }
 
 
+  /**
+   * Get the users in the team
+   * 
+   * @param <type> $team_id
+   * @return <type>
+   */
   function getUsersByTeamId($team_id) {
-    //$sql = "SELECT k.id key_id , u.id user_id, u.* FROM `keys` k,  users u WHERE team_id = ? AND k.id = u.id";
-    $sql = "SELECT u.id user_id, nick, f_name, l_name FROM `keys` k,  users u WHERE team_id = ? AND k.id = u.id";
+    $sql = "SELECT u.id user_id, k.id key_id, team_id, nick, f_name, l_name FROM `keys` k,  users u WHERE team_id = ? AND k.id = u.id";
     $query = $this->db->query($sql, array($team_id));
     if ($query->num_rows() > 0) {
       foreach ($query->result() as $row) {
         $data[] = $row;
-        //$data['nick'] = $row->nick;
-        //$data['f_name'] = $row->f_name;
-        //$data['l_name'] = $row->l_name;
       }
       return $data;
     } else {
@@ -123,7 +125,7 @@ class M_key extends CI_Model {
 
 
   function getFreeKeysByContestId($contest_id) {
-    $sql = "SELECT id, `key`  FROM  `keys` WHERE contest_id = ? AND user_id IS NULL";
+    $sql = "SELECT id, `key`  FROM  `keys` WHERE contest_id = ? AND user_id IS NULL ORDER BY id ASC";
     $query = $this->db->query($sql, array($contest_id));
     if ($query->num_rows() > 0) {
       foreach ($query->result() as $row) {
@@ -229,6 +231,38 @@ class M_key extends CI_Model {
       return -1;
     }
   }
+
+
+  function removeUserByUserContestId($user_id, $contest_id){
+    $updated_at = date('Y-m-d H:i:s');
+    $sql = "UPDATE `keys` SET team_id = NULL, updated_at = ? WHERE user_id = ? AND contest_id = ?";
+    $query = $this->db->query($sql, array($updated_at, $user_id, $contest_id));
+    if ($this->db->affected_rows() == 1) {
+      return TRUE;
+    } else {
+      return FALSE;
+    }
+  }
+
+
+  /**
+   * Remove user from team i.e set user_id = null
+   *
+   * @param <type> $key_id
+   * @return <type>
+   */
+  function removeUserByKeyId($key_id){
+    $updated_at = date('Y-m-d H:i:s');
+    $sql = "UPDATE `keys` SET team_id = NULL, updated_at = ? WHERE id = ? ";
+    $query = $this->db->query($sql, array($updated_at, $key_id));
+    if ($this->db->affected_rows() == 1) {
+      return TRUE;
+    } else {
+      return FALSE;
+    }
+  }
+
+
 
 
   /**

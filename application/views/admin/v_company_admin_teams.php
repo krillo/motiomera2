@@ -3,18 +3,6 @@
 
   });
 
-  function deleteRow(teamId){
-     $.ajax({
-        type: "POST",
-        url: "<?php echo base_url() ?>admin/deleteactivity/" + teamId,
-        data: '',
-        success: function(data){
-          $('#activity-list').html(data);
-        }
-      });
-      return false;
-  }
-
 
   function editRow(teamId){
      $.ajax({
@@ -22,6 +10,7 @@
         url: "<?php echo base_url() ?>admin/teamedit/" + teamId,
         data: '',
         success: function(data){
+          $('#teams').show();
           $('#edit-team').show().html(data);
 
         }
@@ -29,6 +18,22 @@
       return false;
   }
 
+
+  function deleteteam(teamId, contestId){
+    var x=window.confirm("Are you sure you want to delete the team?");
+    if (x){
+      $.ajax({
+        type: "POST",
+        url: "<?php echo base_url() ?>admin/teamdelete/" + teamId  +'/'+ contestId,
+        data: '',
+        success: function(data){
+          $('#edit-team').hide();
+          $('#teams').html(data);
+        }
+      });
+    }
+    return false;
+  }
 
 </script>
 
@@ -61,7 +66,7 @@ Du kan också byta namn på lagen och lägga till egna lagsymboler om du vill.
 <br/>
 <br/>
 <?php if ($teams != null && $teams != -1): ?>
-  <table class="admin-table">
+  <table class="admin-table" style="border-bottom: solid 1px #A19B9E ;">
     <thead>
       <tr>
         <th></th>
@@ -80,7 +85,7 @@ Du kan också byta namn på lagen och lägga till egna lagsymboler om du vill.
         <td> <?php echo $team->name; ?></td>
         <td> <?php echo $team->nof_users; ?></td>
         <td><a href="" onclick="editRow(<?php echo $team->id; ?>);return false;" class="manipulation"><span class="ui-icon ui-icon-pencil"></span></a></td>
-        <td><a href="" onclick="deleteRow(<?php echo $team->id; ?>);return false;" class="manipulation"><span class="ui-icon ui-icon-trash"></span></a></td>
+        <td><a href="" onclick="deleteteam(<?php echo $team->id . ', '. $team->contest_id; ?>);return false;" class="manipulation"><span class="ui-icon ui-icon-trash"></span></a></td>
       </tr>
     <?php endforeach; ?>
     </tbody>
@@ -88,5 +93,12 @@ Du kan också byta namn på lagen och lägga till egna lagsymboler om du vill.
 <?php else: ?>
   <p>No Results found</p>
 <?php endif; ?>
+
+<br/>
+<button class="button-space">Create a new team</button>
+<div class="clear"></div>
+<button class="button-space">Remove all teams</button>
+<div class="clear"></div>
+<button class="button-space">Make new random teams</button>
 
 </div>

@@ -12,13 +12,14 @@ body {color:#333;font-family:Arial,Verdana;font-size:11px;}
 
 /* adminbar */
 #adminbar{float:left;}
+#adminbar ul{padding:0;}
 #adminbar li{
   float:left;
-  font-size:18px;
+  font-size:17px;
   list-style-image:none;
   list-style-position:outside;
   list-style-type:none;
-  margin-right:25px;
+  margin-right:16px;
 }
 #footer{border-top:1px solid #E7E7E7;margin:10px 0 5px 7px; width:740px;}
 /*
@@ -79,3 +80,4 @@ body {color:#333;font-family:Arial,Verdana;font-size:11px;}
 
 .admin-table td{padding: 0 10px 0 10px;}
 .avatar-mini {height:20px;width:20px;}
+.button-space{margin-bottom: 3px;}

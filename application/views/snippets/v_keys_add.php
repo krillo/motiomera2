@@ -5,6 +5,8 @@
 
 <script type="text/javascript">
   $(function(){
+
+    //add keys and update the dynamic data on the page
     $("#submit-keys").click(function(){
      var count = $('#add-keys').attr('value');
      $.ajax({
@@ -12,8 +14,7 @@
         url: "<?php echo base_url() ?>admin/addkeys/<?php echo $contest_id?>/" + count,
         data: "",
         success: function(data){
-          $('#key-list').html(data);
-          //location.reload();
+          $('#key-data').html(data);
         }
       });
       return false;

@@ -106,9 +106,11 @@ class Admin extends CI_Controller{
    * 
    * Displays a partial HTML page
    */
-  function teamedit() {
+  function teamedit($team_id = null) {
     $this->auth(self::COMP_ADM_LEVEL);
-    $team_id = $this->uri->segment(3);
+    if($team_id == null){
+      $team_id = $this->uri->segment(3);
+    }
     $data['team'] = $this->m_team->getById($team_id);
     $data['users'] = $this->m_key->getUsersByTeamId($team_id);
     $this->load->view('admin/v_company_admin_teams_edit', $data);
@@ -131,7 +133,9 @@ class Admin extends CI_Controller{
 
   /**
    * Remove team from db, but first reset all key references to null
-   *
+   * team_id as segment 3
+   * 
+   * Redirect and display the code from $this->teams
    */
   function teamdelete(){
     $this->auth(self::COMP_ADM_LEVEL);
@@ -140,6 +144,20 @@ class Admin extends CI_Controller{
     $this->m_key->removeTeam($team_id);
     $this->m_team->delete($team_id, $contest_id);
     $this->teams($contest_id);
+  }
+
+
+  /**
+   * Remove user from team i.e set the user_id reference to null
+   * Redirect and display the code from $this->teamedit
+   */
+  function removeuserfromteam(){
+    $this->auth(self::COMP_ADM_LEVEL);
+    $key_id = $this->uri->segment(3);
+    $team_id = $this->uri->segment(4);
+    $contest_id = $this->uri->segment(5);
+    $this->m_key->removeUserByKeyId($key_id);
+    $this->teamedit($team_id);
   }
 
 
@@ -180,8 +198,20 @@ class Admin extends CI_Controller{
     if ($this->session->userdata('role_level') > self::SUPPORT_ADM_LEVEL) {
       $this->load->view('snippets/v_keys_add', $data);
     }
+    $this->_showKeyList($contest_id);
+    //$data['free_keys'] = $this->m_key->getFreeKeysByContestId($contest_id);
+    //$this->load->view('admin/v_company_admin_keys', $data);
+  }
+
+
+  /**
+   * Display the key list
+   */
+  function _showKeyList($contest_id){
+    $this->auth(self::COMP_ADM_LEVEL);
+    $data['contest_id'] = $contest_id;
     $data['free_keys'] = $this->m_key->getFreeKeysByContestId($contest_id);
-    $this->load->view('admin/v_company_admin_keys', $data);
+    $this->load->view('snippets/v_keys_list', $data);
   }
 
   /**
@@ -199,8 +229,9 @@ class Admin extends CI_Controller{
     $nbr = $this->uri->segment(4);
     $keys = $this->m_key->generateKeys($nbr);
     $this->m_key->addKeysToDb($contest_id, $keys);
-    $data['free_keys'] = $this->m_key->getFreeKeysByContestId($contest_id);
-    $this->load->view('snippets/v_keys_list', $data);
+    $this->_showKeyList($contest_id);
+    //$data['free_keys'] = $this->m_key->getFreeKeysByContestId($contest_id);
+    //$this->load->view('snippets/v_keys_list', $data);
   }
 
 
@@ -276,63 +307,82 @@ class Admin extends CI_Controller{
    * This function puts all the relevant session parameters as if she were the user.
    * Then redirect to mypage.
    * Handle all the data here so that this the only way to simulate.
+   *
    * Always check that the user has enough priviledges
    */
   function simulate() {
-    if ($this->session->userdata('role_level') > self::SUPPORT_ADM_LEVEL) {
-      $real_nick = $this->session->userdata('user_nick');
-      $real_user_id = $this->session->userdata('user_id');
-      $simulate_id = $this->uri->segment(3);
-      $data = $this->m_user->getById($simulate_id);
-      $session_data = array(
-          'user_id' => $data[0]->id,
-          'user_mail' => $data[0]->email,
-          'user_full_name' => $data[0]->f_name . " " . $data[0]->l_name,
-          'user_nick' => $data[0]->nick,
-          'user_logged_in' => TRUE,
-          'total_steps' => $data[0]->total_steps,
-          'total_logins' => $data[0]->total_logins,
-          'total_regs' => $data[0]->total_regs,
-          'total_calories' => $this->m_step->getCaloriesFromSteg($data[0]->total_steps),
-          'simulation' => TRUE,
-      );
-      $this->session->set_userdata($session_data);
-      $simulate_nick = $data[0]->nick;
-      log_message('info', "$real_nick ($real_user_id) is simulating $simulate_nick ($simulate_id) ");
-      redirect('/mypage');
-    }
+    $this->auth(self::SUPPORT_ADM_LEVEL);
+    $simulate_id = $this->uri->segment(3);
+    $this->_simulate($simulate_id);
+    redirect('/mypage');
   }
 
-  
+
+  /**
+   * Just set the actual simulation parameters, no redirects
+   * @param <type> $simulate_id
+   */
+  function _simulate($simulate_id) {
+    $this->auth(self::SUPPORT_ADM_LEVEL);
+    $real_nick = $this->session->userdata('user_nick');
+    $real_user_id = $this->session->userdata('user_id');
+    $data = $this->m_user->getById($simulate_id);
+    $session_data = array(
+        'user_id' => $data[0]->id,
+        'user_mail' => $data[0]->email,
+        'user_full_name' => $data[0]->f_name . " " . $data[0]->l_name,
+        'user_nick' => $data[0]->nick,
+        'user_logged_in' => TRUE,
+        'total_steps' => $data[0]->total_steps,
+        'total_logins' => $data[0]->total_logins,
+        'total_regs' => $data[0]->total_regs,
+        'total_calories' => $this->m_step->getCaloriesFromSteg($data[0]->total_steps),
+        'simulation' => TRUE,
+    );
+    $this->session->set_userdata($session_data);
+    $simulate_nick = $data[0]->nick;
+    log_message('info', "$real_nick ($real_user_id) is simulating $simulate_nick ($simulate_id) ");
+  }
+
+
   /**
    * This function restores all the administrators session parameters.
    * Then redirect to mypage.
    * Handle all the data here so that this the only way to simulate.
    * Always check that the user has enough priviledges
    */
-  function stopsimulate(){
-    if ($this->session->userdata('role_level') > self::SUPPORT_ADM_LEVEL) {
-      $real_user_id = $this->session->userdata('real_user_id');
-      $data = $this->m_user->getById($real_user_id);
-      $session_data = array(
-          'user_id' => $data[0]->id,
-          'user_mail' => $data[0]->email,
-          'user_full_name' => $data[0]->f_name . " " . $data[0]->l_name,
-          'user_nick' => $data[0]->nick,
-          'user_logged_in' => TRUE,
-          'total_steps' => $data[0]->total_steps,
-          'total_logins' => $data[0]->total_logins,
-          'total_regs' => $data[0]->total_regs,
-          'total_calories' => $this->m_step->getCaloriesFromSteg($data[0]->total_steps),
-          'simulation' => FALSE,
-      );
-      $this->session->set_userdata($session_data);
-      redirect('/mypage');    }
+  function stopsimulate() {
+    $this->auth(self::SUPPORT_ADM_LEVEL);
+    $this->_stopsimulate();
+    redirect('/mypage');
+  }
+
+  /**
+   * Just reset the actual simulation parameters, no redirects
+   */
+  function _stopsimulate() {
+    $this->auth(self::SUPPORT_ADM_LEVEL);
+    $real_user_id = $this->session->userdata('real_user_id');
+    $data = $this->m_user->getById($real_user_id);
+    $session_data = array(
+        'user_id' => $data[0]->id,
+        'user_mail' => $data[0]->email,
+        'user_full_name' => $data[0]->f_name . " " . $data[0]->l_name,
+        'user_nick' => $data[0]->nick,
+        'user_logged_in' => TRUE,
+        'total_steps' => $data[0]->total_steps,
+        'total_logins' => $data[0]->total_logins,
+        'total_regs' => $data[0]->total_regs,
+        'total_calories' => $this->m_step->getCaloriesFromSteg($data[0]->total_steps),
+        'simulation' => FALSE,
+    );
+    $this->session->set_userdata($session_data);
   }
 
 
 
-/*********** WHITE LABEL ****************/
+  /****************************** WHITE LABEL **************************************/
+  /****************************** WHITE LABEL **************************************/
 
   /**
    * The White Label admin page
@@ -421,21 +471,88 @@ class Admin extends CI_Controller{
 
 
 
-  /*********** SUPERADMIN ****************/
+  /****************************** SUPERADMIN **************************************/
+  /****************************** SUPERADMIN **************************************/
+
 
   /**
    * Show settings admin page (White Label Admin page)
    * Always check that the user has enough priviledges
    */
   function superadmin(){
-    if($this->session->userdata('role_level') > self::SUPER_ADM_LEVEL){
-      $data['title'] = 'superadmin';
-      $this->load->view('include/v_header', $data);
-      $this->load->view('admin/v_superadmin');
+    $this->auth(self::SUPER_ADM_LEVEL);
+    $data['title'] = 'superadmin';
+    $this->load->view('include/v_header', $data);
+    $this->load->view('admin/v_superadmin');
+  }
+
+  function testdata(){
+    $this->auth(self::SUPER_ADM_LEVEL);
+    $this->load->view('admin/v_superadmin_testdata');
+  }
+
+
+
+
+
+  /**
+   * This function creates and loads testdata into the db <br/>
+   * Use it only during development
+   *
+   * 1. it finds all users and inserts random steps for them, a month back <br/>
+   * 2. it runs all inserts from the file /db/initial_data.sql <br/>
+   */
+  function deploytestdata() {
+    $this->auth(self::SUPER_ADM_LEVEL);
+    $this->load->model('m_testdata');
+    if(!$this->m_step->isTestDataLoaded()){
+      // insert random steps
+      // simulation of user is required to insert steps
+      $users = $this->m_user->getAll(400);
+      foreach ($users as $user) {
+        $d = new JDate();
+        $this->_simulate($user->id);
+        for($i = 0; $i < 31; $i++ ){
+          $this->m_step->create_x($user->id, 1, $this->_randomSteps(), $d->getDate());
+          $d->subDays(1);
+        }
+        $this->_stopsimulate();
+      }
+      // inserts from file
+      $filename = '/Users/make/_proj/motiomera2/db/initial_data.sql';
+      $lines = file($filename);
+      $row_id = 0;
+      foreach ($lines as $line_num => $line) {
+        if(!strstr($line, '--')){
+          $row_id = $this->m_testdata->runSqlInsert($line);
+        }
+        if($row_id < 0){
+          echo "problem with file $filename at row $line_num <br/> $line";
+          break;
+        }
+      }
+      echo 'Success! hopefully ;)';
     } else {
-      redirect('/start');
+      echo 'Testdata allready run';
     }
   }
+
+
+  /**
+   * Just return a random number between 3300 and 9900
+   * Test purpose
+   * @return string
+   */
+  function _randomSteps(){
+    $steps = '';
+    $nbrs = "3684596879";
+    for($i = 0; $i < 2; $i++ ){
+      $steps .= $nbrs[mt_rand(0, strlen($nbrs) - 1) ];
+    }
+    $steps .= '00';
+    return $steps;
+  }
+
 
 
 }

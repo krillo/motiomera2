@@ -16,21 +16,26 @@
       return false;
   }
 
-
-  function deleteteam(teamId, contestId){
-    var x=window.confirm("Are you sure you want to delete the team?");
-    if (x){
-      $.ajax({
+  //remove user from team and update the fields
+  function removeUser(keyId, teamId, contestId){
+     $.ajax({
         type: "POST",
-        url: "<?php echo base_url() ?>admin/teamdelete/" + teamId  +'/'+ contestId,
+        url: "<?php echo base_url() ?>admin/removeuserfromteam/" + keyId + '/'+ teamId+ '/'+ contestId,
         data: '',
         success: function(data){
-          $('#edit-team').hide();
+          //$('#teams').hide();
+          $('#edit-team').html(data);
+        }
+      });
+      $.ajax({
+        type: "POST",
+        url: "<?php echo base_url() ?>admin/teams/" + contestId,
+        data: '',
+        success: function(data){
           $('#teams').html(data);
         }
       });
-    }
-    return false;
+      return false;
   }
 </script>
 
@@ -72,7 +77,7 @@
       <tr>
         <td> <?php echo $user->nick; ?></td>
         <td> <?php echo $user->f_name . ' ' . $user->l_name; ?></td>
-        <td><a href="" onclick="deleteRow(<?php echo $user->user_id; ?>);return false;" class="manipulation"><span class="ui-icon ui-icon-trash"></span></a></td>
+        <td><a href="" onclick="removeUser(<?php echo $user->key_id; ?>, <?php echo $user->team_id; ?>, <?php echo $team[0]->contest_id; ?>);return false;" class="manipulation"><span class="ui-icon ui-icon-trash"></span></a></td>
       </tr>
     <?php endforeach; ?>
     </tbody>

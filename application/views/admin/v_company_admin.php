@@ -50,9 +50,9 @@ Vill du anmäla fler deltagare till tävlingen gör du det under fliken <b>Till�
 		<li><a href="<?php echo base_url() ?>admin/companysettings">Settings</a></li>
 		<li><a href="<?php echo base_url() ?>admin/teams/<?php echo $contest[0]->id; ?>">Teams</a></li>
 		<li><a href="<?php echo base_url() ?>admin/competitors/<?php echo $contest[0]->id; ?>">Competitors</a></li>
-		<li><a href="<?php echo base_url() ?>admin/additionalorders">Additional orders</a></li>
 		<li><a href="<?php echo base_url() ?>admin/keys/<?php echo $contest[0]->id; ?>">Keys</a></li>
-		<li><a href="<?php echo base_url() ?>admin/reclamation/<?php echo $contest[0]->id; ?>">Reclamation</a></li>
+		<li><a href="<?php echo base_url() ?>admin/additionalorders">Additional orders</a></li>
+    <li><a href="<?php echo base_url() ?>admin/reclamation/<?php echo $contest[0]->id; ?>">Reclamation</a></li>
 		<li><a href="#tabs-3">Bla bla</a></li>
 	</ul>
 	<div id="tabs-3">
