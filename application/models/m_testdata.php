@@ -7,8 +7,6 @@
  * @author Kristian Erendi 2011
  */
 class M_testdata extends CI_Model {
-  const SUPER_ADM_LEVEL = 90;
-
 
   /**
    * Call this function from all functions in this class to prevent anybody with lower access to run the function
@@ -35,12 +33,12 @@ class M_testdata extends CI_Model {
    * @return int  the row_id or -1 for error
    */
   function runSqlInsert($sql){
-    $this->auth(self::SUPER_ADM_LEVEL);
+    $this->auth(SUPER_ADM_LEVEL);
     $query = $this->db->query($sql);
-    if ($this->db->affected_rows() == 1) {
+    if ($this->db->insert_id() > 0) {
       return $this->db->insert_id();
     } else {
-      return 1;
+      return -1;
     }
   }
 

@@ -81,3 +81,5 @@ body {color:#333;font-family:Arial,Verdana;font-size:11px;}
 .admin-table td{padding: 0 10px 0 10px;}
 .avatar-mini {height:20px;width:20px;}
 .button-space{margin-bottom: 3px;}
+.show{display:block;}
+.hide{display:none;}

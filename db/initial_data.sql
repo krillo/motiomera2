@@ -1,5 +1,5 @@
 -- Initial insert source for private person in Swedish.
-delete from sources;
+-- delete from sources;
 insert into sources (wl_id, name, descr, type, created_at, updated_at) values(2, 'telefon', 'Telefon', 'PRIVATE', CURDATE(), CURDATE());
 insert into sources (wl_id, name, descr, type, created_at, updated_at) values(2, 'direktreklam', 'Direktreklam', 'PRIVATE', CURDATE(), CURDATE());
 insert into sources (wl_id, name, descr, type, created_at, updated_at) values(2, 'tidningsannons', 'Tidningsannons', 'PRIVATE', CURDATE(), CURDATE());

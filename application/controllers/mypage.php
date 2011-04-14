@@ -38,8 +38,8 @@ class Mypage extends CI_Controller{
     $data = $this->m_user->getById($id);
     $data['title'] = 'mypage';
     $this->load->view('include/v_header', $data);
-    $this->load->view('include/v_debug');
     $this->load->view('v_mypage');
+    $this->load->view('include/v_debug');
     $this->load->view('include/v_footer');
     $this->_reportStepDialog();
   }

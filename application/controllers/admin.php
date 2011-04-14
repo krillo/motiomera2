@@ -2,13 +2,6 @@
 
 class Admin extends CI_Controller{
 
-  const USER_LEVEL = 10;
-  const COMP_ADM_LEVEL = 40;
-  const SUPPORT_ADM_LEVEL = 50;
-  const WL_ADM_LEVEL = 70;
-  const SUPER_ADM_LEVEL = 90;
-
-
   /**
    * Constructor
    * Don't even allow a user pass the constructor if she is not logged in or have at least COMP_ADM_LEVEL
@@ -17,7 +10,7 @@ class Admin extends CI_Controller{
    */
 	function __construct(){
 		parent::__construct();
-    if(!$this->m_user->isLoggedIn() || $this->session->userdata('role_level') < self::COMP_ADM_LEVEL){
+    if(!$this->m_user->isLoggedIn() || $this->session->userdata('role_level') < COMP_ADM_LEVEL){
       $this->load->view('v_startpage');
     } else {
       $this->load->model('m_company');
@@ -38,7 +31,7 @@ class Admin extends CI_Controller{
    */
   function auth($level){
     if($this->session->userdata('role_level') > $level){
-      return;
+      return TRUE;
     } else {
       redirect('/start');
     }
@@ -57,7 +50,7 @@ class Admin extends CI_Controller{
    * Displays a full HTML page
    */
   function companyadmin() {
-    $this->auth(self::COMP_ADM_LEVEL);
+    $this->auth(COMP_ADM_LEVEL);
     $data['title'] = 'Company admin page';
     $user_id = $this->session->userdata('user_id');
     $data['company'] = $this->m_company->getByUserId($user_id);
@@ -78,7 +71,7 @@ class Admin extends CI_Controller{
 
 
   function companysettings() {
-    $this->auth(self::COMP_ADM_LEVEL);
+    $this->auth(COMP_ADM_LEVEL);
     $this->load->view('admin/v_test');
   }
 
@@ -90,7 +83,7 @@ class Admin extends CI_Controller{
    * Displays a partial HTML page
    */
   function teams($contest_id = null) {
-    $this->auth(self::COMP_ADM_LEVEL);
+    $this->auth(COMP_ADM_LEVEL);
     if($contest_id == null){
       $contest_id = $this->uri->segment(3);
     }
@@ -107,7 +100,7 @@ class Admin extends CI_Controller{
    * Displays a partial HTML page
    */
   function teamedit($team_id = null) {
-    $this->auth(self::COMP_ADM_LEVEL);
+    $this->auth(COMP_ADM_LEVEL);
     if($team_id == null){
       $team_id = $this->uri->segment(3);
     }
@@ -123,7 +116,7 @@ class Admin extends CI_Controller{
    * Displays a partial HTML page
    */
   function renameteam() {
-    $this->auth(self::COMP_ADM_LEVEL);
+    $this->auth(COMP_ADM_LEVEL);
     $team_id = $this->uri->segment(3);
     $new_name = urldecode($this->uri->segment(4));
     $data['team'] = $this->m_team->updateName($team_id, $new_name);
@@ -138,7 +131,7 @@ class Admin extends CI_Controller{
    * Redirect and display the code from $this->teams
    */
   function teamdelete(){
-    $this->auth(self::COMP_ADM_LEVEL);
+    $this->auth(COMP_ADM_LEVEL);
     $team_id = $this->uri->segment(3);
     $contest_id = urldecode($this->uri->segment(4));
     $this->m_key->removeTeam($team_id);
@@ -152,7 +145,7 @@ class Admin extends CI_Controller{
    * Redirect and display the code from $this->teamedit
    */
   function removeuserfromteam(){
-    $this->auth(self::COMP_ADM_LEVEL);
+    $this->auth(COMP_ADM_LEVEL);
     $key_id = $this->uri->segment(3);
     $team_id = $this->uri->segment(4);
     $contest_id = $this->uri->segment(5);
@@ -169,7 +162,7 @@ class Admin extends CI_Controller{
    * Displays a partial HTML page
    */
   function competitors() {
-    $this->auth(self::COMP_ADM_LEVEL);
+    $this->auth(COMP_ADM_LEVEL);
     $contest_id = $this->uri->segment(3);
     $data['competitors'] = $this->m_user->getByContestId($contest_id);
     $data['teams'] = $this->m_team->getActiveTeamsByContestId($contest_id);
@@ -182,7 +175,7 @@ class Admin extends CI_Controller{
 
 
    function additionalorders() {
-    $this->auth(self::COMP_ADM_LEVEL);
+    $this->auth(COMP_ADM_LEVEL);
     $this->load->view('admin/v_test');
   }
 
@@ -192,10 +185,10 @@ class Admin extends CI_Controller{
    * The contest_id is passed as segment 3
    */
   function keys() {
-    $this->auth(self::COMP_ADM_LEVEL);
+    $this->auth(COMP_ADM_LEVEL);
     $contest_id = $this->uri->segment(3);
     $data['contest_id'] = $contest_id;
-    if ($this->session->userdata('role_level') > self::SUPPORT_ADM_LEVEL) {
+    if ($this->session->userdata('role_level') > SUPPORT_ADM_LEVEL) {
       $this->load->view('snippets/v_keys_add', $data);
     }
     $this->_showKeyList($contest_id);
@@ -208,7 +201,7 @@ class Admin extends CI_Controller{
    * Display the key list
    */
   function _showKeyList($contest_id){
-    $this->auth(self::COMP_ADM_LEVEL);
+    $this->auth(COMP_ADM_LEVEL);
     $data['contest_id'] = $contest_id;
     $data['free_keys'] = $this->m_key->getFreeKeysByContestId($contest_id);
     $this->load->view('snippets/v_keys_list', $data);
@@ -224,7 +217,7 @@ class Admin extends CI_Controller{
    * The count is passed as segment 4
    */
   function addkeys() {
-    $this->auth(self::SUPPORT_ADM_LEVEL);
+    $this->auth(SUPPORT_ADM_LEVEL);
     $contest_id = $this->uri->segment(3);
     $nbr = $this->uri->segment(4);
     $keys = $this->m_key->generateKeys($nbr);
@@ -236,7 +229,7 @@ class Admin extends CI_Controller{
 
 
   function reclamation() {
-    $this->auth(self::SUPPORT_ADM_LEVEL);
+    $this->auth(SUPPORT_ADM_LEVEL);
     $this->load->view('admin/v_test');
   }
 
@@ -248,42 +241,31 @@ class Admin extends CI_Controller{
    * Show support admin page
    * Always check that the user has enough priviledges
    */
-  function support(){
-    if($this->session->userdata('role_level') > self::SUPPORT_ADM_LEVEL){
-      $data['title'] = 'support';
-      $this->load->view('include/v_header', $data);
-      $this->load->view('admin/v_support');
-      $this->load->view('include/v_footer');
-    } else {
-      redirect('/start');
-    }
+  function support() {
+    $this->auth(SUPPORT_ADM_LEVEL);
+    $data['title'] = 'support';
+    $this->load->view('include/v_header', $data);
+    $this->load->view('admin/v_support');
+    $this->load->view('include/v_footer');
   }
 
   /**
    * List users
    * returns a search page and result snippet
    */
-  function supportlegacy($limit = 20){
-    if($this->session->userdata('role_level') > self::SUPPORT_ADM_LEVEL){
-      $this->load->view('admin/v_data_table_test');
-      $this->load->view('admin/v_admin');
-    } else {
-      redirect('/start');
-    }
+  function supportlegacy($limit = 20) {
+    $this->auth(SUPPORT_ADM_LEVEL);
+    $this->load->view('admin/v_data_table_test');
+    $this->load->view('admin/v_admin');
   }
-
-
 
   /**
    * List users
    * returns a search page and result snippet
    */
-  function users($limit = 20){
-    if($this->session->userdata('role_level') > self::SUPPORT_ADM_LEVEL){
-      $this->load->view('admin/v_list_users');
-    } else {
-      redirect('/start');
-    }
+  function users($limit = 20) {
+    $this->auth(SUPPORT_ADM_LEVEL);
+    $this->load->view('admin/v_list_users');
   }
 
   /**
@@ -291,16 +273,13 @@ class Admin extends CI_Controller{
    * Always check that the user has enough priviledges
    */
   function findusers() {
-    if ($this->session->userdata('role_level') > self::SUPPORT_ADM_LEVEL) {
-      //$search_word = $this->uri->segment(3);
-      $search_word = $this->input->post('search');
-      $data['records'] = $this->m_user->getByWildcard($search_word);
-      $data['search_word'] = $search_word;
-      //$this->load->view('/snippets/v_test_snippet', $data);
-      $this->load->view('/snippets/v_users_search_result', $data);
-    } else {
-      redirect('/start');
-    }
+    $this->auth(SUPPORT_ADM_LEVEL);
+    //$search_word = $this->uri->segment(3);
+    $search_word = $this->input->post('search');
+    $data['records'] = $this->m_user->getByWildcard($search_word);
+    $data['search_word'] = $search_word;
+    //$this->load->view('/snippets/v_test_snippet', $data);
+    $this->load->view('/snippets/v_users_search_result', $data);
   }
 
   /**
@@ -311,7 +290,7 @@ class Admin extends CI_Controller{
    * Always check that the user has enough priviledges
    */
   function simulate() {
-    $this->auth(self::SUPPORT_ADM_LEVEL);
+    $this->auth(SUPPORT_ADM_LEVEL);
     $simulate_id = $this->uri->segment(3);
     $this->_simulate($simulate_id);
     redirect('/mypage');
@@ -323,7 +302,7 @@ class Admin extends CI_Controller{
    * @param <type> $simulate_id
    */
   function _simulate($simulate_id) {
-    $this->auth(self::SUPPORT_ADM_LEVEL);
+    $this->auth(SUPPORT_ADM_LEVEL);
     $real_nick = $this->session->userdata('user_nick');
     $real_user_id = $this->session->userdata('user_id');
     $data = $this->m_user->getById($simulate_id);
@@ -352,7 +331,7 @@ class Admin extends CI_Controller{
    * Always check that the user has enough priviledges
    */
   function stopsimulate() {
-    $this->auth(self::SUPPORT_ADM_LEVEL);
+    $this->auth(SUPPORT_ADM_LEVEL);
     $this->_stopsimulate();
     redirect('/mypage');
   }
@@ -361,7 +340,7 @@ class Admin extends CI_Controller{
    * Just reset the actual simulation parameters, no redirects
    */
   function _stopsimulate() {
-    $this->auth(self::SUPPORT_ADM_LEVEL);
+    $this->auth(SUPPORT_ADM_LEVEL);
     $real_user_id = $this->session->userdata('real_user_id');
     $data = $this->m_user->getById($real_user_id);
     $session_data = array(
@@ -389,47 +368,37 @@ class Admin extends CI_Controller{
    * Show settings admin page
    * Always check that the user has enough priviledges
    */
-  function settings(){
-    if($this->session->userdata('role_level') > self::WL_ADM_LEVEL){
-      $data['title'] = 'advanced settings';
-      $this->load->view('include/v_header', $data);
-      $this->load->view('admin/v_adv_settings');
-    } else {
-      redirect('/start');
-    }
+  function settings() {
+    $this->auth(WL_ADM_LEVEL);
+    $data['title'] = 'advanced settings';
+    $this->load->view('include/v_header', $data);
+    $this->load->view('admin/v_adv_settings');
   }
 
   /**
    * List activites 
    */
-  function activities($limit = 20){
-    if($this->session->userdata('role_level') > self::WL_ADM_LEVEL){
-      $wl_id = $this->session->userdata('wl_id');
-      $data['records'] = $this->m_activities->getAll($wl_id, $limit);
-      $this->load->view('admin/v_adv_settings_activities', $data);
-    } else {
-      redirect('/start');
-    }
+  function activities($limit = 20) {
+    $this->auth(WL_ADM_LEVEL);
+    $wl_id = $this->session->userdata('wl_id');
+    $data['records'] = $this->m_activities->getAll($wl_id, $limit);
+    $this->load->view('admin/v_adv_settings_activities', $data);
   }
-
 
   /**
    * create a new activity
    * all parameters via post
    */
   function createactivity() {
-    if ($this->session->userdata('role_level') > self::WL_ADM_LEVEL) {
-      $wl_id = $this->session->userdata('wl_id');
-      $name = $this->input->post('name');
-      $multiplicity = $this->input->post('multiplicity');
-      $severity = $this->input->post('severity');
-      $unit = $this->input->post('unit');
-      $desc = $this->input->post('desc');
-      $this->m_activities->create($wl_id, $name, $multiplicity, $severity, $unit, $desc);
-      $this->activities();
-    } else {
-      redirect('/start');
-    }
+    $this->auth(WL_ADM_LEVEL);
+    $wl_id = $this->session->userdata('wl_id');
+    $name = $this->input->post('name');
+    $multiplicity = $this->input->post('multiplicity');
+    $severity = $this->input->post('severity');
+    $unit = $this->input->post('unit');
+    $desc = $this->input->post('desc');
+    $this->m_activities->create($wl_id, $name, $multiplicity, $severity, $unit, $desc);
+    $this->activities();
   }
 
   /**
@@ -437,57 +406,48 @@ class Admin extends CI_Controller{
    * all parameters via post
    */
   function updateactivity() {
-    if ($this->session->userdata('role_level') > self::WL_ADM_LEVEL) {
-      $wl_id = $this->session->userdata('wl_id');
-      $activity_id = $this->input->post('activityid');
-      $name = $this->input->post('name');
-      $multiplicity = $this->input->post('multiplicity');
-      $severity = $this->input->post('severity');
-      $unit = $this->input->post('unit');
-      $desc = $this->input->post('desc');
-      $status = $this->m_activities->update($activity_id, $wl_id, $name, $multiplicity, $severity, $unit, $desc);
-      $this->activities();
-    } else {
-      redirect('/start');
-    }
+    $this->auth(WL_ADM_LEVEL);
+    $wl_id = $this->session->userdata('wl_id');
+    $activity_id = $this->input->post('activityid');
+    $name = $this->input->post('name');
+    $multiplicity = $this->input->post('multiplicity');
+    $severity = $this->input->post('severity');
+    $unit = $this->input->post('unit');
+    $desc = $this->input->post('desc');
+    $status = $this->m_activities->update($activity_id, $wl_id, $name, $multiplicity, $severity, $unit, $desc);
+    $this->activities();
   }
 
-	/**
+  /**
    * Delete activity
    * activiy_id as segment 3
    * the user must have at least WL admin level
    */
-	function deleteactivity(){
-    if($this->session->userdata('role_level') > self::WL_ADM_LEVEL){
-      $activity_id = $this->uri->segment(3);
-      $this->m_activities->delete($activity_id);
-      $this->activities();
-    } else {
-      redirect('/start');
-    }
+  function deleteactivity() {
+    $this->auth(WL_ADM_LEVEL);
+    $activity_id = $this->uri->segment(3);
+    $this->m_activities->delete($activity_id);
+    $this->activities();
   }
 
 
 
-
-
   /****************************** SUPERADMIN **************************************/
   /****************************** SUPERADMIN **************************************/
-
 
   /**
    * Show settings admin page (White Label Admin page)
    * Always check that the user has enough priviledges
    */
   function superadmin(){
-    $this->auth(self::SUPER_ADM_LEVEL);
+    $this->auth(SUPER_ADM_LEVEL);
     $data['title'] = 'superadmin';
     $this->load->view('include/v_header', $data);
     $this->load->view('admin/v_superadmin');
   }
 
   function testdata(){
-    $this->auth(self::SUPER_ADM_LEVEL);
+    $this->auth(SUPER_ADM_LEVEL);
     $this->load->view('admin/v_superadmin_testdata');
   }
 
@@ -503,7 +463,7 @@ class Admin extends CI_Controller{
    * 2. it runs all inserts from the file /db/initial_data.sql <br/>
    */
   function deploytestdata() {
-    $this->auth(self::SUPER_ADM_LEVEL);
+    $this->auth(SUPER_ADM_LEVEL);
     $this->load->model('m_testdata');
     if(!$this->m_step->isTestDataLoaded()){
       // insert random steps
@@ -519,19 +479,22 @@ class Admin extends CI_Controller{
         $this->_stopsimulate();
       }
       // inserts from file
-      $filename = '/Users/make/_proj/motiomera2/db/initial_data.sql';
+      $docRoot = getenv("DOCUMENT_ROOT");
+      $filename = $docRoot . '/db/initial_data.sql';
       $lines = file($filename);
       $row_id = 0;
+      $success = TRUE;
       foreach ($lines as $line_num => $line) {
         if(!strstr($line, '--')){
           $row_id = $this->m_testdata->runSqlInsert($line);
         }
         if($row_id < 0){
-          echo "problem with file $filename at row $line_num <br/> $line";
+          echo "problem with file $filename at row $line_num <br/> $line <br/>";
+          $success = FALSE;
           break;
         }
       }
-      echo 'Success! hopefully ;)';
+      echo $success ? 'Success! hopefully ;)': '';
     } else {
       echo 'Testdata allready run';
     }
@@ -545,11 +508,11 @@ class Admin extends CI_Controller{
    */
   function _randomSteps(){
     $steps = '';
-    $nbrs = "3684596879";
-    for($i = 0; $i < 2; $i++ ){
+    $nbrs = "3614526872934";
+    for($i = 0; $i < 3; $i++ ){
       $steps .= $nbrs[mt_rand(0, strlen($nbrs) - 1) ];
     }
-    $steps .= '00';
+    $steps .= '0';
     return $steps;
   }
 

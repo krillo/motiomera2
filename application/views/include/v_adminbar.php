@@ -26,8 +26,6 @@
   <br/>
   <pre>
     <?php
-    //print_r($this);
-    echo "\n";
     echo 'Controller: ';
     print_r($this->form_validation->CI->router->class);
     echo "\n";
@@ -39,6 +37,20 @@
     echo "\n";
     print_r($this->_ci_cached_vars);
     print_r($this->session->userdata);
+    echo "\n";
+    echo 'Benchmark: ';
+    print_r($this->benchmark);
+    echo "\n";
+    echo 'SQLs: ';
+    print_r($this->db->queries);
+    echo 'SQL Execution time: ';
+    print_r($this->db->query_times);
+    echo "\n";
+    echo 'Segments: ';
+    print_r($this->uri->rsegments);
+
+    //echo "\n";
+    //print_r($this);
     ?>
   </pre>
 </div>
