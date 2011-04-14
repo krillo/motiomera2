@@ -44,6 +44,21 @@ class JDate {
   }
 
   /**
+   * Get object date in YYYY-MM-DD HH:ii:ss where the time is always 00:00:00 or UNIXTIME format
+   *
+   * @param boolean $unix sets the return format in unixtime
+   * @return string|int with date in format YYYY-MM-DD HH:ii:ss or UNIXTIME
+   */
+  public function getDateTimeZero($unix = FALSE) {
+    if ($unix) {
+      return $this->unixtime;
+    } else {
+      return date("Y-m-d H:i:s", $this->unixtime);
+    }
+  }
+
+
+  /**
    * Get object original date, useful after we have used add/sub methods
    * for days and weeks
    *

@@ -54,12 +54,25 @@ class Krillo extends CI_Controller {
     $d->setDateFromWeek(2011, 8);
     $this->_testit($d);
     unset($d);
+
+  
+
+// Specify a week number, date always defaults to the monday in that week
+    echo PHP_EOL . "minus 7 days" . PHP_EOL;
+    $d = new JDate();
+    $d->subDays(6);
+
+    print "The date: " . $d->getDateTimeZero() . PHP_EOL; // The date in 2011-01-31 format
+    unset($d);
     echo '</pre>';
   }
+
 
 // This function shows how the different methods can be used.
 // Please see below function how we create the object and set date.
   function _testit($d) {
+
+
     print "The date: " . $d->getDate() . PHP_EOL; // The date in 2011-01-31 format
     print "The date in unixtime: " . $d->getDate(TRUE) . PHP_EOL; // The date in 1296428400 (unixtime) format
     print "Year: " . $d->getYear() . PHP_EOL;

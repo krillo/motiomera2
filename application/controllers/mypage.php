@@ -36,6 +36,7 @@ class Mypage extends CI_Controller{
    */
   function _showMyPage($id){
     $data = $this->m_user->getById($id);
+    $data['toplist7days'] = $this->m_step->toplist7days();
     $data['title'] = 'mypage';
     $this->load->view('include/v_header', $data);
     $this->load->view('v_mypage');

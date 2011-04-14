@@ -162,9 +162,33 @@ class M_step extends CI_Model {
   }
 
 
+  /**
+   * Calculate calories from steps
+   *
+   * @param <type> $steg
+   * @return string the calories
+   */
   function getCaloriesFromSteg($steg){
 		return $steg * 0.05;
 	}
+
+
+  function toplist7days(){
+    $d = new JDate();
+    $d->subDays(6);
+    $fromdate = $d->getDateTimeZero();
+    $sql = "select sum(steps) tot_steps, user_id, nick from steps s, users u where s.created_at > ? and user_id = u.id group by user_id order by tot_steps desc limit 10";
+    $query = $this->db->query($sql, array($fromdate));
+    if($query->num_rows() > 0 ){
+      foreach ($query->result() as $row){
+        $data[] = $row;
+      }
+      return $data;
+    }
+  }
+
+
+
 
 
   // update person by id
