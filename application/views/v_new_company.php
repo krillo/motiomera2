@@ -221,7 +221,7 @@
         <option value="">Välj...</option>
         <option value="">Bemanning &amp; Arbetsförmedling</option>
         <option value="it">Data, It &amp; Telekommunikation</option>
-        <option value="">Detaljhandel</option>
+        <option value="retail">Detaljhandel</option>
         <option value="house">Fastighetsverksamhet</option>
         <option value="hair">Hår &amp; Skönhetsvård</option>
         <option value="media">Media</option>

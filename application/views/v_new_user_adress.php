@@ -8,10 +8,12 @@
     submitHandler: function() { alert("submitted!"); }
   });*/
 
-  $().ready(function() {
-    $('#signupForm').submit(function(e){ // <<< This selector needs to point to your form.
-        if ($('#country').val() == "") {
-            alert("Vänligen välj ett land.");
+  $(document).ready(function() {
+    $('#signupForm').submit(function(e){ // This selector needs to point to your form.
+        if ($('#country').val() == "0") {
+          $("#country-error").show();
+          $("#country-error").html('Choose a country.');
+            //alert("Vänligen välj ett land.");
             e.preventDefault();
             return false;
         }});
@@ -28,8 +30,8 @@
           maxlength: 30
         },
         street: {
-          required: true
-          //maxlength: 30
+          required: true,
+          maxlength: 30
         },
         zip: {
           required: true,
@@ -38,36 +40,24 @@
         city: {
           required: true         
         },
-        country: {
-          required: true,
-          country: true
-          //minlength: 6,
-          //maxlength: 255
-          
-        },
         agree: {
           required: true
         }
       },
 
       messages: {
-        email: {
-          required: "Please provide a email"
-        },
-        country: {
-          required: "Please select one country"
-        },
         agree: "Please accept our policy"
       }
 
-    })
-  });
+    });
+ 
+   });
 
 </script>
 
 <h1>Ange Er adress</h1>
 
-<div style="border: 2px solid red;">   <?php echo validation_errors(); ?> </div>
+<div style="border: 2px solid red; padding-left: 10px;">   <?php echo validation_errors(); ?> </div>
 
 <form class="cmxform" id="signupForm" method="post" action="/validate/useraddress">
   <fieldset>
@@ -119,14 +109,28 @@
 
     <p>
       <label for="country">Land</label>
-      <select id="country" name="country">
+      <?php
+      $this->load->helper('form');
+      $options = array(
+          '0' => 'Choose...',
+          '46' => 'Sverige',
+          '45' => 'Danmark',
+          '47' => 'Norge',
+          '358' => 'Finland',
+          '354' => 'Island',
+      );
+      echo form_dropdown('country', $options, 'valj', 'id="country"');
+      ?>
+      <!--select id="country" name="country">
         <option value="">Välj...</option>
         <option value="sweden">Sverige</option>
         <option value="denmark">Danmark</option>
         <option value="norway">Norge</option>
         <option value="finland">Finland</option>
         <option value="island">Island</option>
-      </select><span> Utanför Sverige? Läs mer <a href="">här</a></span>
+      </select-->
+      <span id="country-error" style="color:red;"></span>
+      <span> Utanför Sverige? Läs mer <a href="">här</a></span>
     </p>
 
     <p>

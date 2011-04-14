@@ -15,7 +15,7 @@ class M_municipal extends CI_Model {
    * @return <type>
    */
   function getAll(){
-    $sql = "SELECT * FROM municipals order by name COLLATE utf8_swedish_ci asc ";
+    $sql = "SELECT * FROM municipals ORDER BY name COLLATE utf8_swedish_ci ASC ";
     $query = $this->db->query($sql);
 
     //$query = $this->db->get($this->table);
@@ -52,7 +52,7 @@ class M_municipal extends CI_Model {
    * @return <type>
    */
   function getById($id){
-    $sql = "SELECT * FROM temp WHERE id  = ?";
+    $sql = "SELECT * FROM municipals WHERE id  = ?";
     $query = $this->db->query($sql, array($id));
     if($query->num_rows() > 0 ){
       foreach ($query->result() as $row){

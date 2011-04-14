@@ -10,12 +10,12 @@ class M_source extends CI_Model {
 
 
   /**
-   * Gets all the records, defaults to limit the result to 20 rows
-   * @param <type> $limit
+   * Gets all the records, with wl_id 2 and type private.
+   * @param <type> 
    * @return <type>
    */
-  function getAll($desc){
-    $sql = "SELECT * FROM sources WHERE wl_id=2 AND type='private' ORDER BY name COLLATE utf8_swedish_ci asc ";
+  function getAll(){
+    $sql = "SELECT * FROM sources WHERE wl_id=2 AND type='private' ORDER BY name COLLATE utf8_swedish_ci ASC ";
     $query = $this->db->query($sql);
     if($query->num_rows() > 0 ){
       foreach ($query->result() as $row){
@@ -26,7 +26,7 @@ class M_source extends CI_Model {
   }
 
   /**
-   * Prepares the severitylist-array to match the dropdown helper
+   * Prepares the sourcelist-array to match the dropdown helper
    *
    * @param <type> $data
    * @return <type>
@@ -50,7 +50,7 @@ class M_source extends CI_Model {
    * @return <type>
    */
   function getById($id){
-    $sql = "SELECT * FROM temp WHERE id  = ?";
+    $sql = "SELECT * FROM sources WHERE id  = ?";
     $query = $this->db->query($sql, array($id));
     if($query->num_rows() > 0 ){
       foreach ($query->result() as $row){
