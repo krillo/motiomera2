@@ -19,19 +19,22 @@
 
     $('#signupForm').submit(function(e){
       if ($('#muni').val() == "0") {
-        alert("Vänligen välj en kommun.");
+         $("#muni-error").show();
+         $("#muni-error").html('Choose a municipal.');
+
+       // alert("Vänligen välj en kommun.");
         e.preventDefault();
         return false;
       }});
 
     $('#signupForm').submit(function(e){ 
       if ($('#source').val() == "0") {
-        alert("Vänligen välj ett svar.");
+          $("#source-error").show();
+          $("#source-error").html('Choose a source.')
+        //alert("Vänligen välj ett svar.");
         e.preventDefault();
         return false;
       }});
-
-
 
     $("#signupForm").validate({
       rules: {
@@ -96,15 +99,62 @@
         },
         agree: "Please accept our policy"
       }
-
     });
   });
-
 </script>
+
+
+
+
+<script type="text/javascript">
+  $(function() {
+
+    //do the ajax username check
+    $("#username").blur(function() {
+      var username = $("#username").val();
+      if(username ==''){
+      } else{
+        $.ajax({
+          type: "POST",
+          url: "<?php echo base_url() ?>user/isduplicateusername/" + username,
+          data: "",
+          cache: false,
+          success: function(html){
+            $("#username-error").show();
+            $("#username-error").html(html);
+          }
+        });
+      }
+      return false;
+    });
+
+    //do the ajax email check
+    $("#email").blur(function() {
+      var email = $("#email").val();
+      email = encodeURIComponent(email);
+      if(email ==''){
+      } else{
+        $.ajax({
+          type: "POST",
+          url: "<?php echo base_url() ?>user/isduplicateemail/" + email,
+          data: "",
+          cache: false,
+          success: function(html){
+            $("#email-error").show();
+            $("#email-error").html(html);
+          }
+        });
+      }
+      return false;
+    });
+  });  
+</script>
+
+
 
 <h1>Bli medlem</h1>
 
-<div style="border: 2px solid red;">   <?php echo validation_errors(); ?> </div>
+<div style="border: 2px solid red; padding-left: 10px;">   <?php echo validation_errors(); ?> </div>
 
 <form class="cmxform" id="signupForm" method="post" action="/validate/userreg">
   <fieldset>
@@ -113,6 +163,7 @@
     <p>
       <label for="username">Välj ett alias</label>
       <input id="username" name="username" type="text" value="<?php echo set_value('username'); ?>"/>
+      <span id="username-error"></span>
     </p>
 
     <p>
@@ -147,16 +198,13 @@
       $this->load->helper('form');
       echo form_dropdown('muni', $records, 'Choose...', 'id="muni"');
       ?>
-      <!--select name="muni" id="muni">
-        <option label="Välj..." value="">Välj...</option>
-        <option label="Helsingborg" value="1">Helsingborg</option>
-        <option label="Båstad" value="3">Båstad</option>
-      </select-->
-    </p>
+      <span id="muni-error" style="color:red;"></span>
+    </p> 
 
     <p>
       <label for="email">E-postadress</label>
-      <input id="email" name="email" type="text" value="<?php echo set_value('email'); ?>"/><em> Har du inget e-postkonto? <a href="http://motiomera.se/pages/vanligafragor.php#Fraga_IngenEpost"> Läs mer här.</a></em>
+      <input id="email" name="email" type="text" value="<?php echo set_value('email'); ?>"/><span id="email-error"></span><em> Har du inget e-postkonto? <a href="http://motiomera.se/pages/vanligafragor.php#Fraga_IngenEpost"> Läs mer här.</a></em>
+      
     </p>
 
     <p>
@@ -176,12 +224,12 @@
 
     <p>
       <label for="membership">Medlemskap</label>
-      <input name="membership" id="membership" value="" type="radio" /><span> <b>Jag har företagsnyckel</b> </span> <a href=""> Läs mer här.</a>
+      <input style="" name="membership" id="membership" value="companykey" type="radio" /><span> <b>Jag har företagsnyckel</b> </span> <a href=""> Läs mer här.</a>
     </p>
 
     <p>
       <label></label>
-      <input name="key" type="radio"/><span> <b>Jag har kampanjkod</b> </span> <a href=""> Läs mer här.</a>
+      <input name="membership" type="radio" value="campaincode"/><span> <b>Jag har kampanjkod</b> </span> <a href=""> Läs mer här.</a>
     </p>
 
     <p>
@@ -207,6 +255,7 @@
         <option value="tidigarekund">Kund sedan tidigare</option>
         <option value="annat">Annat sätt</option>
       </select-->
+      <span id="source-error" style="color:red;"></span>
     </p>
 
     <p>

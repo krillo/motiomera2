@@ -1,11 +1,16 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Validate extends CI_Controller {
 
+
+	function __construct(){
+		parent::__construct();
+    $this->load->model('m_municipal');
+    $this->load->model('m_source');
+	}
+
+
   function index() {
   }
-
-
-  
   /**
    *
    */
@@ -67,20 +72,43 @@ class Validate extends CI_Controller {
    * On success it continues to the next registration page
    * On fail it shows error page.
    */
-   function userreg() {
-    $this->form_validation->set_rules('username', 'Username', 'required|min_length[4]|max_length[20]');
-    $this->form_validation->set_rules('firstname', 'Firstname', 'required|min_length[0]|max_length[30]');
+
+  function userreg() {
+    $this->load->library('form_validation');
+    $this->form_validation->set_rules('username', 'Username', 'required|min_length[4]|max_length[20]|callback_username_exists');
+    $this->form_validation->set_rules('firstname', 'Firstname', 'required|min_length[0]|max_length[30]|color(red)');
     $this->form_validation->set_rules('lastname', 'Lastname', 'required|min_length[0]|max_length[30]');
     $this->form_validation->set_rules('sex', 'Sex');
     $this->form_validation->set_rules('muni', 'Muni', 'required');
-    $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+    $this->form_validation->set_rules('email', 'Email', 'required|valid_email|callback_email_exists');
     $this->form_validation->set_rules('email2', 'Email2', 'required|valid_email|matches[email]');
     $this->form_validation->set_rules('password', 'Password', 'required|min_length[6]|max_length[40]');
     $this->form_validation->set_rules('password2', 'Password2', 'required|matches[password]|min_length[6]|max_length[40]');
     $this->form_validation->set_rules('source', 'Source', 'required');
     $this->form_validation->set_rules('agree', 'Agree', 'required');
+
     if ($this->form_validation->run() == FALSE) {
+
+      /* else
+        {
+        $this->load->view('v_new_user_adress');
+        } */
+      $dupUsername = $this->m_user->isDuplicateUsername($this->input->post('username'));
+      if ($dupUsername) {
+        $data['usernameError'] = 'Username already in use';
+      }
+      $dupEmail = $this->m_user->isDuplicateEmail($this->input->post('email'));
+      if ($dupEmail) {
+        $data['emailError'] = 'Email already in use';
+      }
+      //if ($this->form_validation->run() == FALSE OR $dupUsername OR $dupEmail) {
+      $data['title'] = 'Register';
+      $data['records'] = $this->m_municipal->getAll();
+      $data['source'] = $this->m_source->getAll();
+      $this->load->view('/include/v_header', $data);
+      $this->load->view('include/v_debug');
       $this->load->view('v_new_user');  //reload same page
+      $this->load->view('include/v_footer');
     } else { //success
       $email = $this->input->post('email');
       $password = $this->input->post('password');
@@ -91,15 +119,43 @@ class Validate extends CI_Controller {
       $muni = $this->input->post('muni');
       $source = $this->input->post('source');
       $user_id = $this->m_user->create_x($email, $password, $f_name, $l_name, $nick, $sex, $source, $muni);
-      if($user_id > 0){
-        redirect('/user/useradress');
-        $this->load->view('v_new_user_adress');
+      redirect('/user/useradress');
+    }
+    /* if($user_id > 0){
+      redirect('/user/useradress');
+      $this->load->view('v_new_user_adress');
       } else{
-        redirect('/error/index/0');
-      }
+      redirect('/error/index/0');
+      } */
+  }
+
+  /**
+   * callback function with a message if username exists
+   * @param <type> $username
+   * @return <type>
+   */
+  function username_exists($username) {
+    $this->form_validation->set_message('username_exists','The Username is already in use. Please try another Username.');
+    if ($this->m_user->isDuplicateUsername($username)) {
+      return FALSE;
+    } else {
+      return TRUE;
     }
   }
 
+  /**
+   *  callback function with a message if email exists
+   * @param <type> $email
+   * @return <type>
+   */
+  function email_exists($email) {
+    $this->form_validation->set_message('email_exists', 'The Email-address is already in use. Please try another Email.');
+    if ($this->m_user->isDuplicateEmail($email)) {
+      return FALSE;
+    } else {
+      return TRUE;
+    }
+  }
 
   /**
    * This function validates the useraddress.
@@ -117,7 +173,10 @@ class Validate extends CI_Controller {
     $this->form_validation->set_rules('mobile', 'Mobile', 'numeric');
     $this->form_validation->set_rules('country', 'Country', 'required');
     if ($this->form_validation->run() == FALSE) {
+      $this->load->view('/include/v_header');
+      $this->load->view('include/v_debug');
       $this->load->view('v_new_user_adress');  //reload same page
+      $this->load->view('include/v_footer');
     } else { //validation is successful
       $id = $this->input->post('user_id');
       $f_name = $this->input->post('firstname');
@@ -149,6 +208,6 @@ class Validate extends CI_Controller {
       redirect('/error/index/0');
     }
   }
-}
 
+   }
 }

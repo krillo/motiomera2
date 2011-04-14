@@ -66,13 +66,42 @@ class User extends CI_Controller{
     $this->load->view('include/v_footer');
   }
 
+   /**
+    * Creates useraddress
+    */
   function useradress() {
-    $data['title'] = 'User adress';
+    $data['title'] = 'User address';
     $this->load->view('/include/v_header', $data);
     $this->load->view('include/v_debug');
     $this->load->view('v_new_user_adress');
     $this->load->view('include/v_footer');
   }
+
+  /**
+   * Check if username exists
+   * if it exists then it will return error message as a snippet
+   * call this with ajax
+   * parameter is passed as segment 3
+   */
+  function isduplicateusername(){
+    $username = $this->uri->segment(3);
+    $data['status'] = $this->m_user->isDuplicateUsername($username);
+    $this->load->view('/snippets/v_status_error_msg', $data);
+  }
+
+  /**
+   * check if email exists
+   * if it exists then it will return error message as a snippet
+   * call this with ajax
+   * parameter is passed as segment 3 and is urlencoded
+   */
+  function isduplicateemail(){
+    $email = $this->uri->segment(3);
+    $email = urldecode($email);
+    $data['status'] = $this->m_user->isDuplicateEmail($email);
+    $this->load->view('/snippets/v_status_error_msg', $data);
+  }
+
   /**
    * create new company
    */
@@ -82,14 +111,18 @@ class User extends CI_Controller{
     $this->load->view('v_new_company');
     $this->load->view('include/v_footer');
   }
-
+  /**
+   * creates companyaddress
+   */
   function companyadress() {
     $data['title'] = 'Company adress ';
     $this->load->view('/include/v_header', $data);
     $this->load->view('v_new_companyadress');
     $this->load->view('include/v_footer');
   }
-
+  /*
+   * create receipt page
+   */
   function receipt(){
     $data['title'] = 'Receipt';
     $this->load->view('/include/v_header', $data);

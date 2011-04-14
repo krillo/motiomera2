@@ -9,41 +9,35 @@ class M_user extends CI_Model {
 
   private $table = 'users';
 
-
-
-
-
-
   /**
    * Gets all the records, defaults to limit the result to 20 rows
    * @param <type> $limit
    * @return <type>
    */
-  function getAll($limit = 20){
+  function getAll($limit = 20) {
     $query = $this->db->get($this->table, $limit);
-    if($query->num_rows() > 0 ){
-      foreach ($query->result() as $row){
+    if ($query->num_rows() > 0) {
+      foreach ($query->result() as $row) {
         $data[] = $row;
       }
       return $data;
     }
   }
 
-
   /**
    * Get user by user_id
    * @param <type> $id
    * @return <type>
    */
-  function getById($id){
+  function getById($id) {
     $sql = "SELECT * FROM users WHERE id  = ?";
     $query = $this->db->query($sql, array($id));
-    if($query->num_rows() > 0 ){
-      foreach ($query->result() as $row){
+    if ($query->num_rows() > 0) {
+      foreach ($query->result() as $row) {
         $data[] = $row;
       }
       return $data;
-    }else{
+    } else {
       //todo error handling
       return -1;
     }
@@ -68,60 +62,88 @@ class M_user extends CI_Model {
 
 
   /**
+   * this method returns true if username exists else false
+   * @param <type> $username
+   * @return boolean
+   */
+  function isDuplicateUsername($username) {
+    $sql = "SELECT id FROM users WHERE nick = ?";
+    $query = $this->db->query($sql, array($username));
+    if ($query->num_rows() > 0) {
+      return TRUE;
+    } else {
+      return FALSE;
+  }
+  }
+  /**
+   * this method returns true if email exists else false
+   * @param <type> $email
+   * @return boolean
+   */
+  function isDuplicateEmail($email) {
+    $sql = "SELECT id FROM users WHERE email = ?";
+    $query = $this->db->query($sql, array($email));
+    if ($query->num_rows() > 0) {
+      return TRUE;
+    } else {
+      return FALSE;
+    }
+  }
+
+  /**
    * Count all records.
    * Returns count and which table their from
    * @return array
    */
-	function count(){
-		$query = $this->db->count_all($this->table);
+  function count() {
+    $query = $this->db->count_all($this->table);
     $data['table'] = $this->table;
     $data['count'] = $query;
     return $data;
-	}
+  }
 
-	// get persons with paging
-	function getPagedList($limit = 10, $offset = 0){
-		$this->db->order_by('id','asc');
-		return $this->db->get($this->table, $limit, $offset);
-	}
+  // get persons with paging
+  function getPagedList($limit = 10, $offset = 0) {
+    $this->db->order_by('id', 'asc');
+    return $this->db->get($this->table, $limit, $offset);
+  }
 
-	/**
+  /**
    * Creates a new post
    * @param <type> $data
    * @return <type>
    */
-	function create(){
+  function create() {
     $data = array(
-      'email' => $_POST['email'],
-      'email_confirmed' => $_POST['email_confirmed'],
-      'password' => $this->input->post('password'),
-      'f_name' => $_POST['f_name'],
-      'l_name' => $_POST['l_name'],
-      'nick' => $_POST['nick'],
-      'sex' => $_POST['sex'],
-      'born' => $_POST['born'],
-      'descr' => $_POST['descr'],
-      'last_login' => $_POST['last_login'],
-      'img_filename' => $_POST['img_filename'],
-      'avatar_filename' => $_POST['avatar_filename'],
-      'session_id' => $_POST['session_id'],
-      'customer_id' => $_POST['customer_id'],
-      'paid_until' => $_POST['paid_until'],
-      'trophy_start' => $_POST['trophy_start'],
-      'browser' => $_POST['browser'],
-      'ip' => $_POST['ip'],
-      'type' => $_POST['type'],
-      'level' => $_POST['level'],
-      'status' => $_POST['status'],
-      'mAffCode' => $_POST['mAffCode'],
-      'company_key_temp' => $_POST['company_key_temp']
+        'email' => $_POST['email'],
+        'email_confirmed' => $_POST['email_confirmed'],
+        'password' => $this->input->post('password'),
+        'f_name' => $_POST['f_name'],
+        'l_name' => $_POST['l_name'],
+        'nick' => $_POST['nick'],
+        'sex' => $_POST['sex'],
+        'born' => $_POST['born'],
+        'descr' => $_POST['descr'],
+        'last_login' => $_POST['last_login'],
+        'img_filename' => $_POST['img_filename'],
+        'avatar_filename' => $_POST['avatar_filename'],
+        'session_id' => $_POST['session_id'],
+        'customer_id' => $_POST['customer_id'],
+        'paid_until' => $_POST['paid_until'],
+        'trophy_start' => $_POST['trophy_start'],
+        'browser' => $_POST['browser'],
+        'ip' => $_POST['ip'],
+        'type' => $_POST['type'],
+        'level' => $_POST['level'],
+        'status' => $_POST['status'],
+        'mAffCode' => $_POST['mAffCode'],
+        'company_key_temp' => $_POST['company_key_temp']
     );
     $data['created_at'] = date('Y-m-d H:i:s');
     $data['updated_at'] = date('Y-m-d H:i:s');
-		$this->db->insert($this->table, $data);
-		return $this->db->insert_id();
-	}
-
+    $this->db->insert($this->table, $data);
+    return $this->db->insert_id();
+  }
 
   /**
    * Creates a new post with the most basic parameters
@@ -136,25 +158,25 @@ class M_user extends CI_Model {
    * @param <string> $muni
    * @return <int> on success the row id else -1
    */
-	function create_x($email, $password, $f_name, $l_name, $nick, $sex, $source, $muni){
+  function create_x($email, $password, $f_name, $l_name, $nick, $sex, $source, $muni) {
     $data = array(
-      'email' => $email,
-      'password' => $password,
-      'f_name' => $f_name,
-      'l_name' => $l_name,
-      'nick' => $nick,
-      'sex' => $sex,
-      'municipal_id' => $muni,
-      //'sources_id' => $source,
-      'status' => 1,      
-      'level' => 11,
-      'email_confirmed' => 0,
-      'wl_id' => 1,  //$this->session->userdata('wl_id'),  //todo: get wl_id from config file
-      'created_at' => date('Y-m-d H:i:s'),
-      'updated_at' => date('Y-m-d H:i:s'),
+        'email' => $email,
+        'password' => $password,
+        'f_name' => $f_name,
+        'l_name' => $l_name,
+        'nick' => $nick,
+        'sex' => $sex,
+        'municipal_id' => $muni,
+        'sources_id' => $source,
+        'status' => 1,
+        'level' => 11,
+        'email_confirmed' => 0,
+        'wl_id' => 1, //$this->session->userdata('wl_id'),  //todo: get wl_id from config file
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s'),
     );
-		$this->db->insert('users', $data);
-    if($this->db->affected_rows() == 1){
+    $this->db->insert('users', $data);
+    if ($this->db->affected_rows() == 1) {
       $user_id = $this->db->insert_id();
       $session_data = array(
           'user_id' => $user_id,
@@ -179,63 +201,61 @@ class M_user extends CI_Model {
    * @param <type> $l_name
    * @return <type>
    */
-  function updateName($id, $f_name,$l_name) {
-      $data = array(
+  function updateName($id, $f_name, $l_name) {
+    $data = array(
         'f_name' => $f_name,
         'l_name' => $l_name,
         'updated_at' => date('Y-m-d H:i:s'),
-      );
-      $this->db->where('id', $id);
-      $this->db->update('users', $data);
-    if($this->db->affected_rows() == 1){
+    );
+    $this->db->where('id', $id);
+    $this->db->update('users', $data);
+    if ($this->db->affected_rows() == 1) {
       return $id;
     } else {
       return -1;
     }
   }
 
-
-	// update person by id
-	function update($id){
+  // update person by id
+  function update($id) {
     $data = array(
-      'email' => $_POST['email'],
-      'email_confirmed' => $_POST['email_confirmed'],
-      'password' => $this->input->post('password'),
-      'f_name' => $_POST['f_name'],
-      'l_name' => $_POST['l_name'],
-      'nick' => $_POST['nick'],
-      'sex' => $_POST['sex'],
-      'born' => $_POST['born'],
-      'descr' => $_POST['descr'],
-      'last_login' => $_POST['last_login'],
-      'img_filename' => $_POST['img_filename'],
-      'avatar_filename' => $_POST['avatar_filename'],
-      'session_id' => $_POST['session_id'],
-      'customer_id' => $_POST['customer_id'],
-      'paid_until' => $_POST['paid_until'],
-      'trophy_start' => $_POST['trophy_start'],
-      'browser' => $_POST['browser'],
-      'ip' => $_POST['ip'],
-      'type' => $_POST['type'],
-      'level' => $_POST['level'],
-      'status' => $_POST['status'],
-      'mAffCode' => $_POST['mAffCode'],
-      'company_key_temp' => $_POST['company_key_temp']
+        'email' => $_POST['email'],
+        'email_confirmed' => $_POST['email_confirmed'],
+        'password' => $this->input->post('password'),
+        'f_name' => $_POST['f_name'],
+        'l_name' => $_POST['l_name'],
+        'nick' => $_POST['nick'],
+        'sex' => $_POST['sex'],
+        'born' => $_POST['born'],
+        'descr' => $_POST['descr'],
+        'last_login' => $_POST['last_login'],
+        'img_filename' => $_POST['img_filename'],
+        'avatar_filename' => $_POST['avatar_filename'],
+        'session_id' => $_POST['session_id'],
+        'customer_id' => $_POST['customer_id'],
+        'paid_until' => $_POST['paid_until'],
+        'trophy_start' => $_POST['trophy_start'],
+        'browser' => $_POST['browser'],
+        'ip' => $_POST['ip'],
+        'type' => $_POST['type'],
+        'level' => $_POST['level'],
+        'status' => $_POST['status'],
+        'mAffCode' => $_POST['mAffCode'],
+        'company_key_temp' => $_POST['company_key_temp']
     );
     //print_r($data); die();
     $data['updated_at'] = date('Y-m-d H:i:s');
-		$this->db->where('id', $id);
-		$this->db->update($this->table, $data);
-	}
-
-	/**
-   * delete row, id from segment 3
-   */
-	function delete($id){
-		$this->db->where('id', $id);
-		$this->db->delete($this->table);
+    $this->db->where('id', $id);
+    $this->db->update($this->table, $data);
   }
 
+  /**
+   * delete row, id from segment 3
+   */
+  function delete($id) {
+    $this->db->where('id', $id);
+    $this->db->delete($this->table);
+  }
 
   /**
    * Return true if user is logged in
@@ -249,7 +269,6 @@ class M_user extends CI_Model {
     }
   }
 
-  
   /**
    * Checking where user login creditials are correct. If correct log in and store some data.
    *
@@ -305,12 +324,9 @@ class M_user extends CI_Model {
   /**
    * Loggs out the user by destroying the session
    */
-  function logout(){
+  function logout() {
     $this->session->sess_destroy();
-        
   }
-
-
 
   /**
    * This function does a wildcard search for users.
@@ -321,8 +337,8 @@ class M_user extends CI_Model {
    * @return mix array of user data or -1 for nothing found
    */
   function getByWildcard($search) {
-    $prep_search = '%'.$search.'%';   //prepare the text $search so it will be a wildcard param
-    if(is_numeric($search)){  //if $search is numeric also search the id field
+    $prep_search = '%' . $search . '%';   //prepare the text $search so it will be a wildcard param
+    if (is_numeric($search)) {  //if $search is numeric also search the id field
       $sql = "SELECT distinct(u.id), u.* FROM users u WHERE f_name LIKE ? OR l_name LIKE ? OR nick LIKE ? OR email LIKE ? OR id = ? ORDER BY id DESC LIMIT 20";
       $query = $this->db->query($sql, array($prep_search, $prep_search, $prep_search, $prep_search, $search));
     } else {
@@ -330,19 +346,14 @@ class M_user extends CI_Model {
       $query = $this->db->query($sql, array($prep_search, $prep_search, $prep_search, $prep_search));
     }
     //echo $this->db->last_query();
-    if($query->num_rows() > 0 ){
-      foreach ($query->result() as $row){
+    if ($query->num_rows() > 0) {
+      foreach ($query->result() as $row) {
         $data[] = $row;
       }
       return $data;
-    }else{
+    } else {
       return -1;
     }
   }
-
-
-
-
-
 
 }
