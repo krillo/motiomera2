@@ -1,6 +1,5 @@
-
-
 -- Initial insert source for private person in Swedish.
+-- delete from sources;
 insert into sources (wl_id, name, descr, type, created_at, updated_at) values(2, 'telefon', 'Telefon', 'PRIVATE', CURDATE(), CURDATE());
 insert into sources (wl_id, name, descr, type, created_at, updated_at) values(2, 'direktreklam', 'Direktreklam', 'PRIVATE', CURDATE(), CURDATE());
 insert into sources (wl_id, name, descr, type, created_at, updated_at) values(2, 'tidningsannons', 'Tidningsannons', 'PRIVATE', CURDATE(), CURDATE());
@@ -12,7 +11,6 @@ insert into sources (wl_id, name, descr, type, created_at, updated_at) values(2,
 insert into sources (wl_id, name, descr, type, created_at, updated_at) values(2, 'event', 'Mässa eller event', 'PRIVATE', CURDATE(), CURDATE());
 insert into sources (wl_id, name, descr, type, created_at, updated_at) values(2, 'tidigarekund', 'Kund sedan tidigare', 'PRIVATE', CURDATE(), CURDATE());
 insert into sources (wl_id, name, descr, type, created_at, updated_at) values(2, 'annat', 'Annat sätt', 'PRIVATE', CURDATE(), CURDATE());
-
 -- Initial insert source for companys in Swedish.
 insert into sources (wl_id, name, descr, type, created_at, updated_at) values(2, 'telefon', 'Telefon', 'COMPANY', CURDATE(), CURDATE());
 insert into sources (wl_id, name, descr, type, created_at, updated_at) values(2, 'direktreklam', 'Direktreklam', 'COMPANY', CURDATE(), CURDATE());
@@ -27,7 +25,6 @@ insert into sources (wl_id, name, descr, type, created_at, updated_at) values(2,
 insert into sources (wl_id, name, descr, type, created_at, updated_at) values(2, 'event', 'Mässa eller event', 'COMPANY', CURDATE(), CURDATE());
 insert into sources (wl_id, name, descr, type, created_at, updated_at) values(2, 'tidigarekund', 'Kund sedan tidigare', 'COMPANY', CURDATE(), CURDATE());
 insert into sources (wl_id, name, descr, type, created_at, updated_at) values(2, 'annat', 'Annat sätt', 'COMPANY', CURDATE(), CURDATE());
-
 -- Initial insert source for private person in English.
 insert into sources (wl_id, name, descr, type, created_at, updated_at) values(1, 'phone', 'Phone', 'PRIVATE', CURDATE(), CURDATE());
 insert into sources (wl_id, name, descr, type, created_at, updated_at) values(1, 'directadvertising', 'Direct advertising', 'PRIVATE', CURDATE(), CURDATE());
@@ -40,7 +37,6 @@ insert into sources (wl_id, name, descr, type, created_at, updated_at) values(1,
 insert into sources (wl_id, name, descr, type, created_at, updated_at) values(1, 'event', 'Fair or event', 'PRIVATE', CURDATE(), CURDATE());
 insert into sources (wl_id, name, descr, type, created_at, updated_at) values(1, 'registeredclient', 'Registered client', 'PRIVATE', CURDATE(), CURDATE());
 insert into sources (wl_id, name, descr, type, created_at, updated_at) values(1, 'other', 'Other', 'PRIVATE', CURDATE(), CURDATE());
-
 -- Initial insert source for companys in English.
 insert into sources (wl_id, name, descr, type, created_at, updated_at) values(1, 'phone', 'Phone', 'COMPANY', CURDATE(), CURDATE());
 insert into sources (wl_id, name, descr, type, created_at, updated_at) values(1, 'directadvertising', 'Direct advertising', 'COMPANY', CURDATE(), CURDATE());
@@ -55,13 +51,6 @@ insert into sources (wl_id, name, descr, type, created_at, updated_at) values(1,
 insert into sources (wl_id, name, descr, type, created_at, updated_at) values(1, 'event', 'Fair or event', 'COMPANY', CURDATE(), CURDATE());
 insert into sources (wl_id, name, descr, type, created_at, updated_at) values(1, 'registeredclient', 'Registered client', 'COMPANY', CURDATE(), CURDATE());
 insert into sources (wl_id, name, descr, type, created_at, updated_at) values(1, 'other', 'Other', 'COMPANY', CURDATE(), CURDATE());
-
-
-
-
-
-
-
 -- Initial insert for Swedish municipals. The codes are taken from SCB
 -- http://www.scb.se/Pages/List____257281.aspx
 insert into municipals (country_id, code, name,  created_at, updated_at) values(46, '0114', 'Upplands Väsby', CURDATE(), CURDATE());

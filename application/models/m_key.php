@@ -45,6 +45,226 @@ class M_key extends CI_Model {
   }
 
 
+  function getTeamUsersByContestId_xxxxxxx($team_id) {
+    $sql = "SELECT * users FROM `keys` WHERE team_id = ? ";
+    $query = $this->db->query($sql, array($contest_id));
+    if ($query->num_rows() > 0) {
+      foreach ($query->result() as $row) {
+        $sql = "SELECT count(id) users FROM `keys` WHERE team_id = ? ";
+        $query = $this->db->query($sql, array($contest_id));
+        
+        
+        $data['total_users_no_team'] = $row->users;
+      }
+      return $data;
+    } else {
+      return -1;
+    }
+  }
+
+
+  /**
+   * Get the users in the team
+   * 
+   * @param <type> $team_id
+   * @return <type>
+   */
+  function getUsersByTeamId($team_id) {
+    $sql = "SELECT u.id user_id, k.id key_id, team_id, nick, f_name, l_name FROM `keys` k,  users u WHERE team_id = ? AND k.id = u.id";
+    $query = $this->db->query($sql, array($team_id));
+    if ($query->num_rows() > 0) {
+      foreach ($query->result() as $row) {
+        $data[] = $row;
+      }
+      return $data;
+    } else {
+      return -1;
+    }
+  }
+
+  /**
+   * Collect some contest data:
+   * 1. All competitors
+   * 2. All registered users in the contest
+   * 3. All users in the competition but not placed in any team
+   *
+   * @param <type> $contest_id
+   * @return <type>
+   */
+  function getTeamDataByContestId($contest_id) {
+    $sql = "SELECT count(id) total  FROM  `keys` WHERE contest_id = ?";
+    $query = $this->db->query($sql, array($contest_id));
+    if ($query->num_rows() == 1) {
+      foreach ($query->result() as $row) {
+        $data['total_keys'] = $row->total;
+      }
+      $sql = "SELECT count(id) users  FROM  `keys` WHERE contest_id = ? AND user_id IS NOT NULL";
+      $query = $this->db->query($sql, array($contest_id));
+      if ($query->num_rows() == 1) {
+        foreach ($query->result() as $row) {
+          $data['total_used_keys'] = $row->users;
+        }
+        $sql = "SELECT count(id) users FROM `keys` WHERE contest_id = ? AND user_id IS NOT NULL AND team_id IS NULL";
+        $query = $this->db->query($sql, array($contest_id));
+        if ($query->num_rows() == 1) {
+          foreach ($query->result() as $row) {
+            $data['total_users_no_team'] = $row->users;
+          }
+          return $data;
+        } else {
+          return -1;
+        }
+      } else {
+        return -1;
+      }
+    } else {
+      return -1;
+    }
+  }
+
+
+
+  function getFreeKeysByContestId($contest_id) {
+    $sql = "SELECT id, `key`  FROM  `keys` WHERE contest_id = ? AND user_id IS NULL ORDER BY id ASC";
+    $query = $this->db->query($sql, array($contest_id));
+    if ($query->num_rows() > 0) {
+      foreach ($query->result() as $row) {
+        $data[$row->id] = $row->key;
+      }
+      return $data;
+    } else {
+      return -1;
+    }
+  }
+
+
+  public function addKeys($contest_id, $keys, $team_id = null){
+    foreach ($keys as $key) {
+      $sql = "INSERT INTO `keys` (contest_id, `key`, team_id, created_at, updated_at) values(?, ?, ?, ?, ?)";
+      $query = $this->db->query($sql, array($contest_id, $key, $team_id, date('Y-m-d H:i:s'), date('Y-m-d H:i:s')));
+    }
+  }
+
+
+
+  /**
+   * Generates keys and places them into teams if parameter $skipteam is false or omitted
+   * Returns array of the created keys
+   *
+   * @param <type> $count
+   * @param <type> $order_id
+   * @param <type> $skipteam
+   * @return string
+   */
+  function generateKeys($count, $skipteam = false){
+    $generatedKeys = array();
+    $letters = "ACDEFGHJKLMNPQRSTUVWXY345679";
+    for ($i = 0; $i < $count; $i++) {
+      $key = "";
+      for ($j = 0; $j < 8; $j++) {
+        $key.= $letters[mt_rand(0, strlen($letters) - 1) ];
+      }
+      if ($this->isKeyAvalible($key)) {
+        $generatedKeys[] = $key;
+      } else {
+        $i--;
+      }
+    }
+    return $generatedKeys;
+  }
+
+
+  /**
+   * Checks in the db if key is available
+   *
+   * @param <type> $key
+   * @return bool true of false
+   */
+  function isKeyAvalible($key){
+    $sql = "SELECT id FROM `keys` WHERE `key`  = ?";
+    $query = $this->db->query($sql, array($key));
+    if($query->num_rows() > 0 ){
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+
+  /**
+   * Writes a array of keys to the db.
+   * @param <type> $contest_id
+   * @param <type> $keys
+   * @param <type> $team_id
+   */
+  public function addKeysToDb($contest_id, $keys, $team_id = null){
+    foreach ($keys as $key) {
+      $sql = "INSERT INTO `keys` (contest_id, `key`, team_id, created_at, updated_at) values(?, ?, ?, ?, ?)";
+      $query = $this->db->query($sql, array($contest_id, $key, $team_id, date('Y-m-d H:i:s'), date('Y-m-d H:i:s')));
+    }
+  }
+
+
+
+/**
+ * Remove team from db.
+ * Return the number of nulled rows
+ *
+ * @param <type> $team_id
+ * @return <type>
+ */
+  function removeTeam($team_id) {
+    $sql = "SELECT count(id) FROM `keys` WHERE team_id  = ?";
+    $query = $this->db->query($sql, array($team_id));
+    if($query->num_rows() == 1 ){
+      $count = $query->result();
+    }
+    $data = array(
+        'team_id' => null,
+        'updated_at' => date('Y-m-d H:i:s'),
+    );
+    $this->db->where('team_id', $team_id);
+    $this->db->update('keys', $data);
+    if ($this->db->affected_rows() == $count) {
+      return $count;
+    } else {
+      return -1;
+    }
+  }
+
+
+  function removeUserByUserContestId($user_id, $contest_id){
+    $updated_at = date('Y-m-d H:i:s');
+    $sql = "UPDATE `keys` SET team_id = NULL, updated_at = ? WHERE user_id = ? AND contest_id = ?";
+    $query = $this->db->query($sql, array($updated_at, $user_id, $contest_id));
+    if ($this->db->affected_rows() == 1) {
+      return TRUE;
+    } else {
+      return FALSE;
+    }
+  }
+
+
+  /**
+   * Remove user from team i.e set user_id = null
+   *
+   * @param <type> $key_id
+   * @return <type>
+   */
+  function removeUserByKeyId($key_id){
+    $updated_at = date('Y-m-d H:i:s');
+    $sql = "UPDATE `keys` SET team_id = NULL, updated_at = ? WHERE id = ? ";
+    $query = $this->db->query($sql, array($updated_at, $key_id));
+    if ($this->db->affected_rows() == 1) {
+      return TRUE;
+    } else {
+      return FALSE;
+    }
+  }
+
+
+
+
   /**
    * Count all records.
    * Returns count and which table their from
@@ -55,12 +275,6 @@ class M_key extends CI_Model {
     $data['table'] = $this->table;
     $data['count'] = $query;
     return $data;
-	}
-
-	// get persons with paging
-	function getPagedList($limit = 10, $offset = 0){
-		$this->db->order_by('id','asc');
-		return $this->db->get($this->table, $limit, $offset);
 	}
 
 	/**

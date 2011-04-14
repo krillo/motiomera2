@@ -43,6 +43,24 @@ class M_user extends CI_Model {
     }
   }
 
+
+
+  function getByContestId($contest_id){
+    $sql = "SELECT k.*,  u.nick, u.f_name, u.l_name, u.avatar_filename  FROM users u, `keys` k WHERE u.id = k.user_id AND k.contest_id = ? ORDER BY f_name ASC";
+    $query = $this->db->query($sql, array($contest_id));
+    if($query->num_rows() > 0 ){
+      foreach ($query->result() as $row){
+        $data[] = $row;
+      }
+      return $data;
+    }else{
+      //todo error handling
+      return -1;
+    }
+
+  }
+
+
   /**
    * this method returns true if username exists else false
    * @param <type> $username
