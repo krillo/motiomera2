@@ -83,3 +83,9 @@ body {color:#333;font-family:Arial,Verdana;font-size:11px;}
 .button-space{margin-bottom: 3px;}
 .show{display:block;}
 .hide{display:none;}
+
+.toplist{width:145px;border:2px #fed22f solid;}
+.toplist-head{margin-left:10px;}
+.toplist-ol{padding-left:25px;}
+.toplist-a{width: 70px;display: block;float: left;}
+.toplist-steps{width: 50px;}

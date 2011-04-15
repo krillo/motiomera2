@@ -36,10 +36,26 @@ class Mypage extends CI_Controller{
    */
   function _showMyPage($id){
     $data = $this->m_user->getById($id);
-    $data['toplist7days'] = $this->m_step->toplist7days();
     $data['title'] = 'mypage';
     $this->load->view('include/v_header', $data);
     $this->load->view('v_mypage');
+
+    $toplist1['toplist'] = $this->m_step->getToplistDays(6, 5);
+    $toplist1['toplist_title'] = 'Top of the week';
+    $this->load->view('snippets/v_toplist', $toplist1);
+
+    $toplist2['toplist'] = $this->m_step->getToplistDays(1, 10);
+    $toplist2['toplist_title'] = 'Top of the day';
+    $this->load->view('snippets/v_toplist', $toplist2);
+
+
+    $toplist3['toplist'] = $this->m_step->getRankedToplistDays(10);
+    $toplist3['toplist_title'] = 'Ranked list';
+    $this->load->view('snippets/v_toplist', $toplist3);
+
+
+
+
     $this->load->view('include/v_debug');
     $this->load->view('include/v_footer');
     $this->_reportStepDialog();

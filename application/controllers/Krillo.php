@@ -28,6 +28,8 @@ class Krillo extends CI_Controller {
     //$data = $this->m_step->create_x(3, 1, 1, '2011-03-03');
     //print_r($data);
 
+    $this->load->model('m_testdata');
+    $this->m_testdata->creteUsers();
 
     $this->testJDate();
   }

@@ -172,22 +172,66 @@ class M_step extends CI_Model {
 		return $steg * 0.05;
 	}
 
-
-  function toplist7days(){
+  /**
+   * Get a ranked toplist.
+   * Submit how many days back you want data from.
+   *
+   * @param int $days how many days back the list is gonna go
+   * @return array the result array or -1 for error
+   */
+  function getToplistDays($days = 1, $limit = 10){
     $d = new JDate();
-    $d->subDays(6);
+    $d->subDays($days);
     $fromdate = $d->getDateTimeZero();
-    $sql = "select sum(steps) tot_steps, user_id, nick from steps s, users u where s.created_at > ? and user_id = u.id group by user_id order by tot_steps desc limit 10";
-    $query = $this->db->query($sql, array($fromdate));
+    $sql = "select sum(steps) tot_steps, user_id, nick from steps s, users u where s.created_at > ? and user_id = u.id group by user_id order by tot_steps desc limit ?";
+    $query = $this->db->query($sql, array($fromdate, $limit));
     if($query->num_rows() > 0 ){
       foreach ($query->result() as $row){
         $data[] = $row;
       }
       return $data;
-    }
+    } else {
+      return -1;
+    }    
   }
 
 
+/*
+ SELECT rank, medlem_id FROM (
+      SELECT @rownum := @rownum + 1 AS rank, medlem_id
+      FROM " . self::RELATION_TABLE . " 
+      WHERE tavlings_id = $tavlingsid      
+      ORDER BY steg DESC
+    ) AS result WHERE medlem_id = $medlemid";  
+ * 
+ * 
+ * 
+SET @rownum := 0;
+select @rownum := @rownum + 1 AS rank, sum(steps) tot_steps, user_id from steps where created_at > '2011-04-07 00:00:00' group by user_id order by tot_steps desc;
+ * 
+ */
+
+
+
+  function getRankedToplistDays($days = 7, $limit = 10){
+    $d = new JDate();
+    $d->subDays($days);
+    $fromdate = $d->getDateTimeZero();
+    $sql = "SET @rownum := 0";
+    $query = $this->db->query($sql);
+    $sql = "select @rownum := @rownum + 1 AS rank, sum(steps) tot_steps, user_id AS nick from steps where created_at > ? group by user_id order by tot_steps desc";
+    $query = $this->db->query($sql, array($fromdate));
+
+
+    if($query->num_rows() > 0 ){
+      foreach ($query->result() as $row){
+        $data[] = $row;
+      }
+      return $data;
+    } else {
+      return -1;
+    }
+  }
 
 
 

@@ -1,22 +1,15 @@
-<?php
-/*
-    [toplist7days] => Array
-        (
-            [0] => stdClass Object
-                (
-                    [tot_steps] => 164900
-                    [user_id] => 3
-                    [nick] => 19
-                )
-*/
-
-
-?>
-<div>
-  <h2>veckan väsrstingar</h2>
-<ol>
-  <li><a href="#">Krillo</a> 120 000</li>
-  <li><a href="#">Noppe</a> 110 300</li>
-  <li><a href="#">Noy</a> 98 120</li>
+<div class="toplist">
+  <h3 class="toplist-head"><?php echo $toplist_title; ?></h3>
+<ol class="toplist-ol">
+  <?php
+  if($toplist > 0){
+    foreach ($toplist as $key => $row): ?>
+  <li><a href="#" class="toplist-a"><?php echo $row->nick; ?></a><span class="toplist-steps"> <?php echo $row->tot_steps; ?></span></li>
+    <?php endforeach;
+  } else {
+    echo 'Nothing to show';
+  }
+  ?>
 </ol>
 </div>
+
