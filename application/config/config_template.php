@@ -356,5 +356,20 @@ $config['rewrite_short_tags'] = FALSE;
 $config['proxy_ips'] = '';
 
 
+
+/*
+|--------------------------------------------------------------------------
+| Motiomera user levels
+|--------------------------------------------------------------------------
+|
+| These are the user and administrator levels used in Motiomera
+|
+*/
+define('USER_LEVEL', 10);
+define('COMP_ADM_LEVEL', 40);
+define('SUPPORT_ADM_LEVEL', 50);
+define('WL_ADM_LEVEL', 70);
+define('SUPER_ADM_LEVEL', 90);
+
 /* End of file config.php */
 /* Location: ./application/config/config.php */
