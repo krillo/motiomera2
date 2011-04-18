@@ -235,6 +235,7 @@
     <p>
       <label for="source">Hur hörde du talas om Motiomera?</label>
       <?php
+      $this->load->helper('form');
       echo form_dropdown('source', $source, 'Choose...', 'id="source"');
 
       ?>

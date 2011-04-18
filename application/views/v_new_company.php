@@ -40,8 +40,7 @@
       return true;
     });
 
-
-    $.validator.addMethod("username",function(value,element){
+    /*$.validator.addMethod("username",function(value,element){
       return this.optional(element)|| /^[A-Za-z0-9]{4,20}$/i.test(value);
     },"You must type min 4, max 20 letters, and no å,ä,ö.");
     
@@ -50,22 +49,26 @@
       //return this.optional(element) || /^[A-Za-z\d]+$/i.test(value);
       return this.optional(element) || /^[A-Za-z0-9!@#$%^&*()_]{6,255}$/i.test(value);
     },"You must type min 6 max 255 letters, and no å,ä,ö.");
-
+    */
     $.validator.addMethod('numericOnly', function (value) {
       return /[0-9 ]/.test(value);
     }, 'Please only enter numeric values (0-9)');
 
 
-    $('#signupForm').submit(function(e){ // <<< This selector needs to point to your form.
+    $('#signupForm').submit(function(e){ //  This selector needs to point to your form.
         if ($('#trade').val() == "") {
-            alert("Please select a bransch.");
+          $("#trade-error").show();
+          $("#trade-error").html('Choose a trade.');
+            //alert("Please select a bransch.");
             e.preventDefault();
             return false;
         }});
 
-      $('#signupForm').submit(function(e){ // <<< This selector needs to point to your form.
+      $('#signupForm').submit(function(e){ //  This selector needs to point to your form.
         if ($('#source').val() == "") {
-            alert("Please select one answer.");
+          $("#source-error").show();
+          $("#source-error").html('Choose a source.');
+            //alert("Please select one answer.");
             e.preventDefault();
             return false;
         }});
@@ -82,7 +85,6 @@
       rules: {
         company: {
           required: true,
-          //username: true,
           minlength: 0,
           maxlength: 30
         },
@@ -104,14 +106,14 @@
         agree: "Please accept our policy"
       }
 
-  })
+  });
   });
 
 </script>
 
 <h1>Beställning för företag</h1>
 
-<div style="border: 2px solid red;">   <?php echo validation_errors(); ?> </div>
+<div style="border: 2px solid red; padding-left: 10px;">   <?php echo validation_errors(); ?> </div>
 
 <form class="cmxform" id="signupForm" method="post" action="/validate/companyreg">
   <fieldset>
@@ -217,7 +219,30 @@
 
     <p>
       <label for="trade">Vilken bransch tillhör företaget?</label>
-      <select name="trade" id="trade">
+      <?php
+        $this->load->helper('form');
+        echo form_dropdown('trade', $trade, 'Choose...', 'id="trade"');
+      ?>
+      <!--?php
+      $this->load->helper('form');
+      $options = array(
+          '' => 'Choose...',
+          'Staffing and Employment services' => 'Bemmaning och Arbetsförmedling',
+          'It' => 'Data, it och Telekommunikation',
+          'Retail' => 'Detaljhandel',
+          'Real Estate' => 'Fastighetsverksamhet',
+          'Hair and Beauty' => 'Hår och Skönhetsvård',
+          'Media' => 'Media',
+          'Hotel and Restaurant' => 'Hotell och Restaurang',
+          'Health & Medical' => 'Hälsa och Sjukvård',
+          'Construction, Design and Furnishings Business' => 'Bygg-, Design- och Inredningsverksamhet',
+          'Banking, Finance and Insurance' => 'Bank, Finans och Försäkring',
+          'Manufacturing and Industry' => 'Tillverkning och Industri',
+          'Advertising, PR and Marketing' => 'Reklam, Pr och Marknadsföring',
+      );
+      echo form_dropdown('trade', $options, 'Choose...', 'id="trade"');
+      ?-->
+      <!--select name="trade" id="trade">
         <option value="">Välj...</option>
         <option value="">Bemanning &amp; Arbetsförmedling</option>
         <option value="it">Data, It &amp; Telekommunikation</option>
@@ -231,7 +256,8 @@
         <option value="finance">Bank, Finans &amp; Försäkring</option>
         <option value="industry">Tillverkning &amp; Industri</option>
         <option value="pr">Reklam, Pr &amp; Marknadsundersökning</option>
-      </select>
+      </select-->
+      <span id="trade-error" style="color:red;"></span>
     </p>
 
     <p>
@@ -242,7 +268,32 @@
 
     <p>
       <label for="source">Hur hörde du talas om Motiomera?</label>
-      <select name="source" id="source">
+      <?php
+        $this->load->helper('form');
+        echo form_dropdown('source', $source, 'Choose...', 'id="source"');
+      ?>
+      <!--?php
+      $this->load->helper('form');
+      $options = array(
+          '' => 'Choose...',
+          'email' => 'Email',
+          'phone' => 'Telefon',
+          'directadvertising' => 'Direktreklam',
+          'officemail' => 'Kontorspost',
+          'newspaperad' => 'Tidningsannons',
+          'newspapercoupon' => 'Reklamblad i tidning',
+          'banner' => 'Bannerannons på internet',
+          'bannerinthenewsletter' => 'Bannerannons i nyhetsbrev',
+          'searchengine' => 'Sökmotor på internet',
+          'fax' => 'Fax',
+          'tipfromanacquaintance' => 'Tips från en bekant',
+          'event' => 'Mässa eller event',
+          'registeredclient' => 'Kund sedan tidigare',
+          'other' => 'Annat',
+      );
+      echo form_dropdown('source', $options, 'Choose...', 'id="source"');
+      ?-->
+      <!--select name="source" id="source">
         <option value="">Välj...</option>
         <option value="email">Email</option>
         <option value="telefon">Telefon</option>
@@ -258,7 +309,8 @@
         <option value="event">Mässa eller event</option>
         <option value="tidigarekund">Kund sedan tidigare</option>
         <option value="annat">Annat sätt</option>
-      </select>
+      </select-->
+       <span id="source-error" style="color:red;"></span>
     </p>
 
     <div style="border-style:solid; border-width:2px;  float:right;">

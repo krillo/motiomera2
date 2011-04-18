@@ -5,37 +5,39 @@
  *
  * @author Kristian Erendi 2011
  */
-class M_source extends CI_Model {
-  private $table = 'sources';
+class M_trade extends CI_Model {
+  private $table = 'trades';
 
 
   /**
-   * Gets all the records, with wl_id 2 and type private.
-   * @param <type> 
+   * Gets all the records, defaults to limit the result to 20 rows
+   * @param <type> $limit
    * @return <type>
    */
-  function getAll($wl_id, $type){
-    $sql = "SELECT * FROM sources WHERE wl_id = ? AND type = ? ORDER BY descr COLLATE utf8_swedish_ci ASC ";
-    $query = $this->db->query($sql, array($wl_id,$type));
+  function getAll(){
+    $sql = "SELECT * FROM trades where wl_id=1 ORDER BY name COLLATE utf8_swedish_ci ASC ";
+    $query = $this->db->query($sql);
+
+    //$query = $this->db->get($this->table);
     if($query->num_rows() > 0 ){
       foreach ($query->result() as $row){
         $data[] = $row;
       }
-      return $this->_prepareSourceList($data);
+      return $this->_prepareTradeList($data);
     }
   }
-  
+
   /**
-   * Prepares the sourcelist-array to match the dropdown helper
+   * Prepares the severitylist-array to match the dropdown helper
    *
    * @param <type> $data
    * @return <type>
    */
-  function _prepareSourceList($data) {
+  function _prepareTradeList($data) {
     $prepArray = array();
     $prepArray[0] = 'Choose...';
     foreach ($data as $key => $value) {
-        $name = $value->descr;
+        $name = $value->name;
         $id = $value->id;
         $prepArray[$id] = $name;
     }
@@ -50,7 +52,7 @@ class M_source extends CI_Model {
    * @return <type>
    */
   function getById($id){
-    $sql = "SELECT * FROM sources WHERE id  = ?";
+    $sql = "SELECT * FROM trades WHERE id  = ?";
     $query = $this->db->query($sql, array($id));
     if($query->num_rows() > 0 ){
       foreach ($query->result() as $row){
@@ -62,6 +64,11 @@ class M_source extends CI_Model {
       return -1;
     }
   }
+
+
+
+
+
 
   /**
    * Count all records.
@@ -112,3 +119,4 @@ class M_source extends CI_Model {
 
 
 }
+

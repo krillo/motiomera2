@@ -1,11 +1,14 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Validate extends CI_Controller {
 
+    private static $wl_id = 0;
 
 	function __construct(){
 		parent::__construct();
     $this->load->model('m_municipal');
     $this->load->model('m_source');
+    $this->load->model('m_trade');
+    $this::$wl_id = WL_ID;
 	}
 
 
@@ -27,7 +30,10 @@ class Validate extends CI_Controller {
 
 
     if ($this->form_validation->run() == FALSE) {
+      $this->load->view('/include/v_header');
+      $this->load->view('/include/v_debug');
       $this->load->view('v_new_companyadress');
+      $this->load->view('include/v_footer');
     } else {
       $this->load->view('v_new_companyadress');
     }
@@ -48,7 +54,13 @@ class Validate extends CI_Controller {
     $this->form_validation->set_rules('source', 'Source', 'required');
     $this->form_validation->set_rules('agree', 'Agree', 'required');
     if ($this->form_validation->run() == FALSE) {
+      $data['title'] = 'Register company';
+      $data['trade'] = $this->m_trade->getAll();
+      $data['source'] = $this->m_source->getAll($this::$wl_id, 'COMPANY');
+      $this->load->view('/include/v_header');
+      $this->load->view('include/v_debug');
       $this->load->view('v_new_company'); //reload same page
+      $this->load->view('include/v_footer');     
     } else { //success
       $company = $this->input->post('company');
       $count1 = $this->input->post('count1');
@@ -104,7 +116,7 @@ class Validate extends CI_Controller {
       //if ($this->form_validation->run() == FALSE OR $dupUsername OR $dupEmail) {
       $data['title'] = 'Register';
       $data['records'] = $this->m_municipal->getAll();
-      $data['source'] = $this->m_source->getAll();
+      $data['source'] = $this->m_source->getAll($this::$wl_id, 'PRIVATE');
       $this->load->view('/include/v_header', $data);
       $this->load->view('include/v_debug');
       $this->load->view('v_new_user');  //reload same page

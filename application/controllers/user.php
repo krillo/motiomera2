@@ -2,10 +2,15 @@
 
 class User extends CI_Controller{
 
+   private static $wl_id = 0;
+
+
 	function __construct(){
 		parent::__construct();
     $this->load->model('m_municipal');
     $this->load->model('m_source');
+    $this->load->model('m_trade');
+    $this::$wl_id = WL_ID;
 	}
 
 	function index(){
@@ -59,7 +64,7 @@ class User extends CI_Controller{
   function newuser() {
     $data['title'] = 'Register';
     $data['records'] = $this->m_municipal->getAll();
-    $data['source'] = $this->m_source->getAll();
+    $data['source'] = $this->m_source->getAll($this::$wl_id, 'PRIVATE');
     $this->load->view('/include/v_header', $data);
     $this->load->view('include/v_debug');
     $this->load->view('v_new_user');
@@ -107,7 +112,10 @@ class User extends CI_Controller{
    */
   function newcompany() {
     $data['title'] = 'Register company';
+    $data['trade'] = $this->m_trade->getAll();
+    $data['source'] = $this->m_source->getAll($this::$wl_id, 'COMPANY');
     $this->load->view('/include/v_header', $data);
+    $this->load->view('/include/v_debug');
     $this->load->view('v_new_company');
     $this->load->view('include/v_footer');
   }
@@ -115,7 +123,7 @@ class User extends CI_Controller{
    * creates companyaddress
    */
   function companyadress() {
-    $data['title'] = 'Company adress ';
+    $data['title'] = 'Company adress';
     $this->load->view('/include/v_header', $data);
     $this->load->view('v_new_companyadress');
     $this->load->view('include/v_footer');

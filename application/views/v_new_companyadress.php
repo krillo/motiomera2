@@ -10,19 +10,11 @@
 
   $().ready(function() {
     //$('#register-submit').click({
-    $.validator.addMethod("username",function(value,element){
-      return this.optional(element)|| /^[A-Za-z0-9]{4,20}$/i.test(value);
-    },"You must type min 4, max 20 letters, and no å,ä,ö.");
-    
-    $.validator.addMethod("password",function(value,element){
-      //return this.optional(element) || /^(?=.*\d)(?=.*[a-z]).{6,255}$/i.test(value);
-      //return this.optional(element) || /^[A-Za-z\d]+$/i.test(value);
-      return this.optional(element) || /^[A-Za-z0-9!@#$%^&*()_]{6,255}$/i.test(value);
-    },"You must type min 6 max 255 letters, and no å,ä,ö.");
-
-    $('#signupForm').submit(function(e){ // <<< This selector needs to point to your form.
+    $('#signupForm').submit(function(e){ //  This selector needs to point to your form.
         if ($('#country').val() == "") {
-            alert("Vänligen välj ett land.");
+          $("#country-error").show();
+          $("#country-error").html('Choose a country.');
+            //alert("Vänligen välj ett land.");
             e.preventDefault();
             return false;
         }});
@@ -31,7 +23,6 @@
       rules: {
         company: {
           required: true,
-          //username: true,
           minlength: 0,
           maxlength: 30
         },
@@ -49,8 +40,6 @@
         },
         city: {
           required: true
-          //email: true,
-          //equalTo: "#email"
         },
         email: {
           required: true,
@@ -62,13 +51,9 @@
           required: true,
           number: true
         },
-        /*country: {
-          required: true,
-          country: true
-          //minlength: 6,
-          //maxlength: 255
-          //equalTo: "#password"
-        },*/
+        mobile: {
+          number: true
+        },
         agree: {
           required: true
         }
@@ -77,24 +62,6 @@
       messages: {
         email: {
           required: "Please provide a email"
-        },
-        email2: {
-          required: "Please provide a email",
-          equalTo: "Please enter the same email as above"
-        },
-        password: {
-          required: "Please provide a password",
-          minlength: "Your password must be at least 6 characters long",
-          maxlength: ""
-        },
-        password2: {
-          required: "Please provide a password",
-          minlength: "Your password must be at least 6 characters long",
-          maxlength: "",
-          equalTo: "Please enter the same password as above"
-        },
-        country: {
-          required: "Please select a country."
         },
         agree: "Please accept our policy"
       }
@@ -106,7 +73,7 @@
 
 <h1>Ange Er adress</h1>
 
-<div style="border: 2px solid red;">   <?php echo validation_errors(); ?> </div>
+<div style="border: 2px solid red; padding-left: 10px;">   <?php echo validation_errors(); ?> </div>
 
 <form class="cmxform" id="signupForm" method="post" action="/validate/companyaddress">
   <fieldset>
@@ -116,7 +83,7 @@
 
     <p>
       <label for="company">Företagsnamn <span style="color:red;">*</span></label>
-      <input id="comåany" name="company" type="text" />
+      <input id="comany" name="company" type="text" />
     </p>
 
     <p>
@@ -166,17 +133,30 @@
 
     <p>
       <label for="country">Land <span style="color:red;">*</span></label>
-      <select id="country" name="country">
+      <?php
+      $this->load->helper('form');
+      $options = array(
+          '' => 'Choose...',
+          'sweden' => 'Sverige',
+          'denmark' => 'Danmark',
+          'norway' => 'Norge',
+          'finland' => 'Finland',
+          'island' => 'Island',
+      );
+      echo form_dropdown('country', $options, 'Choose...', 'id="country"');
+      ?>
+      <!--select id="country" name="country">
         <option value="">Välj...</option>
         <option value="sweden">Sverige</option>
         <option value="denmark">Danmark</option>
         <option value="norway">Norge</option>
         <option value="finland">Finland</option>
         <option value="island">Island</option>
-      </select><span> Utanför Sverige? Läs mer <a href="">här</a></span>
+      </select--><span> Utanför Sverige? Läs mer <a href="">här</a></span>
+      <span id="country-error" style="color:red;"></span>
     </p>
 
-    <h1 style="color:red;">Leveransadress <span style="color:grey; font-size: 15px;">(Skickas till annan adress än ovan? Ange den här.)</span></h1>
+    <h1 style="color:red;">Leveransadress <span style="color:grey; font-size: 15px;">(Ska det skickas till en annan adress än ovan? Ange den här.)</span></h1>
 
     <p>
       <label for="lev_co_name">Företagsnamn</label>
@@ -230,14 +210,26 @@
 
     <p>
       <label for="lev_country">Land</label>
-      <select id="lev_country" name="lev_country">
+      <?php
+      $this->load->helper('form');
+      $options = array(
+          '' => 'Choose...',
+          'sweden' => 'Sverige',
+          'denmark' => 'Danmark',
+          'norway' => 'Norge',
+          'finland' => 'Finland',
+          'island' => 'Island',
+      );
+      echo form_dropdown('lev_country', $options, 'Choose...', 'id="lev_country"');
+      ?>
+      <!--select id="lev_country" name="lev_country">
         <option value="">Välj...</option>
         <option value="sweden">Sverige</option>
         <option value="denmark">Danmark</option>
         <option value="norway">Norge</option>
         <option value="finland">Finland</option>
         <option value="island">Island</option>
-      </select>
+      </select--><span> Utanför Sverige? Läs mer <a href="">här</a></span>
     </p>
 
     <p>
