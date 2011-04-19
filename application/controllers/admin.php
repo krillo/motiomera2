@@ -466,18 +466,6 @@ class Admin extends CI_Controller{
     $this->auth(SUPER_ADM_LEVEL);
     $this->load->model('m_testdata');
     if(!$this->m_step->isTestDataLoaded()){
-      // insert random steps
-      // simulation of user is required to insert steps
-      $users = $this->m_user->getAll(400);
-      foreach ($users as $user) {
-        $d = new JDate();
-        $this->_simulate($user->id);
-        for($i = 0; $i < 31; $i++ ){
-          $this->m_step->create_x($user->id, 1, $this->_randomSteps(), $d->getDate());
-          $d->subDays(1);
-        }
-        $this->_stopsimulate();
-      }
       // inserts from file
       $docRoot = getenv("DOCUMENT_ROOT");
       $filename = $docRoot . '/db/initial_data.sql';
@@ -494,6 +482,22 @@ class Admin extends CI_Controller{
           break;
         }
       }
+      //create some more users
+      $data = array('Filippa', 'Mimmi', 'Tobbe', 'Carlfelix', 'Simpan', 'Mogge', 'janbanan', 'BigRred', 'bigbird', 'Bjork', 'johanna', 'jwalker','Lapen', 'greengreen', 'M', 'tomtekalendern', 'loffe', 'Klaas', 'Kaniin');
+      $this->m_testdata->creteUsers($data);
+      // insert random steps
+      // simulation of user is required to insert steps
+      $users = $this->m_user->getAll(400);
+      foreach ($users as $user) {
+        $d = new JDate();
+        $this->_simulate($user->id);
+        for($i = 0; $i < 31; $i++ ){
+          $this->m_step->create_x($user->id, 1, $this->_randomSteps(), $d->getDate());
+          $d->subDays(1);
+        }
+        $this->_stopsimulate();
+      }
+
       echo $success ? 'Success! hopefully ;)': '';
     } else {
       echo 'Testdata allready run';

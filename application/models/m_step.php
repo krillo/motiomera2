@@ -183,7 +183,7 @@ class M_step extends CI_Model {
     $d = new JDate();
     $d->subDays($days);
     $fromdate = $d->getDateTimeZero();
-    $sql = "select sum(steps) tot_steps, user_id, nick from steps s, users u where s.created_at > ? and user_id = u.id group by user_id order by tot_steps desc limit ?";
+    $sql = "select sum(steps) tot_steps, user_id, nick from steps s, users u where s.date > ? and user_id = u.id group by user_id order by tot_steps desc limit ?";
     $query = $this->db->query($sql, array($fromdate, $limit));
     if($query->num_rows() > 0 ){
       foreach ($query->result() as $row){
@@ -219,7 +219,7 @@ select @rownum := @rownum + 1 AS rank, sum(steps) tot_steps, user_id from steps 
     $fromdate = $d->getDateTimeZero();
     $sql = "SET @rownum := 0";
     $query = $this->db->query($sql);
-    $sql = "select @rownum := @rownum + 1 AS rank, sum(steps) tot_steps, user_id AS nick from steps where created_at > ? group by user_id order by tot_steps desc";
+    $sql = "select @rownum := @rownum + 1 AS rank, sum(steps) tot_steps, user_id AS nick from steps where date > ? group by user_id order by tot_steps desc";
     $query = $this->db->query($sql, array($fromdate));
 
 

@@ -29,7 +29,8 @@ class Krillo extends CI_Controller {
     //print_r($data);
 
     $this->load->model('m_testdata');
-    $this->m_testdata->creteUsers();
+    $data = array('Filippa', 'Mimmi', 'Tobbe', 'Carlfelix', 'Simpan', 'Mogge', 'janbanan', 'BigRred', 'bigbird', 'Bjork', 'johanna', 'jwalker','Lapen', 'greengreen', 'M', 'tomtekalendern', 'loffe', 'Klaas', 'Kaniin');
+    $this->m_testdata->creteUsers($data);
 
     $this->testJDate();
   }

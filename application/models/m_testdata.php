@@ -43,12 +43,17 @@ class M_testdata extends CI_Model {
   }
 
 
-  function creteUsers(){
+  function creteUsers($data){
     $this->auth(SUPER_ADM_LEVEL);
-    $sql = "INSERT INTO `users`
+    foreach ($data as $value) {
+      $sql = "INSERT INTO `users`
             (`municipal_id`,`wl_id`,`level`,`email`,`email_confirmed`,`password`,`f_name`,`l_name`,`nick`,`sex`,`born`,`descr`,`last_login`,`img_filename`,`avatar_filename`,`customer_id`,`paid_until`,`trophy_start`,`status`,`company_key_temp`,`sources_id`,`total_steps`,`total_steps_current`,`total_logins`,`total_regs`,`created_at`,`updated_at`)
-            VALUES(1,1,19,'muppe@boyhapp.se',1,'kapten','Mats','Jalkannen','Muppe','MALE','1978-04-02 00:00:00',NULL,NULL,NULL,'avatar2.gif',NULL,'2012-04-02 00:00:00','2011-04-02 00:00:00',NULL,NULL,1,0,NULL,NULL,0,'2011-04-02 00:00:00','2011-04-02 00:00:00')";
-    $query = $this->db->query($sql);//, array($fromdate));
+            VALUES(1,1,19,'$value@boyhapp.se',1,'kapten','$value','Sirname','$value','MALE','1978-04-02 00:00:00',NULL,NULL,NULL,'avatar2.gif',NULL,'2012-04-02 00:00:00','2011-04-02 00:00:00',NULL,NULL,1,0,NULL,NULL,0,'2011-04-02 00:00:00','2011-04-02 00:00:00')";
+      $query = $this->db->query($sql);
+    }
+
+
+
     if ($this->db->insert_id() > 0) {
       return $this->db->insert_id();
     } else {

@@ -44,7 +44,7 @@ class Mypage extends CI_Controller{
     $toplist1['toplist_title'] = 'Top of the week';
     $this->load->view('snippets/v_toplist', $toplist1);
 
-    $toplist2['toplist'] = $this->m_step->getToplistDays(1, 10);
+    $toplist2['toplist'] = $this->m_step->getToplistDays(1, 15);
     $toplist2['toplist_title'] = 'Top of the day';
     $this->load->view('snippets/v_toplist', $toplist2);
 
