@@ -59,7 +59,7 @@ class Validate extends CI_Controller {
       $data['source'] = $this->m_source->getAll($this::$wl_id, 'COMPANY');
       $this->load->view('/include/v_header');
       $this->load->view('include/v_debug');
-      $this->load->view('v_new_company'); //reload same page
+      $this->load->view('v_new_company', $data); //reload same page
       $this->load->view('include/v_footer');     
     } else { //success
       $company = $this->input->post('company');
@@ -71,7 +71,7 @@ class Validate extends CI_Controller {
       $source = $this->input->post('source');
       $user_id = $this->m_company->create($company, $count1, $count2, $nof_weeks, $start, $trade, $source);
       if($user_id >0) {
-        redirect('/user/companyadress');
+        redirect('/register/companyadress');
         $this->load->view('v_new_companyadress');
         }  else {
            redirect('/error/index/0');
@@ -131,7 +131,7 @@ class Validate extends CI_Controller {
       $muni = $this->input->post('muni');
       $source = $this->input->post('source');
       $user_id = $this->m_user->create_x($email, $password, $f_name, $l_name, $nick, $sex, $source, $muni);
-      redirect('/user/useradress');
+      redirect('/register/useradress');
     }
     /* if($user_id > 0){
       redirect('/user/useradress');
@@ -212,7 +212,7 @@ class Validate extends CI_Controller {
         $email = NULL;
         $row_id = $this->m_address->create($company_id, $user_id, $type, $company_name, $ref_name, $address1, $address2, $co, $zip, $city, $email, $phone, $mobile, $country, $organisation_no, $tax_code);
         if($row_id > 0) {
-          redirect('/user/receipt');
+          redirect('/register/receipt');
         } else {
           redirect('/error/index/0');
         }

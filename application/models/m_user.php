@@ -43,23 +43,43 @@ class M_user extends CI_Model {
     }
   }
 
-
-
-  function getByContestId($contest_id){
+  function getByContestId($contest_id) {
     $sql = "SELECT k.*,  u.nick, u.f_name, u.l_name, u.avatar_filename  FROM users u, `keys` k WHERE u.id = k.user_id AND k.contest_id = ? ORDER BY f_name ASC";
     $query = $this->db->query($sql, array($contest_id));
-    if($query->num_rows() > 0 ){
-      foreach ($query->result() as $row){
+    if ($query->num_rows() > 0) {
+      foreach ($query->result() as $row) {
         $data[] = $row;
       }
       return $data;
-    }else{
+    } else {
       //todo error handling
       return -1;
     }
-
   }
-
+  /**
+   * Checks if the email-address exists, if exists return mail to user.
+   * @param <type> $email
+   */
+  function getNewPass($email) {
+    $sql = "SELECT * FROM users WHERE email = ?";
+    $query = $this->db->query($sql, array($email));
+    if ($query->num_rows() > 0) {
+      /*$this->load->library('email');
+      $this->email->set_newline("\r\n");
+      $this->email->from('noreply@motiomera.se', 'Daniel');
+      $this->email->to($email);
+      $this->email->subject('Testar från Codeigniter');
+      $this->email->message('Testar mail från Codeigniter.');
+      if ($this->email->send()) {
+        $this->load->view('signup_confirmation_view');
+      } else {
+        show_error($this->email->print_debugger());
+      }*/
+      redirect('user/receipt');
+    } else {
+      redirect('/error/index/0');
+    }
+  }
 
   /**
    * this method returns true if username exists else false
@@ -73,8 +93,9 @@ class M_user extends CI_Model {
       return TRUE;
     } else {
       return FALSE;
+    }
   }
-  }
+
   /**
    * this method returns true if email exists else false
    * @param <type> $email

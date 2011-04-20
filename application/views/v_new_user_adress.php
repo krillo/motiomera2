@@ -4,16 +4,11 @@
 <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url() ?>css/cmxformTemplate.css" />
 
 <script type="text/javascript">
- /* $.validator.setDefaults({
-    submitHandler: function() { alert("submitted!"); }
-  });*/
-
   $(document).ready(function() {
     $('#signupForm').submit(function(e){ // This selector needs to point to your form.
         if ($('#country').val() == "0") {
           $("#country-error").show();
           $("#country-error").html('Choose a country.');
-            //alert("Vänligen välj ett land.");
             e.preventDefault();
             return false;
         }});
@@ -44,15 +39,11 @@
           required: true
         }
       },
-
       messages: {
         agree: "Please accept our policy"
       }
-
     });
- 
    });
-
 </script>
 
 <h1>Ange Er adress</h1>
@@ -62,7 +53,6 @@
 <form class="cmxform" id="signupForm" method="post" action="/validate/useraddress">
   <fieldset>
     <legend>Fyll i formuläret</legend>
-
     <p>
       <label for="firstname">Förnamn</label>
       <input id="firstname" name="firstname" type="text" />
@@ -71,42 +61,30 @@
       <label for="lastname">Efternamn</label>
       <input id="lastname" name="lastname" type="text"/>
     </p>
-
     <p>
       <label for="street">Gatuadress</label>
       <input id="street" name="street" type="text"/>
     </p>
-
     <p>
       <label for="co">c/o</label>
       <input id="co" name="co" type="text"/>
     </p>
-
     <p>
       <label for="zip">Postnummer</label>
       <input id="zip" name="zip" type="text"/>
     </p>
-
     <p>
       <label for="city">Ort</label>
       <input id="city" name="city" type="text"/>
     </p>
-
     <p>
       <label for="phone">Telefonnummer</label>
       <input id="phone" name="phone" type="text"/>
     </p>
-
     <p>
       <label for="mobile">Mobilnummer</label>
       <input id="mobile" name="mobile" type="text"/>
     </p>
-
-    <!--p>
-      <label for="country">Land</label>
-      <input id="country" name="country" type="text"/>
-    </p-->
-
     <p>
       <label for="country">Land</label>
       <?php
@@ -121,18 +99,9 @@
       );
       echo form_dropdown('country', $options, 'valj', 'id="country"');
       ?>
-      <!--select id="country" name="country">
-        <option value="">Välj...</option>
-        <option value="sweden">Sverige</option>
-        <option value="denmark">Danmark</option>
-        <option value="norway">Norge</option>
-        <option value="finland">Finland</option>
-        <option value="island">Island</option>
-      </select-->
       <span id="country-error" style="color:red;"></span>
       <span> Utanför Sverige? Läs mer <a href="">här</a></span>
     </p>
-
     <p>
       <input class="" type="hidden" value="<?php echo $this->session->userdata('user_id'); ?>"  name="user_id" />
       <input class="submit" type="submit" value="Gå vidare" />

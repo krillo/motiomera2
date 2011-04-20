@@ -4,10 +4,6 @@
 <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url() ?>css/cmxformTemplate.css" />
 
 <script type="text/javascript">
-  //$.validator.setDefaults({
-  //submitHandler: function() { alert("submitted!"); }
-  //});
-
   $(document).ready(function() {
     $.validator.addMethod("username",function(value,element){
       return this.optional(element)|| /^[A-Za-z0-9]{4,20}$/i.test(value);
@@ -19,19 +15,16 @@
 
     $('#signupForm').submit(function(e){
       if ($('#muni').val() == "0") {
-         $("#muni-error").show();
-         $("#muni-error").html('Choose a municipal.');
-
-       // alert("Vänligen välj en kommun.");
+        $("#muni-error").show();
+        $("#muni-error").html('Choose a municipal.');
         e.preventDefault();
         return false;
       }});
 
     $('#signupForm').submit(function(e){ 
       if ($('#source').val() == "0") {
-          $("#source-error").show();
-          $("#source-error").html('Choose a source.')
-        //alert("Vänligen välj ett svar.");
+        $("#source-error").show();
+        $("#source-error").html('Choose a source.')
         e.preventDefault();
         return false;
       }});
@@ -77,7 +70,6 @@
           required: true
         }
       },
-
       messages: {
         email: {
           required: "Please provide a email"
@@ -103,9 +95,6 @@
   });
 </script>
 
-
-
-
 <script type="text/javascript">
   $(function() {
 
@@ -116,7 +105,7 @@
       } else{
         $.ajax({
           type: "POST",
-          url: "<?php echo base_url() ?>user/isduplicateusername/" + username,
+          url: "<?php echo base_url() ?>register/isduplicateusername/" + username,
           data: "",
           cache: false,
           success: function(html){
@@ -136,7 +125,7 @@
       } else{
         $.ajax({
           type: "POST",
-          url: "<?php echo base_url() ?>user/isduplicateemail/" + email,
+          url: "<?php echo base_url() ?>register/isduplicateemail/" + email,
           data: "",
           cache: false,
           success: function(html){
@@ -150,8 +139,6 @@
   });  
 </script>
 
-
-
 <h1>Bli medlem</h1>
 
 <div style="border: 2px solid red; padding-left: 10px;">   <?php echo validation_errors(); ?> </div>
@@ -159,7 +146,7 @@
 <form class="cmxform" id="signupForm" method="post" action="/validate/userreg">
   <fieldset>
     <legend>Fyll i formuläret</legend>
-    <div style="float: right; font-size: 20px;"><a href="/user/newcompany">Anmäl ditt företag</a></div>
+    <div style="float: right; font-size: 20px;"><a href="/register/newcompany">Anmäl ditt företag</a></div>
     <p>
       <label for="username">Välj ett alias</label>
       <input id="username" name="username" type="text" value="<?php echo set_value('username'); ?>"/>
@@ -175,7 +162,6 @@
       <label for="lastname">Efternamn</label>
       <input id="lastname" name="lastname" type="text" value="<?php echo set_value('lastname'); ?>" />
     </p>
-
     <p>
       <label for="sex">Kön</label>
       <?php
@@ -186,12 +172,7 @@
       );
       echo form_dropdown('sex', $options, 'female');
       ?>
-      <!--select name="sex" id="sex">
-        <option value="female">Kvinna</option>
-        <option value="male">Man</option>
-      </select-->
     </p>
-
     <p>
       <label for="muni">Kommun</label>
       <?php
@@ -200,74 +181,45 @@
       ?>
       <span id="muni-error" style="color:red;"></span>
     </p> 
-
     <p>
       <label for="email">E-postadress</label>
-      <input id="email" name="email" type="text" value="<?php echo set_value('email'); ?>"/><span id="email-error"></span><em> Har du inget e-postkonto? <a href="http://motiomera.se/pages/vanligafragor.php#Fraga_IngenEpost"> Läs mer här.</a></em>
-      
+      <input id="email" name="email" type="text" value="<?php echo set_value('email'); ?>"/><span id="email-error"></span><em> Har du inget e-postkonto? <a href="http://motiomera.se/pages/vanligafragor.php#Fraga_IngenEpost"> Läs mer här.</a></em>     
     </p>
-
     <p>
       <label for="email2">Upprepa</label>
       <input id="email2" name="email2" type="text" value="<?php echo set_value('email2'); ?>"/>
     </p>
-
     <p>
       <label for="password">Välj lösenord</label>
       <input id="password" name="password"  type="text" class="required" value="<?php echo set_value('password'); ?>"/>
     </p>
-
     <p>
       <label for="password2">Upprepa</label>
       <input id="password2" name="password2" type="text" class="required" value="<?php echo set_value('password2'); ?>"/>
     </p>
-
     <p>
       <label for="membership">Medlemskap</label>
       <input style="" name="membership" id="membership" value="companykey" type="radio" /><span> <b>Jag har företagsnyckel</b> </span> <a href=""> Läs mer här.</a>
     </p>
-
     <p>
       <label></label>
       <input name="membership" type="radio" value="campaincode"/><span> <b>Jag har kampanjkod</b> </span> <a href=""> Läs mer här.</a>
     </p>
-
     <p>
       <label for="source">Hur hörde du talas om Motiomera?</label>
       <?php
       $this->load->helper('form');
       echo form_dropdown('source', $source, 'Choose...', 'id="source"');
-
       ?>
-      <!--select name="source" id="source">
-        <option value="">Välj...</option>
-        <option value="email">Email</option>
-        <option value="telefon">Telefon</option>
-        <option value="direktreklam">Direktreklam</option>
-        <option value="kontorspost">Kontorspost</option>
-        <option value="tidningsannons">Tidningsannons</option>
-        <option value="tidningskupong">Reklamblad i tidning</option>
-        <option value="banner">Bannerannons på internet</option>
-        <option value="bannerinyhetsbrev">Bannerannons i nyhetsbrev</option>
-        <option value="sokmotor">Sökmotor på internet</option>
-        <option value="fax">Faxannons</option>
-        <option value="tipsbekant">Tips från en bekant</option>
-        <option value="event">Mässa eller event</option>
-        <option value="tidigarekund">Kund sedan tidigare</option>
-        <option value="annat">Annat sätt</option>
-      </select-->
       <span id="source-error" style="color:red;"></span>
     </p>
-
     <p>
       <label for="agree">Ja, jag godkänner <a href="http://www.integritetspolicy.se/" target="_blank">Allers integritetspolicy</a> och är över 16 år. </label>
       <input type="checkbox" class="checkbox" id="agree" name="agree"/>
     </p>
-
     <p>
       <input class="submit" type="submit" value="Gå vidare"/>
     </p>
-
   </fieldset>
 </form>
 
