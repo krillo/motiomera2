@@ -39,24 +39,37 @@ class Mypage extends CI_Controller{
     $data['title'] = 'mypage';
     $this->load->view('include/v_header', $data);
     $this->load->view('v_mypage');
+    $this->load->view('snippets/v_map');
 
-    $toplist1['toplist'] = $this->m_step->getToplistDays(6, 5);
+    $toplist1['toplist'] = $this->m_step->getToplistDays(6, 10);
     $toplist1['toplist_title'] = 'Top of the week';
     $this->load->view('snippets/v_toplist', $toplist1);
+    $this->load->view('snippets/v_gift_area');
+    $this->load->view('snippets/v_total_steps');
+
+    $this->load->view('snippets/v_clear');
+    $this->load->view('snippets/v_report_steps_icon');
+    $this->load->view('snippets/v_route_icon');
+
+    $this->load->view('snippets/v_detail_icon');
+    $this->load->view('snippets/v_clear');
+
+
+    $this->load->view('snippets/v_graph');
+    $this->load->view('snippets/v_the_wall');
+    $this->load->view('snippets/v_clear');
+
 
     $toplist2['toplist'] = $this->m_step->getToplistDays(1, 15);
     $toplist2['toplist_title'] = 'Top of the day';
     $this->load->view('snippets/v_toplist', $toplist2);
 
-
     $toplist3['toplist'] = $this->m_step->getRankedToplistDays(10);
     $toplist3['toplist_title'] = 'Ranked list';
     $this->load->view('snippets/v_toplist', $toplist3);
+    $this->load->view('snippets/v_clear');
+    
 
-
-
-
-    $this->load->view('include/v_debug');
     $this->load->view('include/v_footer');
     $this->_reportStepDialog();
   }

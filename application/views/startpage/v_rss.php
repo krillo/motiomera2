@@ -1,0 +1,1 @@
+<div class="grid_6"><img src="/img/rss.png" alt="googlemaps" ></div>

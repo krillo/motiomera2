@@ -15,7 +15,7 @@
   });
 </script>
 
-
+<div class="grid_2">
 <button id="k-debug" style="margin-top: 5px;">debug</button>
 <div id="k-debug-msg" class="hide">
   <pre>
@@ -50,3 +50,4 @@
   </pre>
 </div>
 <?php endif; ?>
+</div>

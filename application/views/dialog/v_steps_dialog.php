@@ -89,7 +89,7 @@
 <style type="text/css">
   .blue { color: blue; }
   ul {list-style-type: none}
-  img {padding-right: 20px; float:left}
+  /* img {padding-right: 20px; float:left} */
   #datepicker{ font-size:13px;float:left;width:250px;}
 
 

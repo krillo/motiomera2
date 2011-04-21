@@ -21,7 +21,7 @@ body {color:#333;font-family:Arial,Verdana;font-size:11px;}
   list-style-type:none;
   margin-right:16px;
 }
-#footer{border-top:1px solid #E7E7E7;margin:10px 0 5px 7px; width:740px;}
+#footer{border-top:1px solid #E7E7E7;margin-top:10px;margin-bottom:5px;}
 /*
 .error{
   border:1px solid red;
@@ -84,8 +84,9 @@ body {color:#333;font-family:Arial,Verdana;font-size:11px;}
 .show{display:block;}
 .hide{display:none;}
 
-.toplist{width:145px;border:2px #fed22f solid;}
+.toplist{border:2px #fed22f solid;}
 .toplist-head{margin-left:10px;}
 .toplist-ol{padding-left:25px;}
-.toplist-a{width: 70px;display: block;float: left;}
+.toplist-a{width:145px;display: block;float: left;}
 .toplist-steps{width: 50px;}
+#gift-area{padding-top: 10px;}
