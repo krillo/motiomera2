@@ -39,24 +39,24 @@ class Mypage extends CI_Controller{
     $data['title'] = 'mypage';
     $this->load->view('include/v_header', $data);
     $this->load->view('v_mypage');
-    $this->load->view('snippets/v_map');
+    $this->load->view('mypage/v_map');
 
     $toplist1['toplist'] = $this->m_step->getToplistDays(6, 10);
     $toplist1['toplist_title'] = 'Top of the week';
     $this->load->view('snippets/v_toplist', $toplist1);
-    $this->load->view('snippets/v_gift_area');
-    $this->load->view('snippets/v_total_steps');
+    $this->load->view('mypage/v_gift_area');
+    $this->load->view('mypage/v_total_steps');
 
     $this->load->view('snippets/v_clear');
     $this->load->view('snippets/v_report_steps_icon');
-    $this->load->view('snippets/v_route_icon');
+    $this->load->view('mypage/v_route_icon');
 
-    $this->load->view('snippets/v_detail_icon');
+    $this->load->view('mypage/v_detail_icon');
     $this->load->view('snippets/v_clear');
 
 
-    $this->load->view('snippets/v_graph');
-    $this->load->view('snippets/v_the_wall');
+    $this->load->view('mypage/v_graph');
+    $this->load->view('mypage/v_the_wall');
     $this->load->view('snippets/v_clear');
 
 
