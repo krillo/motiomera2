@@ -24,20 +24,6 @@
       <title><?php echo $title; ?></title>
     </head>
 
-    <style type="text/css" media="all">
-      .container_12 {
-        background:#FFFFFF url(<?php echo base_url() ?>img/12_col.gif) repeat-y scroll 0 0;
-        margin-bottom:20px;
-        margin-top: 20px;
-      }
-      p {
-        border:1px solid #666666;
-        overflow:hidden;
-        padding:10px 0;
-        text-align:center;
-      }
-    </style>
-
 
 
     <body>

@@ -6,6 +6,11 @@
 */
 root{display: block;}
 body {color:#333;font-family:Arial,Verdana;font-size:11px;}
+.container_12 {
+  background:#FFFFFF url(/img/12_col.gif) repeat-y scroll 0 0;
+  margin-bottom:20px;
+  margin-top: 20px;
+}
 #container{width: 754px;}
 .clear{clear:both;}
 
