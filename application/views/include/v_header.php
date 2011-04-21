@@ -75,12 +75,11 @@
 
         </div>
 
-        <div id="mmMenuTop">
-          <a href="/user/newcompany">FÖR FÖRETAG</a> |
-          <a href="/user/newuser">BLI MEDLEM</a> |
-          <a href="/user/forgotpass">GLÖMT LÖSENORDET?</a>
-        </div>
-
+      <div id="mmMenuTop">
+        <a href="/register/newcompany">FÖR FÖRETAG</a> |
+        <a href="/register/newuser">BLI MEDLEM</a> |
+        <a href="/user/forgotpass">GLÖMT LÖSENORDET?</a>
+      </div>
 
         <div class="clear"></div>
 

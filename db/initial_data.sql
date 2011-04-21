@@ -1,3 +1,29 @@
+-- Initial insert trade for company in Swedish.
+insert into trades (wl_id, name, created_at, updated_at) values(2, 'Bemanning och arbetsförmedling', CURDATE(), CURDATE());
+insert into trades (wl_id, name, created_at, updated_at) values(2, 'Data, it och Telekommunikation', CURDATE(), CURDATE());
+insert into trades (wl_id, name, created_at, updated_at) values(2, 'Detaljhandel', CURDATE(), CURDATE());
+insert into trades (wl_id, name, created_at, updated_at) values(2, 'Fastighetsverksamhet', CURDATE(), CURDATE());
+insert into trades (wl_id, name, created_at, updated_at) values(2, 'Hår och Skönhetsvård', CURDATE(), CURDATE());
+insert into trades (wl_id, name, created_at, updated_at) values(2, 'Media', CURDATE(), CURDATE());
+insert into trades (wl_id, name, created_at, updated_at) values(2, 'Hotell och Restaurang', CURDATE(), CURDATE());
+insert into trades (wl_id, name, created_at, updated_at) values(2, 'Hälsa och Sjukvård', CURDATE(), CURDATE());
+insert into trades (wl_id, name, created_at, updated_at) values(2, 'Bygg-, Design- och Inredningsverksamhet', CURDATE(), CURDATE());
+insert into trades (wl_id, name, created_at, updated_at) values(2, 'Bank, Finans och Försäkring', CURDATE(), CURDATE());
+insert into trades (wl_id, name, created_at, updated_at) values(2, 'Tillverkning och Industri', CURDATE(), CURDATE());
+insert into trades (wl_id, name, created_at, updated_at) values(2, 'Reklam, Pr och Marknadsföring', CURDATE(), CURDATE());
+-- Initial insert trade for company in English.
+insert into trades (wl_id, name, created_at, updated_at) values(1, 'Staffing and Employment services', CURDATE(), CURDATE());
+insert into trades (wl_id, name, created_at, updated_at) values(1, 'It', CURDATE(), CURDATE());
+insert into trades (wl_id, name, created_at, updated_at) values(1, 'Retail', CURDATE(), CURDATE());
+insert into trades (wl_id, name, created_at, updated_at) values(1, 'Real Estate', CURDATE(), CURDATE());
+insert into trades (wl_id, name, created_at, updated_at) values(1, 'Hair and Beauty', CURDATE(), CURDATE());
+insert into trades (wl_id, name, created_at, updated_at) values(1, 'Media', CURDATE(), CURDATE());
+insert into trades (wl_id, name, created_at, updated_at) values(1, 'Hotel and Restaurant', CURDATE(), CURDATE());
+insert into trades (wl_id, name, created_at, updated_at) values(1, 'Health & Medical', CURDATE(), CURDATE());
+insert into trades (wl_id, name, created_at, updated_at) values(1, 'Construction, Design and Furnishings Business', CURDATE(), CURDATE());
+insert into trades (wl_id, name, created_at, updated_at) values(1, 'Banking, Finance and Insurance', CURDATE(), CURDATE());
+insert into trades (wl_id, name, created_at, updated_at) values(1, 'Manufacturing and Industry', CURDATE(), CURDATE());
+insert into trades (wl_id, name, created_at, updated_at) values(1, 'Advertising, PR and Marketing', CURDATE(), CURDATE());
 -- Initial insert source for private person in Swedish.
 -- delete from sources;
 insert into sources (wl_id, name, descr, type, created_at, updated_at) values(2, 'telefon', 'Telefon', 'PRIVATE', CURDATE(), CURDATE());
