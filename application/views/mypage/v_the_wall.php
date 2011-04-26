@@ -1,0 +1,1 @@
+<div class="grid_6"><p>anslagstavla</p></div>
