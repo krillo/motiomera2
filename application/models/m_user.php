@@ -64,20 +64,11 @@ class M_user extends CI_Model {
     $sql = "SELECT * FROM users WHERE email = ?";
     $query = $this->db->query($sql, array($email));
     if ($query->num_rows() > 0) {
-      /*$this->load->library('email');
-      $this->email->set_newline("\r\n");
-      $this->email->from('noreply@motiomera.se', 'Daniel');
-      $this->email->to($email);
-      $this->email->subject('Testar från Codeigniter');
-      $this->email->message('Testar mail från Codeigniter.');
-      if ($this->email->send()) {
-        $this->load->view('signup_confirmation_view');
-      } else {
-        show_error($this->email->print_debugger());
-      }*/
-      redirect('user/receipt');
+      //todo: generate new temporary password
+      //send email with the new password
+      return TRUE;
     } else {
-      redirect('/error/index/0');
+      return FALSE;
     }
   }
 

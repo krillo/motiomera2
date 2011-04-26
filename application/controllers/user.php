@@ -6,6 +6,8 @@ if (!defined('BASEPATH'))
 class User extends CI_Controller {
 
   private static $wl_id = 0;
+  private static $newPassCount = 5;
+  private static $persistantFootPrint = '127.0.0.1Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.16) Gecko/20110319 Firefox/3.6.16 GTB7.1 ( .NET CLR 3.5.30729; .NET4.0C)';
 
   function __construct() {
     parent::__construct();
@@ -67,10 +69,31 @@ class User extends CI_Controller {
     $this->load->view('include/v_footer');
   }
   /**
-   * this function checks if email exists.
+   * This function checks if email exists and sends a new or displays error message
+   * It stops robots from accessing the function more tahn five times in an hour.
    */
   function getnewpass() {
-    $email = $this->m_user->getNewPass($this->input->post('email'));
+    //stop robots
+    //$newPassCount
+    $footprint = $this->input->ip_address() . $this->input->user_agent();
+    
+      
+
+
+
+    //$this::$newPassCount =
+
+
+    $email = $this->uri->segment(3);
+    $email = urldecode($email);
+    $success = $this->m_user->getNewPass($email);
+    if($success == true){
+      echo 'Your new password has been sent to you';
+      echo $footprint;
+    }else{
+      echo 'There is no user with that email address';
+      echo $footprint;
+    }
   }
 
   /*
