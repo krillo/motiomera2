@@ -505,6 +505,23 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `m2`.`frauds`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `m2`.`frauds` ;
+
+CREATE  TABLE IF NOT EXISTS `m2`.`frauds` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `type` ENUM('LOGIN', 'NEWPASSWORD') NOT NULL ,
+  `ip` VARCHAR(25) NOT NULL ,
+  `footprint` VARCHAR(45) NOT NULL ,
+  `created_at` TIMESTAMP NOT NULL ,
+  `updated_at` TIMESTAMP NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- procedure insert_steps
 -- -----------------------------------------------------
 
@@ -651,7 +668,7 @@ INSERT INTO `m2`.`contests` (`id`, `company_id`, `drive_id`, `trade_id`, `start`
 INSERT INTO `m2`.`contests` (`id`, `company_id`, `drive_id`, `trade_id`, `start`, `stop`, `nof_weeks`, `route_xxx`, `created_at`, `updated_at`) VALUES ('2', '1', '1', NULL, '2011-03-29 00:00:00', '2011-05-01 00:00:00', '5', NULL, '2011-03-03 00:00:00', '2011-03-03 00:00:00');
 INSERT INTO `m2`.`contests` (`id`, `company_id`, `drive_id`, `trade_id`, `start`, `stop`, `nof_weeks`, `route_xxx`, `created_at`, `updated_at`) VALUES ('3', '3', '1', NULL, '2011-03-29 00:00:00', '2011-05-01 00:00:00', '5', NULL, '2011-03-03 00:00:00', '2011-03-03 00:00:00');
 INSERT INTO `m2`.`contests` (`id`, `company_id`, `drive_id`, `trade_id`, `start`, `stop`, `nof_weeks`, `route_xxx`, `created_at`, `updated_at`) VALUES ('4', '2', '2', NULL, '2011-04-04 00:00:00', '2011-04-17 00:00:00', '2', NULL, '2011-03-03 00:00:00', '2011-03-03 00:00:00');
-INSERT INTO `m2`.`contests` (`id`, `company_id`, `drive_id`, `trade_id`, `start`, `stop`, `nof_weeks`, `route_xxx`, `created_at`, `updated_at`) VALUES ('5', '1', '2', NULL, '2011-04-11 00:00:00', '2011-04-24 00:00:00', '2', NULL, '2011-03-03 00:00:00', '2011-03-03 00:00:00');
+INSERT INTO `m2`.`contests` (`id`, `company_id`, `drive_id`, `trade_id`, `start`, `stop`, `nof_weeks`, `route_xxx`, `created_at`, `updated_at`) VALUES ('5', '1', '2', NULL, '2011-09-05 00:00:00', '2011-10-02 00:00:00', '4', NULL, '2011-03-03 00:00:00', '2011-03-03 00:00:00');
 
 COMMIT;
 

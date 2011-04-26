@@ -38,8 +38,10 @@ class Mypage extends CI_Controller{
     $data = $this->m_user->getById($id);
     $data['title'] = 'mypage';
     $this->load->view('include/v_header', $data);
-    $this->load->view('v_mypage');
-    $this->load->view('mypage/v_map');
+    $this->load->view('mypage/v_mypage');
+
+    $data['comp'] = $this->m_company->getCompanyContestByUserId($id);
+    $this->load->view('mypage/v_map', $data);
 
     $toplist1['toplist'] = $this->m_step->getToplistDays(6, 10);
     $toplist1['toplist_title'] = 'Top of the week';
