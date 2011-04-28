@@ -172,22 +172,36 @@ class M_step extends CI_Model {
 		return $steg * 0.05;
 	}
 
+  
   /**
    * Get a ranked toplist.
    * Submit how many days back you want data from.
+   * If user_id is submitted then her data will be added to the array, even if her totoal steps don't fall into the limit
+   * Limit is how many rows to return
+   * The returned array is orderd with the key as the rank!
    *
+   *
+   * @param int $user_id if submitted, the users data will be added
    * @param int $days how many days back the list is gonna go
    * @return array the result array or -1 for error
    */
-  function getToplistDays($days = 1, $limit = 10){
+  function getToplistDays($user_id = 0, $days = 1, $limit = 10){
+    $userInResult = FALSE;
     $d = new JDate();
     $d->subDays($days);
     $fromdate = $d->getDateTimeZero();
-    $sql = "select sum(steps) tot_steps, user_id, nick from steps s, users u where s.date > ? and user_id = u.id group by user_id order by tot_steps desc limit ?";
+    $sql = "SELECT SUM(steps) tot_steps, user_id, nick FROM steps s, users u WHERE s.date > ? and user_id = u.id GROUP BY user_id ORDER BY tot_steps DESC LIMIT ?";
     $query = $this->db->query($sql, array($fromdate, $limit));
     if($query->num_rows() > 0 ){
       foreach ($query->result() as $row){
         $data[] = $row;
+        if($row->user_id == $user_id){
+          $userInResult = TRUE;
+        }
+      }
+      if(!$userInResult && $user_id > 0){
+        $rank = $this->getRankedToplistDays($user_id, $days);
+        $data[$rank[0]->rank] = $rank[0];
       }
       return $data;
     } else {
@@ -196,33 +210,22 @@ class M_step extends CI_Model {
   }
 
 
-/*
- SELECT rank, medlem_id FROM (
-      SELECT @rownum := @rownum + 1 AS rank, medlem_id
-      FROM " . self::RELATION_TABLE . " 
-      WHERE tavlings_id = $tavlingsid      
-      ORDER BY steg DESC
-    ) AS result WHERE medlem_id = $medlemid";  
- * 
- * 
- * 
-SET @rownum := 0;
-select @rownum := @rownum + 1 AS rank, sum(steps) tot_steps, user_id from steps where created_at > '2011-04-07 00:00:00' group by user_id order by tot_steps desc;
- * 
- */
 
 
+  /**
+   * Get the rank of a user
+   * Submit how many days back you want data from.
 
-  function getRankedToplistDays($days = 7, $limit = 10){
+   * @return array the result array or -1 for error
+   */
+  function getRankedToplistDays($user_id, $days = 7){
     $d = new JDate();
     $d->subDays($days);
     $fromdate = $d->getDateTimeZero();
     $sql = "SET @rownum := 0";
     $query = $this->db->query($sql);
-    $sql = "select @rownum := @rownum + 1 AS rank, sum(steps) tot_steps, user_id AS nick from steps where date > ? group by user_id order by tot_steps desc";
-    $query = $this->db->query($sql, array($fromdate));
-
-
+    $sql = "SELECT ranked.*, u.nick FROM (SELECT @rownum := @rownum + 1 AS rank, SUM(steps) tot_steps, user_id FROM steps WHERE date > ? GROUP BY user_id ORDER BY tot_steps DESC)AS ranked, users u WHERE ranked.user_id = ? AND u.id = ?";
+    $query = $this->db->query($sql, array($fromdate, $user_id, $user_id));
     if($query->num_rows() > 0 ){
       foreach ($query->result() as $row){
         $data[] = $row;

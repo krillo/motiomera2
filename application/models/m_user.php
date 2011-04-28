@@ -56,6 +56,27 @@ class M_user extends CI_Model {
       return -1;
     }
   }
+
+
+  /**
+   *
+   */
+  function getCurrentContestTeamKeyById($user_id){
+    $sql = "SELECT k.contest_id, k.user_id, team_id, `key`, company_id, start, stop, nof_weeks, route_xxx, t.name team_name, img_filename team_img_filename, total_steps team_total_steps, co.name company_name " .
+           "FROM `keys` k, contests c, teams t, companys co WHERE k.user_id = ? AND k.contest_id = c.id AND CURDATE() > start AND CURDATE() < stop AND k.team_id = t.id AND c.company_id = co.id";
+    $query = $this->db->query($sql, array($user_id));
+    if ($query->num_rows() > 0) {
+      foreach ($query->result() as $row) {
+        $data[] = $row;
+      }
+      return $data;
+    } else {
+      //todo error handling
+      return -1;
+    }
+  }
+
+
   /**
    * Checks if the email-address exists, if exists return mail to user.
    * @param <type> $email
