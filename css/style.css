@@ -91,7 +91,9 @@ body {color:#333;font-family:Arial,Verdana;font-size:11px;}
 
 .toplist{border:2px #fed22f solid;}
 .toplist-head{margin-left:10px;}
-.toplist-ol{padding-left:25px;}
+.toplist-ol{padding-left:10px;list-style-type:none;}
+.toplist-nbr{float:left;width:20px;}
 .toplist-a{width:145px;display: block;float: left;}
 .toplist-steps{width: 50px;}
+.selected{color:red;font-weight:bold;}
 #gift-area{padding-top: 10px;}

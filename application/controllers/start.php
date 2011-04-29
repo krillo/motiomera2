@@ -40,15 +40,17 @@ class Start extends CI_Controller{
     $this->load->view('startpage/v_member_profile');
     $this->load->view('startpage/v_promo');
 
-    $toplist1['toplist'] = $this->m_step->getToplistDays(6, 10);
+    $toplist1['toplist'] = $this->m_step->getToplistDays(0, 6, 10);
     $toplist1['toplist_title'] = 'Top of the week';
+    $toplist1['unique_id'] = "topweek";
     $this->load->view('snippets/v_toplist', $toplist1);
 
     $this->load->view('startpage/v_rss');
 
-    $toplist3['toplist'] = $this->m_step->getRankedToplistDays(10);
-    $toplist3['toplist_title'] = 'Ranked list';
-    $this->load->view('snippets/v_toplist', $toplist3);
+    $toplist2['toplist'] = $this->m_step->getToplistDays(0, 30, 25);
+    $toplist2['toplist_title'] = 'Top of the month';
+    $toplist2['unique_id'] = "topmonth";
+    $this->load->view('snippets/v_toplist', $toplist2);
 
 
     $this->load->view('startpage/v_puff');

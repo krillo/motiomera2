@@ -28,23 +28,22 @@ class Mypage extends CI_Controller{
   }
 
 
-
-
   /**
    * Show my page
-   * @param <type> $id
+   * @param <type> $user_id
    */
-  function _showMyPage($id){
-    $data = $this->m_user->getById($id);
+  function _showMyPage($user_id){
+    $data = $this->m_user->getById($user_id);
     $data['title'] = 'mypage';
     $this->load->view('include/v_header', $data);
     $this->load->view('mypage/v_mypage');
 
-    $data['comp'] = $this->m_company->getCompanyContestByUserId($id);
+    $data['contest'] = $this->m_user->getCurrentContestTeamKeyById($user_id);
     $this->load->view('mypage/v_map', $data);
 
-    $toplist1['toplist'] = $this->m_step->getToplistDays(6, 10);
+    $toplist1['toplist'] = $this->m_step->getToplistDays($user_id, 6, 4);
     $toplist1['toplist_title'] = 'Top of the week';
+    $toplist1['unique_id'] = "topweek";
     $this->load->view('snippets/v_toplist', $toplist1);
     $this->load->view('mypage/v_gift_area');
     $this->load->view('mypage/v_total_steps');
@@ -62,16 +61,13 @@ class Mypage extends CI_Controller{
     $this->load->view('snippets/v_clear');
 
 
-    $toplist2['toplist'] = $this->m_step->getToplistDays(1, 15);
+    $toplist2['toplist'] = $this->m_step->getToplistDays($user_id, 1, 10);
     $toplist2['toplist_title'] = 'Top of the day';
+    $toplist2['unique_id'] = "topday";
     $this->load->view('snippets/v_toplist', $toplist2);
 
-    $toplist3['toplist'] = $this->m_step->getRankedToplistDays(10);
-    $toplist3['toplist_title'] = 'Ranked list';
-    $this->load->view('snippets/v_toplist', $toplist3);
-    $this->load->view('snippets/v_clear');
-    
 
+    $this->load->view('snippets/v_clear');
     $this->load->view('include/v_footer');
     $this->_reportStepDialog();
   }

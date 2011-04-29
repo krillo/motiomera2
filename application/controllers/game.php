@@ -25,7 +25,7 @@ class Game extends CI_Controller{
     $gifts = array(0 => 'port.jpg', 1 => 'beer.jpg', 2 => 'gt.jpg', 3 => 'coffee.jpg', 4 => 'cappuccino.jpg');
     $displayGift = $gifts[array_rand($gifts)];
     $data['gift'] = $displayGift;
-    $this->load->view('/snippets/v_gift', $data);
+    $this->load->view('/mypage/v_gift', $data);
   }
 
 }
