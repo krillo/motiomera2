@@ -222,4 +222,20 @@ class Validate extends CI_Controller {
   }
 
    }
+
+   function newpass () {
+     $this->load->library('form_validation');
+     $this->form_validation->set_rules('newpass', 'Newpass', 'required|min_length[6]|max_length[40]');
+     $this->form_validation->set_rules('newpass2', 'Newpass2', 'required|matches[newpass]|min_length[6]|max_length[40]');
+     if ($this->form_validation->run() == FALSE) {
+       $this->load->view('/include/v_header');
+       $this->load->view('include/v_debug');
+       $this->load->view('v_change_password');
+       $this->load->view('include/v_footer');
+     }else{
+       
+       echo 'good';
+     }
+   }
+   
 }

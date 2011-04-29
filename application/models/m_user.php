@@ -61,13 +61,22 @@ class M_user extends CI_Model {
    * @param <type> $email
    */
   function getNewPass($email) {
-    $sql = "SELECT * FROM users WHERE email = ?";
+    $sql = "SELECT password FROM users WHERE email = ?";
     $query = $this->db->query($sql, array($email));
     if ($query->num_rows() > 0) {
       //todo: generate new temporary password
       //send email with the new password
       return TRUE;
     } else {
+      return FALSE;
+    }
+  }
+  function passWord ($password){
+    $sql = "SELECT password FROM users WHERE email = 'new-pass-email'";
+    $query = $this->db->query($sql);
+    if ($query->num_rows() > 0) {
+      return TRUE;
+    }  else {
       return FALSE;
     }
   }

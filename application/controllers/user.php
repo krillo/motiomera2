@@ -76,25 +76,36 @@ class User extends CI_Controller {
     //stop robots
     //$newPassCount
     $footprint = $this->input->ip_address() . $this->input->user_agent();
-    
-      
-
-
 
     //$this::$newPassCount =
-
-
+    
     $email = $this->uri->segment(3);
     $email = urldecode($email);
     $success = $this->m_user->getNewPass($email);
     if($success == true){
-      echo 'Your new password has been sent to you';
+      $time = sha1(time());
+      $code = sha1($email);
+      echo anchor  ("http://m2.dev/index.php/user/changepass/" . $code . $time ."");
+      //$message = "nytt lösen http://www.motiomera.se/newpass/" . $ord .  " .";
+      //echo $message;
+      //$this->load->view('v_password_receipt');
+      //echo 'Your new password has been sent to you, follow this link to activate' "http://m2.dev/index.php/mypage/changepass/$ord");
       echo $footprint;
     }else{
-      echo 'There is no user with that email address';
+      echo 'fel';
+      //echo 'There is no user with that email address';
       echo $footprint;
-    }
+    } 
+    }  
+
+    function changepass () {
+    //$password = $this->m_user->
+    $data['title'] = 'Change password';
+    $this->load->view('/include/v_header', $data);
+    $this->load->view('v_change_password', $data);
+    $this->load->view('include/v_footer');
   }
+
 
   /*
    * create receipt page
