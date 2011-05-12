@@ -8,7 +8,7 @@ class User extends CI_Controller {
   private static $wl_id = 0;
   private static $newPassCount = 5;
   private static $persistantFootPrint = '127.0.0.1Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.16) Gecko/20110319 Firefox/3.6.16 GTB7.1 ( .NET CLR 3.5.30729; .NET4.0C)';
-
+  
   function __construct() {
     parent::__construct();
     $this->load->model('m_municipal');
@@ -59,8 +59,9 @@ class User extends CI_Controller {
     }
     $this->load->view('/snippets/v_stepdata', $data);
   }
+
   /**
-   * Create a forgot password page where the user can get a new password by mail.
+   * A page where the user type their emailaddress to get it checked if exists.
    */
   function forgotpass() {
     $data['title'] = 'Forgot password';
@@ -68,44 +69,40 @@ class User extends CI_Controller {
     $this->load->view('v_new_password', $data);
     $this->load->view('include/v_footer');
   }
+  
   /**
-   * This function checks if email exists and sends a new or displays error message
-   * It stops robots from accessing the function more tahn five times in an hour.
+   * This function checks if email exists or displays error message.
+   * Sending an activation code to the users email.
+   * It stops robots from accessing the function more than five times in an hour.
    */
-  function getnewpass() {
-    //stop robots
-    //$newPassCount
-    $footprint = $this->input->ip_address() . $this->input->user_agent();
-
-    //$this::$newPassCount =
-    
-    $email = $this->uri->segment(3);
-    $email = urldecode($email);
-    $success = $this->m_user->getNewPass($email);
-    if($success == true){
-      $time = sha1(time());
-      $code = sha1($email);
-      echo anchor  ("http://m2.dev/index.php/user/changepass/" . $code . $time ."");
-      //$message = "nytt lösen http://www.motiomera.se/newpass/" . $ord .  " .";
-      //echo $message;
-      //$this->load->view('v_password_receipt');
-      //echo 'Your new password has been sent to you, follow this link to activate' "http://m2.dev/index.php/mypage/changepass/$ord");
-      echo $footprint;
-    }else{
-      echo 'fel';
-      //echo 'There is no user with that email address';
-      echo $footprint;
-    } 
-    }  
-
-    function changepass () {
-    //$password = $this->m_user->
-    $data['title'] = 'Change password';
-    $this->load->view('/include/v_header', $data);
-    $this->load->view('v_change_password', $data);
-    $this->load->view('include/v_footer');
+  function checkemail() {
+    //$footprint = $this->input->ip_address() . $this->input->user_agent();
+    $email = urldecode($this->uri->segment(3));
+    if ($this->m_user->checkEmail($email)) {
+      $code = $this->m_user->setPassCode($email);
+      echo anchor("http://m2.dev/index.php/user/newpass/$code");
+    } else {
+      echo 'There is no user with that email address. Please try again.';
+      //echo $footprint;
+    }
   }
-
+    
+  /**
+   * This function let the user type a new password and it gets validated, then update password in db.
+   */
+  function newpass() {
+    $code = $this->uri->segment(3);
+    $user_id = $this->m_user->newPassCode($code);
+    if ($user_id > 0) {
+      //$this->m_user->loginPasscodeOk($user_id);
+      $data['title'] = 'Change password';
+      //$this->load->view('/include/v_header', $data);
+      $this->load->view('v_change_password');
+      //$this->load->view('include/v_footer');
+    } else {
+      redirect('/start');
+    }
+  }
 
   /*
    * create receipt page

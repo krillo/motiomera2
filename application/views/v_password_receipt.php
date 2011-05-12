@@ -11,8 +11,7 @@
     <!--form action="" method="post"-->
     <h2>Nytt lösenord</h2>
     <p>
-      <?php $ord = sha1('danne');?>
-      Klicka på länken för att ändra Ert lösenord <?php echo anchor ("http://m2.dev/index.php/user/changepass/$ord")?>
+      Ni har precis bett om ett nytt lösenord. En aktiveringskod har skickats till den E-postadress som uppgavs. Vänligen klicka på länken i mailet för att få den nya koden.
     </p>
     
       <!--?php $ord = 'hej';

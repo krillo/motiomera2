@@ -6,7 +6,7 @@
       email = encodeURIComponent(email);
       $.ajax({
         type: "POST",
-        url: "<?php echo base_url() ?>user/getnewpass/" + email,
+        url: "<?php echo base_url() ?>user/checkemail/" + email,
         data: "",
         cache: false,
         success: function(html){

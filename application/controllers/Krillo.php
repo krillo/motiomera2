@@ -28,11 +28,13 @@ class Krillo extends CI_Controller {
     //$data = $this->m_step->create_x(3, 1, 1, '2011-03-03');
     //print_r($data);
 
-    $this->load->model('m_testdata');
-    $data = array('Filippa', 'Mimmi', 'Tobbe', 'Carlfelix', 'Simpan', 'Mogge', 'janbanan', 'BigRred', 'bigbird', 'Bjork', 'johanna', 'jwalker','Lapen', 'greengreen', 'M', 'tomtekalendern', 'loffe', 'Klaas', 'Kaniin');
-    $this->m_testdata->creteUsers($data);
+    echo date('Y-m-d H:i:s');
 
-    $this->testJDate();
+    //$this->load->model('m_testdata');
+    //$data = array('Filippa', 'Mimmi', 'Tobbe', 'Carlfelix', 'Simpan', 'Mogge', 'janbanan', 'BigRred', 'bigbird', 'Bjork', 'johanna', 'jwalker','Lapen', 'greengreen', 'M', 'tomtekalendern', 'loffe', 'Klaas', 'Kaniin');
+    //$this->m_testdata->creteUsers($data);
+
+    //$this->testJDate();
   }
 
   function testJDate() {
