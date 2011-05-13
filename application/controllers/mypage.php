@@ -55,8 +55,14 @@ class Mypage extends CI_Controller{
     $this->load->view('mypage/v_detail_icon');
     $this->load->view('snippets/v_clear');
 
+    $d = new JDate();
+    $d->subDays(6);
+    $data['label_steps'] = 'Dina steg';
+    $data['label_average'] = 'Medel samtliga deltagare';
+    $data['graph'] = $this->m_step->getStepSumPerDayByUserId($user_id, 'VALID', $d->getDate(), date('Y-m-d') );
+    $data['average'] = $this->m_step->getAverageStepSumPerDay('VALID', $d->getDate(), date('Y-m-d') );
+    $this->load->view('snippets/v_graph', $data);
 
-    $this->load->view('mypage/v_graph');
     $this->load->view('mypage/v_the_wall');
     $this->load->view('snippets/v_clear');
 

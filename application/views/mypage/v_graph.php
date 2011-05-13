@@ -1,1 +1,0 @@
-	<div class="grid_6"><p>graf</p></div>

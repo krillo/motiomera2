@@ -44,7 +44,8 @@ class Admin extends CI_Controller{
   /****************************** COMPANYADMIN **************************************/
 
   /**
-   * Show the company admin page
+   * Show the company admin page.
+   * Get all the comapnydata and stor it in the session object
    * Always check that the user has enough priviledges<br/>
    *
    * Displays a full HTML page
@@ -53,20 +54,67 @@ class Admin extends CI_Controller{
     $this->auth(COMP_ADM_LEVEL);
     $data['title'] = 'Company admin page';
     $user_id = $this->session->userdata('user_id');
-    $data['company'] = $this->m_company->getByUserId($user_id);
-    $company_id = $data['company'][0]->id;
-    $data['contest'] = $this->m_contest->getCurrentContest($company_id);
-    $contest_id = $data['contest'][0]->id;
-    $data['contest_dates'] = $this->m_contest_dates->getDatesByContestId($contest_id);
-
-    $start = date('Y-m-d', strtotime($data['contest'][0]->start));
-    $data['start'] = $start;
-    $stop = date('Y-m-d', strtotime($data['contest'][0]->stop));
-    $data['stop'] = $stop;
-
+    $data = $this->_getCompanyDataByUserId($user_id);
     $this->load->view('include/v_header', $data);
     $this->load->view('admin/v_company_admin');
     $this->load->view('include/v_footer');
+  }
+
+  /**
+   * This function collects all important data for the company.
+   *
+   * @param <type> $user_id
+   * @return <type>
+   */
+  function _getCompanyDataByUserId($user_id){
+    $this->auth(COMP_ADM_LEVEL);
+    $data['company'] = $this->m_company->getCompanyByUserId($user_id);
+    $company_id = $data['company']['id'];
+    $data['contest'] = $this->m_contest->getCurrentContest($company_id);
+    $contest_id = $data['contest']['id'];
+    $data['contest_dates'] = $this->m_contest_dates->getDatesByContestId($contest_id);
+    $start = date('Y-m-d', strtotime($data['contest']['start']));
+    $data['start'] = $start;
+    $stop = date('Y-m-d', strtotime($data['contest']['stop']));
+    $data['stop'] = $stop;
+    return $data;
+  }
+
+  /**
+   * This function collects all important data for the company.
+   *
+   * @param <type> $customer_id
+   * @return <type>
+   */
+  function _getCompanyDataByContestId($contest_id){
+    $this->auth(COMP_ADM_LEVEL);
+    $data['company'] = $this->m_company->getCompanyByContestId($contest_id);
+    $data['contest'] = $this->m_contest->getContestById($contest_id);
+    $data['contest_dates'] = $this->m_contest_dates->getDatesByContestId($contest_id);
+    $start = date('Y-m-d', strtotime($data['contest']['start']));
+    $data['start'] = $start;
+    $stop = date('Y-m-d', strtotime($data['contest']['stop']));
+    $data['stop'] = $stop;
+    return $data;
+  }
+
+
+  /**
+   * Show the companystats tab
+   * The 
+   */
+  function companystats() {
+    $this->auth(COMP_ADM_LEVEL);
+    $contest_id = $this->uri->segment(3);
+    $data = $this->_getCompanyDataByContestId($contest_id);
+    $d = new JDate($data['start']);
+    $this->load->view('snippets/v_grid_start');
+    $data['label_steps'] = 'Medel steg i ' . $data['company']['name'];
+    $data['label_average'] = 'Medel samtliga deltagare';
+    $data['graph'] = $this->m_step->getStepSumPerDayByContestId($contest_id, 'VALID', $d->getDate(), date('Y-m-d') );
+    $data['average'] = $this->m_step->getAverageStepSumPerDay('VALID', $d->getDate(), date('Y-m-d') );
+    $this->load->view('snippets/v_graph', $data);
+    $this->load->view('snippets/v_grid_end');
   }
 
 
@@ -164,11 +212,10 @@ class Admin extends CI_Controller{
   function competitors() {
     $this->auth(COMP_ADM_LEVEL);
     $contest_id = $this->uri->segment(3);
-    $data['competitors'] = $this->m_user->getByContestId($contest_id);
+    $data['competitors'] = $this->m_user->getUsersByContestId($contest_id);
     $data['teams'] = $this->m_team->getActiveTeamsByContestId($contest_id);
     $data['competition_data'] = $this->m_key->getTeamDataByContestId($contest_id);
     $this->load->view('admin/v_company_admin_competitors', $data);
-    $this->load->view('include/v_debug');
   }
 
 
@@ -506,18 +553,37 @@ class Admin extends CI_Controller{
 
 
   /**
+   * Add some more steps to all users, three days back
+   */
+  function morestepdata() {
+    $this->auth(SUPER_ADM_LEVEL);
+    $this->load->model('m_testdata');
+    $users = $this->m_user->getAll(400);
+    // insert random steps
+    // simulation of user is required to insert steps
+    foreach ($users as $user) {
+      $d = new JDate();
+      $this->_simulate($user->id);
+      for ($i = 0; $i < 3; $i++) {
+        $this->m_step->create_x($user->id, 1, $this->_randomSteps(), $d->getDate());
+        $d->subDays(1);
+      }
+      $this->_stopsimulate();
+    }
+    echo 'Success! hopefully ;)' ;
+  }
+
+
+
+
+
+  /**
    * Just return a random number between 3300 and 9900
    * Test purpose
    * @return string
    */
   function _randomSteps(){
-    $steps = '';
-    $nbrs = "3614526872934";
-    for($i = 0; $i < 3; $i++ ){
-      $steps .= $nbrs[mt_rand(0, strlen($nbrs) - 1) ];
-    }
-    $steps .= '0';
-    return $steps;
+    return rand(3000, 9000);
   }
 
 

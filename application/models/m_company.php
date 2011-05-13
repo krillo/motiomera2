@@ -48,13 +48,12 @@ class M_company extends CI_Model {
    * @param <int> $user_id
    * @return <array>
    */
-  function getByUserId($user_id){
+  function getCompanyByUserId($user_id){
     $sql = "SELECT * FROM companys WHERE user_id  = ?";
     $query = $this->db->query($sql, array($user_id));
-    if($query->num_rows() > 0 ){
-      foreach ($query->result() as $row){
-        $data[] = $row;
-      }
+    if($query->num_rows() == 1 ){
+      $arr = $query->result_array();
+      $data = $arr[0];
       return $data;
     }else{
       //todo: error handling
@@ -62,6 +61,24 @@ class M_company extends CI_Model {
     }
   }
 
+
+  /**
+   * Get the company by contest id
+   * @param <int> $contest_id
+   * @return <array>
+   */
+  function getCompanyByContestId($contest_id){
+    $sql = "SELECT c.* FROM companys c, contests t WHERE t.id  = ? AND c.id = t.company_id";
+    $query = $this->db->query($sql, array($contest_id));
+    if($query->num_rows() == 1 ){
+      $arr = $query->result_array();
+      $data = $arr[0];
+      return $data;
+    }else{
+      //todo: error handling
+      return -1;
+    }
+  }
 
 
   /**
@@ -82,6 +99,7 @@ class M_company extends CI_Model {
       return -1;
     }
   }
+
 
 
   /**

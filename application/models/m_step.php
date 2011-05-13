@@ -62,6 +62,165 @@ class M_step extends CI_Model {
   }
 
 
+  /**
+   * Gets the sum of steps per day for an user.
+   * The returned array will have one record for each day in the date span.
+   * If there are no steps it will fill them with 0 but still submit date and weekday.
+   * the aarray will look like this:
+   *
+   * <pre>
+   *        [1] => stdClass Object
+   *             (
+   *                 [steps_day] => 1430
+   *                 [date] => 2011-04-27
+   *                 [weekday] => Wednesday
+   *             )
+   *         [2] => stdClass Object
+   *             (
+   *                 [steps_day] => 0
+   *                 [date] => 2011-04-28
+   *                 [weekday] => Thursday
+   * </pre>
+   *
+   * @param <type> $user_id
+   * @param <type> $status
+   * @param <type> $startdate
+   * @param <type> $stopdate
+   * @return array of stdClass 
+   */
+  function getStepSumPerDayByUserId($user_id, $status, $startdate, $stopdate){
+    $sql = "SELECT sum(count) steps_day, s.date FROM steps s WHERE s.user_id = ? AND s.status = ? AND s.date >= ? AND s.date <= ? GROUP BY date ";
+    $query = $this->db->query($sql, array($user_id, $status, $startdate, $stopdate));
+    if($query->num_rows() > 0 ){
+      foreach ($query->result() as $row){
+        $rows[$row->date] = $row;
+      }
+
+      $refDate = new JDate($startdate);
+      $i = 1;
+      while($refDate->getDate() <= $stopdate){
+        if(array_key_exists($refDate->getDate(), $rows)){
+          $row = $rows[$refDate->getDate()];
+          $row->weekday = $refDate->getWeekday();
+          $data[$i] = $row;
+        } else {
+          $obj = new stdClass;
+          $obj->steps_day = 0;
+          $obj->date = $refDate->getDate();
+          $obj->weekday = $refDate->getWeekday();
+          $data[$i] = $obj;
+        }
+        $refDate->addDays(1);
+        $i++;
+      }
+      return $data;
+    }
+  }
+
+
+
+  function getStepSumPerDayByContestId($contest_id, $status, $startdate, $stopdate) {
+    $sql = "SELECT u.id  FROM users u, `keys` k WHERE u.id = k.user_id AND k.contest_id = ? ";
+    $query = $this->db->query($sql, array($contest_id));
+    if ($query->num_rows() > 0) {
+      foreach ($query->result() as $row) {
+        $userIds[] = $row->id;
+      }
+      $nbrUsers = count($userIds);
+      $ids = implode(',', $userIds);
+      //echo $ids . $nbrUsers;
+      $sql = "SELECT sum(count)/$nbrUsers steps_day, s.date FROM steps s WHERE s.user_id IN ($ids) AND s.status = ? AND s.date >= ? AND s.date <= ? GROUP BY date ";
+      $query = $this->db->query($sql, array($status, $startdate, $stopdate));
+      if ($query->num_rows() > 0) {
+        foreach ($query->result() as $row) {
+          $rows[$row->date] = $row;
+        }
+
+        $refDate = new JDate($startdate);
+        $i = 1;
+        while ($refDate->getDate() <= $stopdate) {
+          if (array_key_exists($refDate->getDate(), $rows)) {
+            $row = $rows[$refDate->getDate()];
+            $row->weekday = $refDate->getWeekday();
+            $data[$i] = $row;
+          } else {
+            $obj = new stdClass;
+            $obj->steps_day = 0;
+            $obj->date = $refDate->getDate();
+            $obj->weekday = $refDate->getWeekday();
+            $data[$i] = $obj;
+          }
+          $refDate->addDays(1);
+          $i++;
+        }
+        return $data;
+      }
+    } else {
+      //todo error handling
+      return -1;
+    }
+  }
+
+  /**
+   * Gets the average of all steps per day for all users.
+   * The returned array will have one record for each day in the date span.
+   * If there are no steps it will fill them with 0 but still submit date and weekday.
+   * the aarray will look like this:
+   *
+   * <pre>
+   *         [1] => stdClass Object
+   *             (
+   *                 [steps_day] => 296405
+   *                 [nof_users] => 26
+   *                 [average] => 11400
+   *                 [date] => 2011-04-28
+   *                 [weekday] => Thursday
+   *             )
+   *         [2] => stdClass Object
+   *             (
+   *                 [nof_users] => 0
+   *                 [average] => 0
+   *                 [steps_day] => 0
+   *                 [date] => 2011-04-29
+   *                 [weekday] => Friday
+   * </pre>
+   *
+   * @param <type> $status
+   * @param <type> $startdate
+   * @param <type> $stopdate
+   * @return array of stdClass
+   */
+  function getAverageStepSumPerDay($status, $startdate, $stopdate){  
+    $sql = "SELECT sum(count) steps_day, count(distinct(user_id)) nof_users, cast((sum(count) / count(distinct(user_id))) AS UNSIGNED INTEGER) AS average, s.date FROM steps s WHERE s.status = ? AND s.date >= ? AND s.date <= ? GROUP BY date ";
+    $query = $this->db->query($sql, array($status, $startdate, $stopdate));
+    if($query->num_rows() > 0 ){
+      foreach ($query->result() as $row){
+        $rows[$row->date] = $row;
+      }
+
+      $refDate = new JDate($startdate);
+      $i = 1;
+      while($refDate->getDate() <= $stopdate){
+        if(array_key_exists($refDate->getDate(), $rows)){
+          $row = $rows[$refDate->getDate()];
+          $row->weekday = $refDate->getWeekday();
+          $data[$i] = $row;
+        } else { //0 steps that day - fill the array with 0
+          $obj = new stdClass;
+          $obj->nof_users = 0;
+          $obj->average = 0;
+          $obj->steps_day = 0;
+          $obj->date = $refDate->getDate();
+          $obj->weekday = $refDate->getWeekday();
+          $data[$i] = $obj;
+        }
+        $refDate->addDays(1);
+        $i++;
+      }
+      return $data;
+    }
+  }
+
 
   /**
    * Count all records.

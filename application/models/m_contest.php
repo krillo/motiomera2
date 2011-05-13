@@ -26,17 +26,16 @@ class M_contest extends CI_Model {
 
 
   /**
-   * Get by user_id
+   * Get contest by contest_id
    * @param <type> $id
    * @return <type>
    */
-  function getById($id){
-    $sql = "SELECT * FROM companys WHERE id  = ?";
-    $query = $this->db->query($sql, array($id));
-    if($query->num_rows() > 0 ){
-      foreach ($query->result() as $row){
-        $data[] = $row;
-      }
+  function getContestById($contest_id){
+    $sql = "SELECT * FROM contests WHERE id  = ?";
+    $query = $this->db->query($sql, array($contest_id));
+    if($query->num_rows() == 1 ){
+      $arr = $query->result_array();
+      $data = $arr[0];
       return $data;
     }else{
       //todo error handling
@@ -45,14 +44,18 @@ class M_contest extends CI_Model {
   }
 
 
-  
+  /**
+   * Gets the contest that is in progress right now
+   *
+   * @param <type> $company_id
+   * @return <type>
+   */
   function getCurrentContest($company_id){
     $sql = "SELECT * FROM contests WHERE company_id = ?  AND (start <= ? AND stop >= ? )";
     $query = $this->db->query($sql, array($company_id, date('Y-m-d'), date('Y-m-d')));
-    if($query->num_rows() > 0 ){
-      foreach ($query->result() as $row){
-        $data[] = $row;
-      }
+    if($query->num_rows() == 1 ){
+      $arr = $query->result_array();
+      $data = $arr[0];
       return $data;
     }else{
       //todo error handling

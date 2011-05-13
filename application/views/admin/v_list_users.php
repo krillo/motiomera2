@@ -89,7 +89,7 @@
 <h2>Medlemmar</h2>
 
 <div>
-  <div style="width:600px">
+  <div style="width:920px">
     <div style="margin-top:20px; text-align:left">
       <form method="get" action="">
         <input type="text" name="search" id="search_box" class='search_box'/>
