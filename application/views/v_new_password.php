@@ -1,14 +1,31 @@
+<script type="text/javascript">
+  $(function() {
+    //do the ajax email check
+    $("#new-pass").click(function() {
+      var email = $("#new-pass-email").val();
+      email = encodeURIComponent(email);
+      $.ajax({
+        type: "POST",
+        url: "<?php echo base_url() ?>user/checkemail/" + email,
+        data: "",
+        cache: false,
+        success: function(html){
+          $("#new-pass-mess").html(html);
+        }
+      });
+      return false;
+    });
+  });
+</script>
 
 <h1>Glömt lösenord</h1>
 
-<form class="forgot_password_form" id="forgot_password_form" method="post" action="/user/getnewpass">
-<p>
-  <label for="email" style="font-weight: bold;"> E-postadress eller användarnamn</label>
-  <input id="email" name="email" type="text" style="margin-left: 10px;" /> <em> Har glömt din E-postadress eller användarnamn? Kontakta oss <a href="http://motiomera.se/pages/vanligafragor.php#Fraga_EjHittaSvar"> här.</a></em>
-</p>
 
 <p>
-  <input class="submit" type="submit" value="Skicka efter nytt lösenord"/>
+  <label for="new-pass-email" style="font-weight: bold;"> E-postadress</label>
+  <input id="new-pass-email" name="new-pass-email" type="text" style="margin-left: 10px;" />Har du glömt din E-postadress eller användarnamn? Kontakta oss <a href="http://motiomera.se/pages/vanligafragor.php#Fraga_EjHittaSvar"> här.</a>
 </p>
-</form>
+<button id="new-pass">Send</button>
+
+<span id="new-pass-mess" style="color:red;"></span>
 

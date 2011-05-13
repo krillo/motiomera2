@@ -57,7 +57,6 @@ class M_user extends CI_Model {
     }
   }
 
-
   /**
    *
    */
@@ -76,29 +75,43 @@ class M_user extends CI_Model {
     }
   }
 
-
   /**
    * Checks if the email-address exists, if exists return mail to user.
    * @param <type> $email
    */
-  function getNewPass($email) {
+  function checkEmail($email) {
     $sql = "SELECT * FROM users WHERE email = ?";
     $query = $this->db->query($sql, array($email));
-    if ($query->num_rows() > 0) {
-      /*$this->load->library('email');
-      $this->email->set_newline("\r\n");
-      $this->email->from('noreply@motiomera.se', 'Daniel');
-      $this->email->to($email);
-      $this->email->subject('Testar från Codeigniter');
-      $this->email->message('Testar mail från Codeigniter.');
-      if ($this->email->send()) {
-        $this->load->view('signup_confirmation_view');
-      } else {
-        show_error($this->email->print_debugger());
-      }*/
-      redirect('user/receipt');
+    if ($query->num_rows() == 1) {
+      return TRUE;
     } else {
-      redirect('/error/index/0');
+      return FALSE;
+    }
+  }
+
+  /**
+   * This function gets the users id from db if the newpasscode has one match.
+   * On match it also loggs in the user
+   *
+   * @param <type> $code
+   * @return <type>
+   */
+  function newPassCode($code) {
+    $sql = "SELECT * FROM users WHERE new_pass_code = ?";
+    $query = $this->db->query($sql, array($code));
+    if ($query->num_rows() == 1) {
+      $data = $query->result();
+      $user_id = $data[0]->id;
+      $this->_login($data);  //login user
+      /*
+      foreach ($query->result() as $data) {
+        $user_id = $data->id;
+        $this->_login($data);  //login user
+      }
+       */
+      return $user_id;
+    } else {
+      return -1;
     }
   }
 
@@ -179,7 +192,9 @@ class M_user extends CI_Model {
         'level' => $_POST['level'],
         'status' => $_POST['status'],
         'mAffCode' => $_POST['mAffCode'],
-        'company_key_temp' => $_POST['company_key_temp']
+        'company_key_temp' => $_POST['company_key_temp'],
+        'new_pass_code' => $_POST['new_pass_code'],
+        'new_pass_datetime' => $_POST['new_pass_datetime']
     );
     $data['created_at'] = date('Y-m-d H:i:s');
     $data['updated_at'] = date('Y-m-d H:i:s');
@@ -210,6 +225,8 @@ class M_user extends CI_Model {
         'sex' => $sex,
         'municipal_id' => $muni,
         'sources_id' => $source,
+        'new_pass_code' => $code,
+        'new_pass_datetime' => $datetime,
         'status' => 1,
         'level' => 11,
         'email_confirmed' => 0,
@@ -258,6 +275,41 @@ class M_user extends CI_Model {
     }
   }
 
+  /**
+   * This function set a new pass code and a datetime.
+   * -1 is return on error
+   * @param <type> $email
+   * @return string the code
+   */
+  function setPassCode($email) {
+    $updated_at = date('Y-m-d H:i:s');
+    $code = sha1(time() . $email);
+    $sql = "UPDATE users SET new_pass_code = ?, updated_at = ?, new_pass_datetime = ? WHERE email = ?";
+    $query = $this->db->query($sql, array($code, $updated_at, $updated_at, $email));
+    if ($this->db->affected_rows() == 1) {
+      return $code;
+    } else {
+      return -1;
+    }
+  }
+
+  /**
+   *  This function updates the new password in db.
+   * @param <type> $user_id
+   * @param <type> $newpassword
+   * @return <type>
+   */
+  function updatePassWord($id, $newpassword) {
+    $updated_at = date('Y-m-d H:i:s');
+    $sql = "UPDATE users SET password = ?, updated_at = ? WHERE id = ?";
+    $query = $this->db->query($sql, array($newpassword, $updated_at, $id));
+    if ($this->db->affected_rows() == 1) {
+      return TRUE;
+    } else {
+      return FALSE;
+    }
+  }
+
   // update person by id
   function update($id) {
     $data = array(
@@ -283,7 +335,9 @@ class M_user extends CI_Model {
         'level' => $_POST['level'],
         'status' => $_POST['status'],
         'mAffCode' => $_POST['mAffCode'],
-        'company_key_temp' => $_POST['company_key_temp']
+        'company_key_temp' => $_POST['company_key_temp'],
+        'new_pass_code' => $_POST['new_pass_code'],
+        'new_pass_datetime' => $_POST['new_pass_datetime']
     );
     //print_r($data); die();
     $data['updated_at'] = date('Y-m-d H:i:s');
@@ -328,6 +382,37 @@ class M_user extends CI_Model {
       return -1;  //wrong user or pass
     } else {      //ok user and pass
       $data = $query->result();
+      return $this->_login($data);
+    }
+  }
+
+  /**
+   * Logs in the user
+   * @param <type> $user_id
+   * @return <type>
+   */
+  /*
+  function loginPasscodeOk($user_id){
+    $sql = "SELECT * FROM users WHERE id = ? LIMIT 1";
+    $query = $this->db->query($sql, array($user_id));
+    if (!$query->num_rows) {
+      return -1;  //wrong user_id
+    } else {      //ok 
+      $data = $query->result();
+      return $this->_login($data);
+    }
+  }
+*/
+
+
+  /**
+   * Logs in the user and sets all the variables.
+   * This must only be used internally from the class.
+   *
+   * @param <type> $data a full data record i.e. "select * from user"
+   * @return <type>
+   */
+  function _login($data){
       $session_data = array(
           'user_id' => $data[0]->id,
           'user_mail' => $data[0]->email,
@@ -361,7 +446,9 @@ class M_user extends CI_Model {
         return 1;
       }
     }
-  }
+
+
+
 
   /**
    * Loggs out the user by destroying the session

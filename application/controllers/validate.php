@@ -2,7 +2,7 @@
 class Validate extends CI_Controller {
 
     private static $wl_id = 0;
-
+    
 	function __construct(){
 		parent::__construct();
     $this->load->model('m_municipal');
@@ -222,4 +222,38 @@ class Validate extends CI_Controller {
   }
 
    }
+
+   function newpass () {
+     //$this->load->library('form_validation');
+     //$this->form_validation->set_rules('newpass', '"New password field"', 'required|min_length[6]|max_length[40]');
+     //$this->form_validation->set_rules('newpass2', '"Your password again"', 'required|matches[newpass]|min_length[6]|max_length[40]');
+     //if ($this->form_validation->run() == FALSE) {
+       //$this->load->view('/include/v_header');
+       //$this->load->view('v_change_password');  //reload same page
+       //$this->load->view('include/v_footer');
+     //}else{   //validation is successful
+       $newpassword = $this->input->post('password');
+       //$code = $this->uri->segment(3);
+       //$user_id = $this->session->userdata('id');
+       //$user_id = $this->m_user->newPassCode();
+       $id = $this->session->userdata('user_id');
+       $this->m_user->updatePassWord($id,$newpassword);
+       //if($user_id >0) {
+         redirect('/user/receipt');
+       //}  else {
+         //redirect('/error/index/0');
+       //}
+     }
+
+   //}
+   /*$this->load->library('form_validation');
+    $this->form_validation->set_rules('newpass', 'Newpass', 'required|min_length[6]|max_length[40]');
+    $this->form_validation->set_rules('newpass2', 'Newpass2', 'required|matches[newpass]|min_length[6]|max_length[40]');
+    if ($this->form_validation->run() == FALSE) {
+
+    } else {  //Validation is ok
+      $newpassword = $this->input->post('newpass');
+      $this->m_user->updatePassWord($user_id, $newpassword);
+      redirect('/user/receipt');
+    }  */
 }

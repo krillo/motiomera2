@@ -91,8 +91,6 @@ class Mypage extends CI_Controller{
     $prep['activites_data'] = $this->_prepareStepList($data);
     $this->load->view('dialog/v_steps_dialog', $prep);
   }
-  
-
 
 
   /**
