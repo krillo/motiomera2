@@ -10,8 +10,9 @@
   <body>
     <!--form action="" method="post"-->
     <h2>Nytt lösenord</h2>
+      <h4>Välkommen!</h4>
     <p>
-      Ni har precis bett om ett nytt lösenord. En aktiveringskod har skickats till den E-postadress som uppgavs. Vänligen klicka på länken i mailet för att få den nya koden.
+     Ni har precis ändrat ert lösenord och är nu inloggad som vanligt.
     </p>
     
       <!--?php $ord = 'hej';

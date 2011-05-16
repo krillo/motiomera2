@@ -1,0 +1,381 @@
+body.edit_identity {
+  font-family: lucida grande, arial, sans-serif;
+}
+
+body.edit_identity .col p {
+  margin: 0;
+}
+
+body.edit_identity .col a {
+  color: #05c;
+  padding: 1px;
+}
+
+body.edit_identity .col a:hover {
+  color: #fff;
+  background: #05c;
+  text-decoration: none;
+}
+
+body.edit_identity a.admin {
+  color: red;
+}
+
+body.edit_identity a.admin:hover {
+  color: white;
+  background: red;
+}
+
+body.edit_identity .container {
+  width: 850px;
+}
+
+body.edit_identity .Left,
+body.edit_identity table.layout td.left {
+  width: 60%;
+}
+
+body.edit_identity .Right,
+body.edit_identity table.layout td.right {
+  width: 40%;
+  font-family: helvetica, arial, sans-serif;
+}
+
+body.edit_identity div.link_back {
+  text-align: left;
+  font-size: 14px;
+  margin: 0 0 14px 0;
+}
+
+body.edit_identity div.link_back a {
+  text-decoration: none;
+}
+
+body.edit_identity div.link_back a span.underlined {
+  text-decoration: underline;
+}
+
+body.edit_identity div.link_back a:hover span.underlined {
+  text-decoration: none;
+}
+
+body.edit_identity div.page_header h1 {
+  font-size: 14px;
+  margin: 0;
+}
+
+body.edit_identity label {
+  font-weight: normal;
+  color: #222;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+body.edit_identity tr.confirm_password label {
+  white-space: normal;
+}
+
+body.edit_identity input {
+  color: #000;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 3px;
+  width: 300px;
+}
+
+body.edit_identity table {
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+body.edit_identity table tr {
+  padding: 0;
+}
+
+body.edit_identity table p.hint {
+  font-size: 11px;
+  color: #999;
+}
+
+body.edit_identity table p.hint a {
+  color: #888;
+}
+
+body.edit_identity table p.hint a:hover {
+  color: #fff;
+  background: #666;
+}
+
+body.edit_identity table tr.submit td input {
+  width: auto;
+  font-size: 14px;
+  padding: 0;
+}
+
+body.edit_identity table tr.submit td {
+  padding-top: 6px;
+}
+
+body.edit_identity table td,
+body.edit_identity table th {
+  padding: 0;
+  color: #999;
+  font-size: 11px;
+  vertical-align: middle;
+}
+
+body.edit_identity table td {
+  padding-left: 10px;
+}
+
+body.edit_identity table tr th {
+  vertical-align: top;
+  padding-top: 10px;
+  min-width:65px;
+}
+
+body.edit_identity table tr.username_password td input {
+  width: 200px;
+}
+
+body.edit_identity table tr.confirm_password th {
+  padding-top: 0;
+}
+
+body.edit_identity table tr.avatar th {
+  padding: 0 0 18px 0;
+  text-align: right;
+}
+
+body.edit_identity table tr.avatar td {
+  vertical-align: top;
+  padding-top: 6px;
+}
+
+body.edit_identity table tr.with_tip td p {
+  font-size: 11px;
+}
+
+body.edit_identity tr.avatar th img {
+  background: #fff;
+  padding: 1px;
+  border: 1px solid #ddd;
+  height: 55px;
+  width: 55px;
+}
+
+body.edit_identity tr.avatar td input {
+  font-size: 12px;
+  font-weight: normal;
+  width: auto;
+}
+
+body.edit_identity tr.avatar td a {
+  font-size: 11px;
+}
+
+body.edit_identity tr.avatar td p {
+  margin: 0;
+}
+
+body.edit_identity table td strong {
+  color: #666;
+}
+
+body.edit_identity div.errors {
+  border: 2px solid red;
+  margin: 0 0 20px 0;
+  padding: 10px;
+}
+
+body.edit_identity div.errors h2{
+  font-size: 16px;
+  margin: 0 0 10px 0;
+}
+
+body.edit_identity div.errors ul {
+  padding: 0 0 0 20px;
+}
+
+body.edit_identity div.errors li {
+  list-style-type: square;
+  color: #333;
+}
+
+body.edit_identity input.dummy[data-dummy=true] {
+  color: #888;
+}
+
+/* =====================================
+AFFECTED ACCOUNTS
+=======================================*/
+
+body.edit_identity #affected_accounts {
+  margin-top: 12px;
+}
+
+#affected_accounts {
+  color: #333;
+  font-size: 14px;
+}
+
+#affected_accounts dl,
+#affected_accounts dt,
+#affected_accounts dd {
+  padding: 0;
+  float: none;
+  text-align: left;
+  font-weight: normal;
+  font-size: 14px;
+  width: auto;
+}
+
+#affected_accounts dl {
+  margin: 0 0 0 44px;
+}
+
+#affected_accounts dd {
+  margin: 0 0 5px;
+  color: #666;
+}
+
+#affected_accounts dt {
+  font-size: 14px;
+  font-weight: normal;
+  color: #333;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 20px 0 5px;
+}
+
+#affected_accounts dt strong {
+  border-bottom: 1px solid #ccc;
+  display: block;
+  padding: 0 0 4px;
+}
+
+#affected_accounts dt img {
+  margin: 0 0 -26px -44px;
+  vertical-align: middle;
+}
+
+
+/*-------------------------------------------------
+IDENTITY VALIDATION
+-------------------------------------------------*/
+
+body.identity_validation div.validated_field {
+  margin: -5px -10px 10px -10px;
+  padding: 5px 0 5px 10px;
+  display: inline-block;
+}
+
+body.identity_validation table div.validated_field {
+  margin: -5px -10px 10px -10px;
+  padding: 7px 0 5px 8px;
+  display: block;
+}
+
+body.identity_validation table div.validated_field.locale {
+  margin: 0 -10px;
+}
+
+body.edit_identity table tr.username_password td div.validated_field {
+  width: 240px;
+  padding-right: 10px;
+}
+
+body.identity_validation div.validated_field p,
+body.identity_validation div.validated_field h2,
+body.identity_validation div.validated_field p.hint,
+body.identity_validation div.validated_field p.field {
+  margin: 0;
+}
+
+body.identity_validation div.validated_field p.field {
+  padding: 0 40px 0 0;
+  display: inline-block;
+}
+
+body.identity_validation div.validated_field p.hint,
+body.identity_validation div.validated_field p.error {
+	margin-top: 5px;
+  font-size: 11px;
+	line-height: 1.1em;
+	background: none;
+}
+
+body.identity_validation div.validated_field p.error {
+  display: none;
+  color: #f00;
+}
+
+body.identity_validation div.validated_field.invalid p.error {
+  display: block;
+}
+
+body.identity_validation div.validated_field.invalid label,
+body.identity_validation div.validated_field.invalid h2 {
+  color: #f00;
+}
+
+body.identity_validation div.validated_field.valid p.field {
+  background: url(/images/signal_id/identifications/icon_success.png) no-repeat right center;
+}
+
+body.identity_validation div.validated_field.invalid {
+  background: #fedfe7;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+}
+
+body.identity_validation div.validated_field.invalid p.field {
+  background: url(/images/signal_id/identifications/icon_fail.png) no-repeat right center;
+}
+
+body.identity_validation table div.validated_field.valid,
+body.identity_validation table div.validated_field.invalid {
+  background-position: right 12px;
+}
+
+body.identity_validation div.validated_field.invalid p.hint {
+  display: none;
+}
+
+body.identity_validation div.username_suggestions {
+	margin: 10px 0 5px 0;
+}
+
+body.identity_validation div.username_suggestions ul {
+	padding-top: 5px;
+}
+
+body.identity_validation div.username_suggestions li {
+	padding-top: 4px;
+	font-family: monaco, monspace, courier, sans-serif;
+}
+
+
+/* IE */
+
+*:first-child+html body.identity_validation div.validated_field,
+*:first-child+html body.identity_validation table div.validated_field,
+*:first-child+html body.identity_validation div.validated_field p.field {
+  display: inline;
+}
+
+
+*:first-child+html body.identity_validation div.validated_field,
+*:first-child+html body.identity_validation table div.validated_field {
+  margin-top: -3px;
+  padding-right: 0;
+}
+
+*:first-child+html body.identifications div.pick {
+  zoom: 1;
+}
+
+

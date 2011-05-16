@@ -10,8 +10,8 @@
     },"You must type min 4, max 20 letters, and no å,ä,ö.");
     
     $.validator.addMethod("password",function(value,element){
-      return this.optional(element) || /^[A-Za-z0-9!@#$%^&*()_]{6,255}$/i.test(value);
-    },"You must type min 6 max 255 letters, and no å,ä,ö.");  
+      return this.optional(element) || /^[A-Za-z0-9!@#$%^/+-=?&*()_]{6,40}$/i.test(value);
+    },"You must type min 6 letters no å,ä,ö.");
 
     $('#signupForm').submit(function(e){
       if ($('#muni').val() == "0") {
@@ -97,6 +97,17 @@
 
 <script type="text/javascript">
   $(function() {
+
+
+    //$("#username").keyup(function() {
+
+      //alert('gnu');
+    //$.validator.addMethod("username",function(value,element){
+      //return this.optional(element)|| /^[A-Za-z0-9]{4,20}$/i.test(value);
+    //},"You must type min 4, max 20 letters, and no å,ä,ö.");
+
+    //});
+
 
     //do the ajax username check
     $("#username").blur(function() {
