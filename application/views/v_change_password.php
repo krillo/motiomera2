@@ -3,27 +3,14 @@
   <head>
     <meta charset="utf-8" />
     <title>Reset your password</title>
-    <!--link href="https://launchpad-asset2.37signals.com/stylesheets/signal_id/identifications.css?1303394513" media="screen" rel="stylesheet" type="text/css" />
-    <link href="https://launchpad-asset3.37signals.com/stylesheets/signal_id/modal.css?1303394513" media="screen" rel="stylesheet" type="text/css" /-->
-    <!--link href="https://launchpad-asset2.37signals.com/stylesheets/signal_id/layout.css?1303394513" media="screen" rel="stylesheet" type="text/css" /-->
-    <!--link href="https://launchpad-asset2.37signals.com/stylesheets/signal_id/identities.css?1303394513" media="screen" rel="stylesheet" type="text/css" /-->
-    <!--link href="https://launchpad-asset1.37signals.com/stylesheets/signal_id/welcome.css?1303394513" media="screen" rel="stylesheet" type="text/css" /-->
-    <!--link href="https://launchpad-asset1.37signals.com/stylesheets/signal_id/launchbar.css?1303394522" media="screen" rel="stylesheet" type="text/css" /-->
-    <!--link href="https://launchpad-asset0.37signals.com/stylesheets/signal_id/id_card.css?1303394513" media="screen" rel="stylesheet" type="text/css" /-->
-    <!--link href="https://launchpad-asset0.37signals.com/stylesheets/signal_id/invitations.css?1303394513" media="screen" rel="stylesheet" type="text/css" /-->
-    <!--link href="https://launchpad-asset1.37signals.com/stylesheets/signal_id/buttons.css?1303394513" media="screen" rel="stylesheet" type="text/css" /-->
 
-    <!--link href="https://launchpad-asset2.37signals.com/stylesheets/signal_id/layout.css?1303394513" media="screen" rel="stylesheet" type="text/css" /-->
-    <!--link href="https://launchpad-asset2.37signals.com/stylesheets/signal_id/password_resets.css?1303394513" media="screen" rel="stylesheet" type="text/css" /-->
-    <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url() ?>css/layout.css" />
-    <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url() ?>css/identities.css" />
-    <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url() ?>css/password_resets.css" />
-    <!--link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url() ?>css/cmxform.css" />
-    <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url() ?>css/cmxformTemplate.css" /-->
+
+    <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url() ?>css/daje_temp_newpassword.css" />
+
     <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js'></script>
-    <!-- script src="https://launchpad-asset1.37signals.com/sprockets.js?1303394513" type="text/javascript"></script-->
+
     <script src="<?php echo base_url(); ?>js/jquery.validate.js" type="text/javascript"></script>
-    <!-- script src="<?php echo base_url(); ?>js/sprockets.js" type="text/javascript"></script-->
+
   </head>
 
   
@@ -34,18 +21,19 @@
 
           $.validator.addMethod("password",function(value,element){
             return this.optional(element) || /^[A-Za-z0-9!@#$%^/+-=?&*()_]{6,40}$/i.test(value);
-          }, "<img src='/img/icon_fail.png'/>You must type min 6 letters no å,ä,ö.");
+          }, "");
 
           $("#password").keyup(function() {
           $("#password-error").remove();
           var password = $(this).val();
-          var characterReg = /^\s*[a-zA-Z0-9,\s]+\s*$/;
+          /*var characterReg = /^\s*[a-zA-Z0-9,\s]+\s*$/;*/
+          var characterReg = /^\s*[a-zA-Z0-9,!@#$%^/+-=?&*()_\s]+\s*$/;
+          /*var characterReg = /^((([A-Z]|[a-z]|[0-9]|[%\*\&\$\^\/\_\?\+\-\=\(\)\#\!\@])))\.?$/i;*/
           if(!characterReg.test(password)) {
             $(this).after('<span id="password-error" style="color:red;" <img src="/img/icon_fail.png">No special characters allowed.</span>');
           }
         });
           
-
           $("#signupForm").validate({
             rules: {
               password: {
@@ -63,15 +51,15 @@
             },
             messages: {
               password: {
-                required: "<img src='/img/icon_fail.png'/>Please provide a password",
-                minlength: "<img src='/img/icon_fail.png'/>Your password must be at least 6 characters long",
+                required: "<img src='/img/icon_fail.png'/>",
+                minlength: "<img src='/img/icon_fail.png'/>",
                 maxlength: ""
               },
               password_confirmation: {
-                required: "<img src='/img/icon_fail.png'/>Please provide a password",
-                minlength: "<img src='/img/icon_fail.png'/>Your password must be at least 6 characters long",
+                required: "<img src='/img/icon_fail.png'/>",
+                minlength: "<img src='/img/icon_fail.png'/>",
                 maxlength: "",
-                equalTo: "<img src='/img/icon_fail.png'/>Please enter the same password as above"
+                equalTo: "<img src='/img/icon_fail.png'/>"
               }
             }
           });
@@ -121,7 +109,7 @@
                       <p><input id="password" name="password"  type="text" /></p>
                       <span id="password-error"></span>
                       <!--p class="field"><input data-password-mismatch="These passwords don't match. Please try again. Remember that passwords are case sensitive." data-password-not-password="Must not be 'password'" data-password-same-as-username="Your password can not be the same as your username" data-password-too-short="For security your password must be at least 6 characters" id="password" name="password" type="text" /></p-->
-                      <p class="hint">Min 6 characters and max 40 characters.</p>
+                      <p class="hint">Type min 6 and max 40 characters, no å,ä,ö.</p>
                       <!--p class="error"></p-->
                     </div>
 

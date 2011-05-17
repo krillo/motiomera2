@@ -5,13 +5,36 @@
 
 <script type="text/javascript">
   $(document).ready(function() {
+
+    $("#username").keyup(function() {
+          $("#username1-error").remove();
+          var username = $(this).val();
+          /*var characterReg = /^\s*[a-zA-Z0-9,\s]+\s*$/;*/
+          var characterReg = /^\s*[a-zA-Z0-9,!@#$%^/+-=?&*()_\s]+\s*$/;
+          /*var characterReg = /^((([A-Z]|[a-z]|[0-9]|[%\*\&\$\^\/\_\?\+\-\=\(\)\#\!\@])))\.?$/i;*/
+          if(!characterReg.test(username)) {
+            $(this).after('<span id="username1-error" style="color:red;" <img src="/img/icon_fail.png">No special characters allowed.</span>');
+          }
+        });
+
     $.validator.addMethod("username",function(value,element){
       return this.optional(element)|| /^[A-Za-z0-9]{4,20}$/i.test(value);
     },"You must type min 4, max 20 letters, and no å,ä,ö.");
-    
+
     $.validator.addMethod("password",function(value,element){
       return this.optional(element) || /^[A-Za-z0-9!@#$%^/+-=?&*()_]{6,40}$/i.test(value);
     },"You must type min 6 letters no å,ä,ö.");
+
+    $("#password").keyup(function() {
+          $("#password-error").remove();
+          var password = $(this).val();
+          /*var characterReg = /^\s*[a-zA-Z0-9,\s]+\s*$/;*/
+          var characterReg = /^\s*[a-zA-Z0-9,!@#$%^/+-=?&*()_\s]+\s*$/;
+          /*var characterReg = /^((([A-Z]|[a-z]|[0-9]|[%\*\&\$\^\/\_\?\+\-\=\(\)\#\!\@])))\.?$/i;*/
+          if(!characterReg.test(password)) {
+            $(this).after('<span id="password-error" style="color:red;" <img src="/img/icon_fail.png">No special characters allowed.</span>');
+          }
+        });
 
     $('#signupForm').submit(function(e){
       if ($('#muni').val() == "0") {
@@ -97,20 +120,8 @@
 
 <script type="text/javascript">
   $(function() {
-
-
-    //$("#username").keyup(function() {
-
-      //alert('gnu');
-    //$.validator.addMethod("username",function(value,element){
-      //return this.optional(element)|| /^[A-Za-z0-9]{4,20}$/i.test(value);
-    //},"You must type min 4, max 20 letters, and no å,ä,ö.");
-
-    //});
-
-
     //do the ajax username check
-    $("#username").blur(function() {
+    $("#username").keyup(function() {
       var username = $("#username").val();
       if(username ==''){
       } else{
@@ -127,9 +138,8 @@
       }
       return false;
     });
-
     //do the ajax email check
-    $("#email").blur(function() {
+    $("#email").keyup(function() {
       var email = $("#email").val();
       email = encodeURIComponent(email);
       if(email ==''){
@@ -161,7 +171,7 @@
     <p>
       <label for="username">Välj ett alias</label>
       <input id="username" name="username" type="text" value="<?php echo set_value('username'); ?>"/>
-      <span id="username-error"></span>
+      <span id="username-error"></span><span id="username1-error"></span>
     </p>
 
     <p>
