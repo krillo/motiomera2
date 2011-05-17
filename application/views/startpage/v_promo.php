@@ -1,1 +1,27 @@
-<div class="grid_6"><img src="/img/promo.png" alt="googlemaps" ></div>
+<script>
+$(function(){
+  $("#slides").slides({
+  pagination: false,
+	play: 5000
+  });
+});
+</script>
+
+<div class="grid_6">
+<div id="slides">
+  <div class="slides_container">
+    <div>
+      <a href="chart.html"><img src="/img/1.png" alt="" /></a>
+    </div>
+    <div>
+      <a href="chart.html"><img src="/img/2.png" alt="" /></a>
+    </div>
+    <div>
+      <a href="chart.html"><img src="/img/3.png" alt="" /></a>
+    </div>
+    <div>
+      <a href="chart.html"><img src="/img/4.png" alt="" /></a>
+    </div>
+  </div>
+</div>
+</div>

@@ -8,6 +8,10 @@
     <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url() ?>css/ui-lightness/jquery-ui-1.8.9.custom.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url() ?>css/style.css" />
 
+    <?php //todo: show only when on start page ?>
+    <script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/slides.min.jquery.js"></script>
+
+
 
     <?php if ($this->session->userdata('role_level') > 40): ?>
       <script type="text/javascript" src="<?php echo base_url(); ?>dataTables/js/jquery.dataTables.min.js"></script>
