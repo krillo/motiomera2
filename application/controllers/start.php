@@ -16,6 +16,16 @@ class Start extends CI_Controller{
   }
 
 
+  /**
+   * 
+   */
+  function promo(){
+    $data['title'] = 'For companys';
+    $this->load->view('include/v_header', $data);
+    $this->load->view('promo/v_promo');
+    $this->load->view('include/v_footer');
+  }
+
 
   /**
    * login the user
@@ -38,7 +48,7 @@ class Start extends CI_Controller{
     $this->load->view('include/v_header', $data);
 
     $this->load->view('startpage/v_member_profile');
-    $this->load->view('startpage/v_promo');
+    $this->load->view('startpage/v_slideshow');
 
     $toplist1['toplist'] = $this->m_step->getToplistDays(0, 6, 10);
     $toplist1['toplist_title'] = 'Top of the week';
@@ -51,12 +61,7 @@ class Start extends CI_Controller{
     $toplist2['toplist_title'] = 'Top of the month';
     $toplist2['unique_id'] = "topmonth";
     $this->load->view('snippets/v_toplist', $toplist2);
-
-
     $this->load->view('startpage/v_puff');
-
-
-
     $this->load->view('include/v_footer');
   }
 
