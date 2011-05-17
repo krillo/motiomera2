@@ -1,5 +1,3 @@
-<?php if($this->session->userdata('role_level') > SUPER_ADM_LEVEL): ?>
-
 <script type="text/javascript">
   $(function(){
 
@@ -31,8 +29,7 @@
     echo "\n";
     print_r($this->_ci_cached_vars);
     print_r($this->session->userdata);
-    echo "\n";
-    echo "\n";
+    echo "\n\n";
     echo 'Benchmark: ';
     print_r($this->benchmark);
     echo "\n";
@@ -40,14 +37,17 @@
     print_r($this->db->queries);
     echo 'SQL Execution time: ';
     print_r($this->db->query_times);
-    echo "\n";
+    $totalSQLExecTime = 0;
+    foreach ($this->db->query_times as $value) {
+      $totalSQLExecTime = $totalSQLExecTime + $value;
+    }
+    $totalSQLExecTime = substr($totalSQLExecTime, 0, 6);
+    echo 'Total SQL execution time: ' . $totalSQLExecTime . 's';
+    echo "\n\n\n";
     echo 'Segments: ';
     print_r($this->uri->rsegments);
-    
-    //echo "\n";
-    //print_r($this);
     ?>
   </pre>
 </div>
-<?php endif; ?>
 </div>
+<div class="clear"></div>

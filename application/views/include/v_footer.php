@@ -1,4 +1,7 @@
-<?php if($this->session->userdata('role_level') > SUPER_ADM_LEVEL): ?>
+<?php if($this->session->userdata('role_level') > SUPER_ADM_LEVEL OR $this->uri->uri_string == 'start') :
+       //todo: remove debug from startpage
+?>
+
 <script type="text/javascript">
   $(function(){
 
@@ -14,6 +17,7 @@
   });
 </script>
 
+<div class="clear"></div>
 <div class="grid_2">
 <button id="k-debug" style="margin-top: 5px;">debug</button>
 <div id="k-debug-msg" class="hide">
