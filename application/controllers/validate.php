@@ -223,15 +223,20 @@ class Validate extends CI_Controller {
 
    }
 
+   /**
+    * This function validates the password from the user.
+    * If it´s ok the password ubdates in db, if not ok it shows an error.
+    */
+
    function newpass () {
-     //$this->load->library('form_validation');
-     //$this->form_validation->set_rules('newpass', '"New password field"', 'required|min_length[6]|max_length[40]');
-     //$this->form_validation->set_rules('newpass2', '"Your password again"', 'required|matches[newpass]|min_length[6]|max_length[40]');
-     //if ($this->form_validation->run() == FALSE) {
+     $this->load->library('form_validation');
+     $this->form_validation->set_rules('password', '"New password"', 'required|min_length[6]|max_length[40]');
+     $this->form_validation->set_rules('password_confirmation', '"Confirm password"', 'required|matches[password]|min_length[6]|max_length[40]');
+     if ($this->form_validation->run() == FALSE) {
        //$this->load->view('/include/v_header');
-       //$this->load->view('v_change_password');  //reload same page
+       $this->load->view('v_change_password');  //reload same page
        //$this->load->view('include/v_footer');
-     //}else{   //validation is successful
+     }else{   //validation is successful
        $newpassword = $this->input->post('password');
        //$code = $this->uri->segment(3);
        //$user_id = $this->session->userdata('id');
@@ -242,7 +247,7 @@ class Validate extends CI_Controller {
          redirect('/user/receipt');
        //}  else {
          //redirect('/error/index/0');
-       //}
+       }
      }
 
    //}
