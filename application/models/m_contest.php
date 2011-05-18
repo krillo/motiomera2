@@ -27,6 +27,7 @@ class M_contest extends CI_Model {
 
   /**
    * Get contest by contest_id
+   * Nice dates and add weekdays as well
    * @param <type> $id
    * @return <type>
    */
@@ -36,6 +37,11 @@ class M_contest extends CI_Model {
     if($query->num_rows() == 1 ){
       $arr = $query->result_array();
       $data = $arr[0];
+      //make dates and days nicer
+      $data['start'] = date('Y-m-d', strtotime($data['start']));
+      $data['start_weekday'] = date('l', strtotime($data['start']));
+      $data['stop'] = date('Y-m-d', strtotime($data['stop']));
+      $data['stop_weekday'] = date('l', strtotime($data['stop']));
       return $data;
     }else{
       //todo error handling
@@ -86,6 +92,25 @@ class M_contest extends CI_Model {
 		$this->db->order_by('id','asc');
 		return $this->db->get($this->table, $limit, $offset);
 	}
+
+  /**
+   * Update contest dates
+   *
+   * @param <type> $contest_id
+   * @param <type> $start
+   * @param <type> $stop
+   */
+  function updateContestDates($contest_id, $start, $stop = '2011-05-31'){
+    $x = JDate::dateDaysDiff($start, $stop);
+    $y = JDate::dateWeekDiff($start, $stop);
+    echo '->' . $x  .'<->'. $y . '<-';
+
+
+    $updated_at = date('Y-m-d H:i:s');
+    $sql = "UPDATE contests SET start = ?, stop = ?, updated_at = ? WHERE id = ?";
+    $query = $this->db->query($sql, array($start, $stop, $updated_at, $contest_id));
+  }
+
 
 	/**
    * Creates a new post

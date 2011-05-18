@@ -48,7 +48,7 @@
                                  '<td><input id="severity'+rowId+'" class="input-text" type="text" value=""></td>'+
                                  '<td><input id="unit'+rowId+'" class="input-text" type="text" value=""></td>'+
                                  '<td><input id="desc'+rowId+'" class="input-text" type="text" value=""></td>'+
-                                 '<td colspan="2"><button onclick="updateRow('+rowId+');return false;>Save</button></td>'+
+                                 '<td colspan="2"><button onclick="updateRow('+rowId+');return false;">Save</button></td>'+
                                '</tr>');
     $('#name'+rowId).val(e_name);
     $('#multiplicity'+rowId).val(e_multiplicity);

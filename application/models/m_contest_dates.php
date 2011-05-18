@@ -73,8 +73,8 @@ class M_contest_dates extends CI_Model {
     }
     if($query->num_rows() > 0 ){
       foreach ($query->result() as $row){
-        $nice_date = date('Y-m-d', strtotime($row->date));
-        $data[$row->type] = $nice_date;
+        $data[$row->type] = date('Y-m-d', strtotime($row->date));
+        $data[$row->type . '_WEEKDAY'] = date('l', strtotime($row->date));
       }
       return $data;
     }else{

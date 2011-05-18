@@ -293,4 +293,32 @@ class JDate {
     $this->unixtime = $this->getMonday(true);
   }
 
+  /**
+   * Return how many days between two dates
+   * 
+   * @param <type> $start
+   * @param <type> $end
+   * @return <type> 
+   */
+  public static function dateDaysDiff($start, $end){
+    $start_ts = strtotime($start);
+    $end_ts = strtotime($end);
+    $diff =  $end_ts - $start_ts;
+    return round($diff / 86400);
+  }
+
+
+  /**
+   * 
+   * 
+   * @param <type> $start
+   * @param <type> $end
+   * @return <type> 
+   */
+  public static function dateWeekDiff($start, $end){
+    $days = self::dateDaysDiff($start, $end);
+    return round($days / 7);
+  }
+
+
 }

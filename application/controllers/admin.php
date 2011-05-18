@@ -73,15 +73,11 @@ class Admin extends CI_Controller{
     $data['contest'] = $this->m_contest->getCurrentContest($company_id);
     $contest_id = $data['contest']['id'];
     $data['contest_dates'] = $this->m_contest_dates->getDatesByContestId($contest_id);
-    $start = date('Y-m-d', strtotime($data['contest']['start']));
-    $data['start'] = $start;
-    $stop = date('Y-m-d', strtotime($data['contest']['stop']));
-    $data['stop'] = $stop;
     return $data;
   }
 
   /**
-   * This function collects all important data for the company.
+   * This function collects all important data for that competition.
    *
    * @param <type> $customer_id
    * @return <type>
@@ -91,11 +87,45 @@ class Admin extends CI_Controller{
     $data['company'] = $this->m_company->getCompanyByContestId($contest_id);
     $data['contest'] = $this->m_contest->getContestById($contest_id);
     $data['contest_dates'] = $this->m_contest_dates->getDatesByContestId($contest_id);
-    $start = date('Y-m-d', strtotime($data['contest']['start']));
-    $data['start'] = $start;
-    $stop = date('Y-m-d', strtotime($data['contest']['stop']));
-    $data['stop'] = $stop;
     return $data;
+  }
+
+
+
+  /**
+   * Show important dates tab.
+   * If the user have more priviledges than COMP_ADM_LEVEL, then the dates will be editable on the page
+   */
+  function companydates(){
+    $this->auth(COMP_ADM_LEVEL);
+    $contest_id = $this->uri->segment(3);
+    $data = $this->_getCompanyDataByContestId($contest_id);
+    if($this->session->userdata('role_level') > SUPPORT_ADM_LEVEL){
+      $data['editable'] = TRUE;
+    } else {
+      $data['editable'] = FALSE;
+    }
+    $this->load->view('admin/v_company_admin_dates', $data);
+  }
+
+
+  /**
+   * Update contest dates.
+   * only administrators with more privileges than SUPPORT_ADM_LEVEL are allow to do this
+   */
+  function companydatesupdate(){
+    $this->auth(SUPPORT_ADM_LEVEL);
+    $contest_id = $this->input->post('contest_id');
+    $start = $this->input->post('start');
+    $stop = $this->input->post('stop');
+    if($this->m_contest->updateContestDates($contest_id, $start, $stop)){
+      $data = $this->_getCompanyDataByContestId($contest_id);
+      $data['editable'] = TRUE;
+      $this->load->view('admin/v_company_admin_dates', $data);
+    }else{
+      //todo not able to update, show error on admin page
+      echo 'error';
+    }
   }
 
 
@@ -107,7 +137,7 @@ class Admin extends CI_Controller{
     $this->auth(COMP_ADM_LEVEL);
     $contest_id = $this->uri->segment(3);
     $data = $this->_getCompanyDataByContestId($contest_id);
-    $d = new JDate($data['start']);
+    $d = new JDate($data['contest']['start']);
     $this->load->view('snippets/v_grid_start');
     $data['label_steps'] = 'Medel steg i ' . $data['company']['name'];
     $data['label_average'] = 'Medel samtliga deltagare';
