@@ -146,6 +146,30 @@ class M_user extends CI_Model {
   }
 
   /**
+   * This function gets the time when the user requested an activation code.
+   * @param <type> $code
+   * @return <type>
+   */
+  function checkNewPassTime ($code) {
+    $sql = "SELECT new_pass_datetime FROM users WHERE new_pass_code = ?";
+    $query = $this->db->query($sql, array($code));
+    if ($query->num_rows() == 1) {
+      $data = $query->result();
+      $start = $data[0]->new_pass_datetime;
+        //login user
+      /*
+      foreach ($query->result() as $data) {
+        $user_id = $data->id;
+        $this->_login($data);  //login user
+      }
+       */
+      return $start;
+    } else {
+      return -1;
+    }
+  }
+
+  /**
    * Count all records.
    * Returns count and which table their from
    * @return array

@@ -10,15 +10,15 @@
           $("#username1-error").remove();
           var username = $(this).val();
           /*var characterReg = /^\s*[a-zA-Z0-9,\s]+\s*$/;*/
-          var characterReg = /^\s*[a-zA-Z0-9,!@#$%^/+-=?&*()_\s]+\s*$/;
+          var characterReg = /^\s*[a-zA-Z0-9_]+\s*$/;
           /*var characterReg = /^((([A-Z]|[a-z]|[0-9]|[%\*\&\$\^\/\_\?\+\-\=\(\)\#\!\@])))\.?$/i;*/
           if(!characterReg.test(username)) {
-            $(this).after('<span id="username1-error" style="color:red;" <img src="/img/icon_fail.png">No special characters allowed.</span>');
+            $(this).after('<span id="username1-error" style="color:red;" <img src="/img/icon_fail.png">No special characters</span>');
           }
         });
 
     $.validator.addMethod("username",function(value,element){
-      return this.optional(element)|| /^[A-Za-z0-9]{4,20}$/i.test(value);
+      return this.optional(element)|| /^[A-Za-z0-9_]{4,20}$/i.test(value);
     },"You must type min 4, max 20 letters, and no å,ä,ö.");
 
     $.validator.addMethod("password",function(value,element){
@@ -32,7 +32,7 @@
           var characterReg = /^\s*[a-zA-Z0-9,!@#$%^/+-=?&*()_\s]+\s*$/;
           /*var characterReg = /^((([A-Z]|[a-z]|[0-9]|[%\*\&\$\^\/\_\?\+\-\=\(\)\#\!\@])))\.?$/i;*/
           if(!characterReg.test(password)) {
-            $(this).after('<span id="password-error" style="color:red;" <img src="/img/icon_fail.png">No special characters allowed.</span>');
+            $(this).after('<span id="password-error" style="color:red;" <img src="/img/icon_fail.png">No å,ä,ö.</span>');
           }
         });
 
