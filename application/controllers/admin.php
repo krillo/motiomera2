@@ -14,6 +14,8 @@ class Admin extends CI_Controller{
       $this->load->view('v_startpage');
     } else {
       $this->load->model('m_company');
+      $this->load->model('m_settings');
+      $this->load->model('m_white_label');
     }
 	}
 
@@ -119,9 +121,9 @@ class Admin extends CI_Controller{
     $start = $this->input->post('start');
     $stop = $this->input->post('stop');
     if($this->m_contest->updateContestDates($contest_id, $start, $stop)){
-      $data = $this->_getCompanyDataByContestId($contest_id);
-      $data['editable'] = TRUE;
-      $this->load->view('admin/v_company_admin_dates', $data);
+      if($this->m_contest_dates->updateContestDates($contest_id, $stop)){
+        $this->companyadmin();
+      }
     }else{
       //todo not able to update, show error on admin page
       echo 'error';
@@ -445,11 +447,15 @@ class Admin extends CI_Controller{
    * Show settings admin page
    * Always check that the user has enough priviledges
    */
-  function settings() {
+  function advsettings($tab = 0) {
     $this->auth(WL_ADM_LEVEL);
     $data['title'] = 'advanced settings';
+    $data['tab'] = $tab;
+    $wl_id = $this->session->userdata('wl_id');
+    $data['wl'] = $this->m_white_label->getById($wl_id);
     $this->load->view('include/v_header', $data);
     $this->load->view('admin/v_adv_settings');
+    $this->load->view('include/v_footer');
   }
 
   /**
@@ -459,7 +465,7 @@ class Admin extends CI_Controller{
     $this->auth(WL_ADM_LEVEL);
     $wl_id = $this->session->userdata('wl_id');
     $data['records'] = $this->m_activities->getAll($wl_id, $limit);
-    $this->load->view('admin/v_adv_settings_activities', $data);
+    $this->load->view('admin/adv_settings/v_activities', $data);
   }
 
   /**
@@ -509,6 +515,47 @@ class Admin extends CI_Controller{
 
 
 
+
+  /**
+   * List settings
+   */
+  function settings() {
+    $this->auth(WL_ADM_LEVEL);
+    $wl_id = $this->session->userdata('wl_id');
+    $data['records'] = $this->m_settings->getByWlId($wl_id);
+    $this->load->view('admin/adv_settings/v_settings', $data);
+  }
+
+
+  /**
+   * Update all settings
+   * all parameters via post
+   * return to settings panel (tab 2)
+   */
+  function settingsupdate() {
+    $this->auth(WL_ADM_LEVEL);
+    $wl_id = $this->session->userdata('wl_id');
+    $wl_data = $this->m_white_label->getById($wl_id);
+    foreach ($_POST as $key=>$value)  {
+      if($key != 'save'){
+        $data[$key] = $this->input->post($key);
+      }
+    }
+    if($this->m_settings->update($wl_id, $data)){
+      $this->m_settings->createSettingsFile($wl_id, $wl_data);
+      $this->advsettings(2);   
+    }else{
+      echo 'error';
+    }
+  }
+
+
+
+
+
+
+
+
   /****************************** SUPERADMIN **************************************/
   /****************************** SUPERADMIN **************************************/
 
@@ -529,6 +576,17 @@ class Admin extends CI_Controller{
   }
 
 
+  /**
+   * It deletes all settings in the db and restores it with default values and generates a new settings file
+   */
+  function regeneratesettings(){
+    $this->auth(SUPER_ADM_LEVEL);
+    $this->m_settings->deleteByWlId(WL_ID);
+    $this->m_settings->initialInsert(WL_ID);
+    $wl_data = $this->m_white_label->getById(WL_ID);
+    $file = $this->m_settings->createSettingsFile(WL_ID, $wl_data);
+    echo $file;
+  }
 
 
 
@@ -536,6 +594,7 @@ class Admin extends CI_Controller{
    * This function creates and loads testdata into the db <br/>
    * Use it only during development
    *
+
    * 1. it finds all users and inserts random steps for them, a month back <br/>
    * 2. it runs all inserts from the file /db/initial_data.sql <br/>
    */

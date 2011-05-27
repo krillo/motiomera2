@@ -3,10 +3,10 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js'></script>
-    <script type="text/javascript" src="<?php echo base_url() ?>js/jquery-ui-1.8.9.custom.min.js"></script>
-    <script type="text/javascript" src="<?php echo base_url(); ?>js/step.js?ver=0.2"></script>
-    <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url() ?>css/ui-lightness/jquery-ui-1.8.9.custom.css" />
-    <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url() ?>css/style.css" />
+    <script type="text/javascript" src="<?php echo $this->config->item('base_url'); ?>js/jquery-ui-1.8.9.custom.min.js"></script>
+    <script type="text/javascript" src="<?php echo $this->config->item('base_url'); ?>js/step.js?ver=0.2"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="<?php echo $this->config->item('base_url'); ?>css/ui-lightness/jquery-ui-1.8.9.custom.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="<?php echo $this->config->item('base_url'); ?>css/style.css" />
 
     <?php //todo: show only when on start page ?>
     <script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/slides.min.jquery.js"></script>

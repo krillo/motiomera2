@@ -86,9 +86,9 @@
 
 
 <div id="activity-list">
-<h1>List Activites</h1>
+<h1>Activites</h1>
 <?php if ($records != null && $records != -1): ?>
-  <table >
+  <table class="admin-table">
     <thead>
       <tr>
         <th>Name</th>
