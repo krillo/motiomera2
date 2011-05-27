@@ -8,7 +8,7 @@
       <li><a href="/admin/companyadmin">Admin</a></li>
     <?php
       echo $role_level > 50? '<li><a href="/admin/support">Support</a></li>': '';
-      echo $role_level > 70? '<li><a href="/admin/settings">Avancerade inställningar</a></li>': '';
+      echo $role_level > 70? '<li><a href="/admin/advsettings">Avancerade inställningar</a></li>': '';
       echo $role_level > 90? '<li><a href="/admin/superadmin">Superadmin</a></li> ': '';
       echo $this->session->userdata('simulation') == TRUE ? '<li><a href="/admin/stopsimulate">Stop simulation</a></li>': '';
     ?>

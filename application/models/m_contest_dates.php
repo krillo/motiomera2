@@ -1,5 +1,11 @@
 <?php
 
+  //these keys are used in the db
+  define("LAST_REG", 'LAST_REG');
+  define("SEND_RESULT_EMAIL", 'SEND_RESULT_EMAIL');
+  define("LAST_ADMIN_DAY", 'LAST_ADMIN_DAY');
+
+
 /**
  * The Keys
  *
@@ -7,11 +13,6 @@
  */
 class M_contest_dates extends CI_Model {
   private $table = 'contest_dates';
-
-  const LAST_REG = 'LAST_REG';
-  const SEND_RESULT_EMAIL = 'SEND_RESULT_EMAIL';
-  const LAST_ADMIN_DAY = 'LAST_ADMIN_DAY';
-
 
   /**
    * Gets all the records, defaults to limit the result to 20 rows
@@ -84,24 +85,55 @@ class M_contest_dates extends CI_Model {
   }
 
 
+/**
+ * Calculate all dates from contest stop date
+ * Return the dates in an associative array with keyname as property name used in the db
+ *
+ * @param <type> $stop
+ * @return array with all the dates
+ */
+private function calculateDatesFromStopDate($stop){
+  $d = new JDate($stop);
+  $d->addDays(LAST_REG_ADD_DAYS);
+  $data[LAST_REG] = $d->getDate();
+
+  $d = new JDate($stop);
+  $d->addDays(SEND_RESULT_EMAIL_ADD_DAYS);
+  $data[SEND_RESULT_EMAIL] = $d->getDate();
+
+  $d = new JDate($stop);
+  $d->addDays(LAST_ADMIN_DAY_ADD_DAYS);
+  $data[LAST_ADMIN_DAY] = $d->getDate();
+  return $data;
+}
+
 
   /**
-   * Count all records.
-   * Returns count and which table their from
-   * @return array
+   * Update all contest dates for a competition
+   * contest_id and stop date is needed for this
+   * return true for success
+   *
+   * @param <type> $contest_id
+   * @param <type> $stop
+   * @return boolean
    */
-	function count(){
-		$query = $this->db->count_all($this->table);
-    $data['table'] = $this->table;
-    $data['count'] = $query;
-    return $data;
-	}
+  function updateContestDates($contest_id, $stop){
+    $sql = "SELECT id FROM contests WHERE id = ?";
+    $query = $this->db->query($sql, array($contest_id));
+    if($query->num_rows() >= 1 ){
+      $data = $this::calculateDatesFromStopDate($stop);
+      foreach ($data as $key => $value) {
+        $sql = "UPDATE contest_dates SET date = ?, updated_at = ? WHERE contest_id = ? AND type = ?";
+        $query = $this->db->query($sql, array($value, date('Y-m-d H:i:s'), $contest_id, $key));
+      }
+      return TRUE;
+    } else {
+      return FALSE;
+    }
 
-	// get persons with paging
-	function getPagedList($limit = 10, $offset = 0){
-		$this->db->order_by('id','asc');
-		return $this->db->get($this->table, $limit, $offset);
-	}
+  }
+
+
 
 	/**
    * Creates a new post

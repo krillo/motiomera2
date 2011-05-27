@@ -100,15 +100,19 @@ class M_contest extends CI_Model {
    * @param <type> $start
    * @param <type> $stop
    */
-  function updateContestDates($contest_id, $start, $stop = '2011-05-31'){
-    $x = JDate::dateDaysDiff($start, $stop);
-    $y = JDate::dateWeekDiff($start, $stop);
-    echo '->' . $x  .'<->'. $y . '<-';
-
-
-    $updated_at = date('Y-m-d H:i:s');
-    $sql = "UPDATE contests SET start = ?, stop = ?, updated_at = ? WHERE id = ?";
-    $query = $this->db->query($sql, array($start, $stop, $updated_at, $contest_id));
+  function updateContestDates($contest_id, $start, $stop){
+    $sql = "SELECT id FROM contests WHERE id = ?";
+    $query = $this->db->query($sql, array($contest_id));
+    if($query->num_rows() == 1 ){
+      $days = JDate::dateDaysDiff($start, $stop);
+      $weeks = JDate::dateWeekDiff($start, $stop);
+      $updated_at = date('Y-m-d H:i:s');
+      $sql = "UPDATE contests SET start = ?, stop = ?, nof_weeks = ?,  updated_at = ? WHERE id = ?";
+      $query = $this->db->query($sql, array($start, $stop, $weeks, $updated_at, $contest_id));
+      return TRUE;
+    }else{
+      return FALSE;
+    }
   }
 
 
