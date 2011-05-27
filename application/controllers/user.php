@@ -80,6 +80,7 @@ class User extends CI_Controller {
     $email = urldecode($this->uri->segment(3));
     if ($this->m_user->checkEmail($email)) {
       $code = $this->m_user->setPassCode($email);
+      //$expire = $this->m_user->checkNewPassTime($code);
       echo anchor("http://m2.dev/index.php/user/newpass/$code");
     } else {
       echo 'There is no user with that email address. Please try again.';
@@ -93,6 +94,25 @@ class User extends CI_Controller {
   function newpass() {
     $code = $this->uri->segment(3);
     $user_id = $this->m_user->newPassCode($code);
+    //if($user_id != -1){
+      //här händer allt
+    //} else{
+      //felmedelande antingern fel kod eller tiden ute begär ett nytt
+    //}
+    $start = $this->m_user->checkNewPassTime($code);
+    //$expire = $start + time()+60;
+    //$expire = "2011-05-23 13:50:00";
+    //$now = date('Y-m-d H:i:s');
+    //if ($now>$expire){
+      //redirect('/snippets/v_status_error_msg');
+    //}  else {
+
+    //$start = $this->m_user->checkNewPassTime($code);
+    //$expire = date('Y-m-d H:i:s',time()+60*1);
+    //$now = date('Y-m-d H:i:s');
+    //if ($now>$expire){
+      //redirect('/snippets/v_status_error_msg');
+    //}  else {
     if ($user_id > 0) {
       //$this->m_user->loginPasscodeOk($user_id);
       $data['title'] = 'Change password';
