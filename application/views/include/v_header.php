@@ -50,7 +50,7 @@
                   <table width="290" cellspacing="1" cellpadding="0" border="0">
                     <tr>
                       <td class="log-in-input">E-postadress: </td>
-                      <td><input name="user" id="user" value="" class="text-field" size="17" type="text" maxlength="96" tabindex="1" /></td>
+                      <td><input name="mail" id="mail" value="" class="text-field" size="17" type="text" maxlength="96" tabindex="1"  /></td>
                       <td class="log-in-input"><input type="checkbox" id="autologin" name="autologin" value="on" tabindex="3" /> <label for="autologin">Kom ihåg mig</label></td>
                     </tr>
                     <tr>

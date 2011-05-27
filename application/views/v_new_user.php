@@ -204,7 +204,7 @@
     </p> 
     <p>
       <label for="email">E-postadress</label>
-      <input id="email" name="email" type="text" value="<?php echo set_value('email'); ?>"/><span id="email-error"></span><em> Har du inget e-postkonto? <a href="http://motiomera.se/pages/vanligafragor.php#Fraga_IngenEpost"> Läs mer här.</a></em>     
+      <input id="email" name="email" type="text" value="<?php echo set_value('email'); ?>"/><span id="email-error"></span><em> Har du inget e-postkonto? <a href="http://motiomera.se/pages/vanligafragor.php#Fraga_IngenEpost"> Läs mer här.</a></em>
     </p>
     <p>
       <label for="email2">Upprepa</label>

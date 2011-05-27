@@ -97,8 +97,14 @@ class M_user extends CI_Model {
    * @return <type>
    */
   function newPassCode($code) {
-    $sql = "SELECT * FROM users WHERE new_pass_code = ?";
-    $query = $this->db->query($sql, array($code));
+    //$codeTimespan = 6;
+    //$checktime = new JDate();
+    //$checktime->subHours($codeTimespan);
+      $sql = "SELECT * FROM users WHERE new_pass_code = ?";
+      $query = $this->db->query($sql, array($code));
+    //$sql = "SELECT * FROM users WHERE new_pass_code = ? AND new_pass_datetime > ?";
+    //$query = $this->db->query($sql, array($code, $codeTimespan));
+    //echo $this->db->last_query();
     if ($query->num_rows() == 1) {
       $data = $query->result();
       $user_id = $data[0]->id;
@@ -144,6 +150,48 @@ class M_user extends CI_Model {
       return FALSE;
     }
   }
+
+  /**
+   * It creates a new post with a footprint
+   * Check for frauds (robots)
+   * If footprint exists more then x-times in time-y in the db then true is return.
+   * Else is this probably a legal request
+   *
+   * @param string $footprint
+   * @param string $type
+   * @return boolean
+   */
+  function isFraud($footprint, $type) {
+    $now = date('Y-m-d H:i:s');
+    $ip = $this->input->ip_address();
+    //$ip = '127.0.9.9';
+    $sql = "INSERT INTO frauds (type, ip, footprint, created_at, updated_at) VALUES (?, ?, ?, ?, ?)";
+    $query = $this->db->query($sql, array($type, $ip, $footprint, $now, $now));
+    //todo: read these from settings
+    $fraudTimespan = 1;
+    $maxAttempts = 3;
+
+    $checktime = new JDate();
+    $checktime->subHours($fraudTimespan);
+
+    $sql = "SELECT COUNT(id) count FROM frauds WHERE footprint = ? AND created_at > ?";
+    $query = $this->db->query($sql, array($footprint, $fraudTimespan));
+    //echo $this->db->last_query();
+    if ($query->num_rows() > 0) {
+      $data = $query->result();
+      //print_r($data);
+      //echo $data[0]->count;
+      if ($data[0]->count <= $maxAttempts) {
+        return $data[0]->count;       //all ok
+      } else {
+        return 0;                  //attempts exceeded
+      }
+    } else {
+      //todo: error handling
+      return -1;                 //error
+    }
+  }
+  
 
   /**
    * This function gets the time when the user requested an activation code.
