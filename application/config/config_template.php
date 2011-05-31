@@ -356,13 +356,14 @@ $config['rewrite_short_tags'] = FALSE;
 $config['proxy_ips'] = '';
 
 
-
 /*
 |--------------------------------------------------------------------------
-| Motiomera user levels
+| Motiomera user levels and settings
 |--------------------------------------------------------------------------
 |
-| These are the user and administrator levels used in Motiomera
+| These are the user and administrator levels used in Motiomera.
+| The white label id is decided from the HTTP_HOST.
+| A custom settings file is loaded, decided by wl_id
 |
 */
 define('USER_LEVEL', 10);
@@ -370,6 +371,21 @@ define('COMP_ADM_LEVEL', 40);
 define('SUPPORT_ADM_LEVEL', 50);
 define('WL_ADM_LEVEL', 70);
 define('SUPER_ADM_LEVEL', 90);
+
+switch ($_SERVER['HTTP_HOST']) {
+  case 'm2.dev:8888':
+    define('WL_ID', 1);
+    break;
+  case 'motiomera.dk':
+    define('WL_ID', 2);
+    break;
+  default:
+    define('WL_ID', 1);
+    break;
+}
+
+$file = './settings/settings_wl_id'. WL_ID .'.php';
+require_once($file);
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */

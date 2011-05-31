@@ -72,7 +72,7 @@
             $("#flash").show();
             $("#searchword").show();
             $(".searchword").html(search_word);
-            $("#flash").html('<img src="ajax-loader.gif" align="absmiddle">&nbsp;Loading Results...');
+            $("#flash").html('<img src="img/ajax-loader.gif" align="absmiddle">&nbsp;Loading Results...');
           },
           success: function(html){
             $("#insert_search").show();
@@ -87,7 +87,6 @@
 </script>
 
 <h2>Medlemmar</h2>
-
 <div>
   <div style="width:920px">
     <div style="margin-top:20px; text-align:left">
@@ -99,12 +98,7 @@
     <div>
       <div id="searchword">Search results for <span class="searchword"></span></div>
       <div id="flash"></div>
-
-
-  <span id="insert_search"></span>
-
-  
-
+      <span id="insert_search"></span>
     </div>
   </div>
 </div>

@@ -12,6 +12,12 @@ class Krillo extends CI_Controller {
   function index() {
     //echo 'LAST_REG_ADD_DAYS = ' . LAST_REG_ADD_DAYS;
 
+    log_message('debug', 'Some variable did not contain a value.');
+    show_error('krillo error message' ,200  );
+
+    //show_404('krillo_page.php' , 'log_error');
+
+
     $this->load->model('m_settings');
     $this->m_settings->deleteByWlId(1);
 

@@ -58,7 +58,7 @@ class Admin extends CI_Controller{
     $user_id = $this->session->userdata('user_id');
     $data = $this->_getCompanyDataByUserId($user_id);
     $this->load->view('include/v_header', $data);
-    $this->load->view('admin/v_company_admin');
+    $this->load->view('admin/company_admin/v_main');
     $this->load->view('include/v_footer');
   }
 
@@ -107,7 +107,7 @@ class Admin extends CI_Controller{
     } else {
       $data['editable'] = FALSE;
     }
-    $this->load->view('admin/v_company_admin_dates', $data);
+    $this->load->view('admin/company_admin/v_dates', $data);
   }
 
 
@@ -169,7 +169,7 @@ class Admin extends CI_Controller{
     }
     $data['competition_data'] = $this->m_key->getTeamDataByContestId($contest_id);
     $data['teams'] = $this->m_team->getAllByContestId($contest_id);
-    $this->load->view('admin/v_company_admin_teams', $data);
+    $this->load->view('admin/company_admin/v_teams', $data);
   }
 
 
@@ -186,7 +186,7 @@ class Admin extends CI_Controller{
     }
     $data['team'] = $this->m_team->getById($team_id);
     $data['users'] = $this->m_key->getUsersByTeamId($team_id);
-    $this->load->view('admin/v_company_admin_teams_edit', $data);
+    $this->load->view('admin/company_admin/v_teams_edit', $data);
   }
 
 
@@ -247,7 +247,7 @@ class Admin extends CI_Controller{
     $data['competitors'] = $this->m_user->getUsersByContestId($contest_id);
     $data['teams'] = $this->m_team->getActiveTeamsByContestId($contest_id);
     $data['competition_data'] = $this->m_key->getTeamDataByContestId($contest_id);
-    $this->load->view('admin/v_company_admin_competitors', $data);
+    $this->load->view('admin/company_admin/v_competitors', $data);
   }
 
 
@@ -272,7 +272,7 @@ class Admin extends CI_Controller{
     }
     $this->_showKeyList($contest_id);
     //$data['free_keys'] = $this->m_key->getFreeKeysByContestId($contest_id);
-    //$this->load->view('admin/v_company_admin_keys', $data);
+    //$this->load->view('admin/company_admin/v_keys', $data);
   }
 
 
@@ -324,7 +324,7 @@ class Admin extends CI_Controller{
     $this->auth(SUPPORT_ADM_LEVEL);
     $data['title'] = 'support';
     $this->load->view('include/v_header', $data);
-    $this->load->view('admin/v_support');
+    $this->load->view('admin/support/v_main');
     $this->load->view('include/v_footer');
   }
 
@@ -344,7 +344,7 @@ class Admin extends CI_Controller{
    */
   function users($limit = 20) {
     $this->auth(SUPPORT_ADM_LEVEL);
-    $this->load->view('admin/v_list_users');
+    $this->load->view('admin/support/v_list_users');
   }
 
   /**
@@ -454,7 +454,7 @@ class Admin extends CI_Controller{
     $wl_id = $this->session->userdata('wl_id');
     $data['wl'] = $this->m_white_label->getById($wl_id);
     $this->load->view('include/v_header', $data);
-    $this->load->view('admin/v_adv_settings');
+    $this->load->view('admin/adv_settings/v_main');
     $this->load->view('include/v_footer');
   }
 
@@ -567,12 +567,12 @@ class Admin extends CI_Controller{
     $this->auth(SUPER_ADM_LEVEL);
     $data['title'] = 'superadmin';
     $this->load->view('include/v_header', $data);
-    $this->load->view('admin/v_superadmin');
+    $this->load->view('admin/superadmin/v_main');
   }
 
   function testdata(){
     $this->auth(SUPER_ADM_LEVEL);
-    $this->load->view('admin/v_superadmin_testdata');
+    $this->load->view('admin/superadmin/v_testdata');
   }
 
 
