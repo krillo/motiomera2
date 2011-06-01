@@ -3,10 +3,10 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js'></script>
-    <script type="text/javascript" src="<?php echo $this->config->item('base_url'); ?>js/jquery-ui-1.8.9.custom.min.js"></script>
-    <script type="text/javascript" src="<?php echo $this->config->item('base_url'); ?>js/step.js?ver=0.2"></script>
-    <link rel="stylesheet" type="text/css" media="screen" href="<?php echo $this->config->item('base_url'); ?>css/ui-lightness/jquery-ui-1.8.9.custom.css" />
-    <link rel="stylesheet" type="text/css" media="screen" href="<?php echo $this->config->item('base_url'); ?>css/style.css" />
+    <script type="text/javascript" src="<?php echo $this->config->item('base_url'); ?>/js/jquery-ui-1.8.9.custom.min.js"></script>
+    <script type="text/javascript" src="<?php echo $this->config->item('base_url'); ?>/js/step.js?ver=0.2"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="<?php echo $this->config->item('base_url'); ?>/css/ui-lightness/jquery-ui-1.8.9.custom.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="<?php echo $this->config->item('base_url'); ?>/css/style.css" />
 
     <?php //todo: show only when on start page ?>
     <script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/slides.min.jquery.js"></script>
@@ -50,7 +50,7 @@
                   <table width="290" cellspacing="1" cellpadding="0" border="0">
                     <tr>
                       <td class="log-in-input">E-postadress: </td>
-                      <td><input name="user" id="user" value="" class="text-field" size="17" type="text" maxlength="96" tabindex="1" /></td>
+                      <td><input name="user" id="user" value="" class="text-field" size="17" type="text" maxlength="96" tabindex="1"  /></td>
                       <td class="log-in-input"><input type="checkbox" id="autologin" name="autologin" value="on" tabindex="3" /> <label for="autologin">Kom ihåg mig</label></td>
                     </tr>
                     <tr>

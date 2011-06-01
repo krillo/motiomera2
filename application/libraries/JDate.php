@@ -43,6 +43,7 @@ class JDate {
     }
   }
 
+
   /**
    * Get object date in YYYY-MM-DD HH:ii:ss where the time is always 00:00:00 or UNIXTIME format
    *
@@ -253,6 +254,33 @@ class JDate {
       $this->unixtime = strtotime(date("Y-m-d", $this->unixtime) . "-$days day");
     }
   }
+
+  /**
+   * Add hours to the date
+   * @param int $hours adds specified hours to the date
+   */
+  public function addHours($hours) {
+    if (!is_int($hours))
+      return FALSE;
+
+    if ($hours > 0) {
+      $this->unixtime = strtotime(date("Y-m-d H:i:s", $this->unixtime) . "+$hours hour");
+    }
+  }
+
+  /**
+   * Subtract hours from the date
+   * @param int $hours subtracts specified hours from the date
+   */
+  public function subHours($hours) {
+    if (!is_int($hours))
+      return FALSE;
+
+    if ($hours > 0) {
+      $this->unixtime = strtotime(date("Y-m-d H:i:s", $this->unixtime) . "-$hours hour");
+    }
+  }
+
 
   /**
    * Add week or weeks to the date

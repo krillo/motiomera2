@@ -93,7 +93,7 @@
 
                     <div class="field validated_field">
                       <label for="password">Choose a new password</label>
-                      <p><input id="password" name="password"  type="text" /></p>
+                      <p><input id="password" name="password"  type="text"/></p>
                       <span id="password-error"></span>
                       <p class="hint">Type min 6 and max 40 characters, no å,ä,ö.</p>
                     </div>

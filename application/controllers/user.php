@@ -66,61 +66,58 @@ class User extends CI_Controller {
   function forgotpass() {
     $data['title'] = 'Forgot password';
     $this->load->view('/include/v_header', $data);
-    $this->load->view('v_new_password', $data);
+    $this->load->view('v_new_password');
     $this->load->view('include/v_footer');
   }
   
   /**
    * This function checks if email exists or displays error message.
    * Sending an activation code to the users email.
-   * It stops robots from accessing the function more than five times in an hour.
+   * It stops robots from accessing the function more than three times in an hour.
    */
   function checkemail() {
-    //$footprint = $this->input->ip_address() . $this->input->user_agent();
     $email = urldecode($this->uri->segment(3));
-    if ($this->m_user->checkEmail($email)) {
-      $code = $this->m_user->setPassCode($email);
-      //$expire = $this->m_user->checkNewPassTime($code);
-      echo anchor("http://m2.dev/index.php/user/newpass/$code");
+    //if ($this->m_user->checkEmail($email)) {
+    //$code = $this->m_user->setPassCode($email);
+    $footprint = $this->input->ip_address() . $this->input->user_agent();
+    $isFraud = $this->m_user->isFraud($footprint, 'NEWPASSWORD');
+    //$this->m_user->checkEmail($email);
+    //$code = $this->m_user->setPassCode($email);
+    if ($isFraud == -1) {
+      echo 'error';
     } else {
-      echo 'There is no user with that email address. Please try again.';
-      //echo $footprint;
+      if ($isFraud == 0) {
+        echo 'capthca <img src="/img/icons/beer.jpg">';
+      } else {
+        if($this->m_user->checkEmail($email)) {
+        $code = $this->m_user->setPassCode($email);
+        echo anchor("http://m2.dev/index.php/user/newpass/$code");
+      //}
+    //}
+    }else{
+    echo 'There is no user with that email address. Please try again.';
     }
-  }
-    
+  }}}
+
   /**
-   * This function let the user type a new password and it gets validated, then update password in db.
+   * This function check if the activation code has expired.
+   * If not, let the user type a new password and it gets validated, then update password in db.
    */
   function newpass() {
     $code = $this->uri->segment(3);
+    //$expire = $this->m_user->checkNewPassTime($code);
     $user_id = $this->m_user->newPassCode($code);
+    if($user_id != -1) {
     //if($user_id != -1){
       //här händer allt
     //} else{
-      //felmedelande antingern fel kod eller tiden ute begär ett nytt
+      //echo 'Tiden har tyvärr gått ut, eller fel kod.';          //felmedelande antingen fel kod eller tiden ute begär ett nytt
     //}
-    $start = $this->m_user->checkNewPassTime($code);
-    //$expire = $start + time()+60;
-    //$expire = "2011-05-23 13:50:00";
-    //$now = date('Y-m-d H:i:s');
-    //if ($now>$expire){
-      //redirect('/snippets/v_status_error_msg');
-    //}  else {
-
-    //$start = $this->m_user->checkNewPassTime($code);
-    //$expire = date('Y-m-d H:i:s',time()+60*1);
-    //$now = date('Y-m-d H:i:s');
-    //if ($now>$expire){
-      //redirect('/snippets/v_status_error_msg');
-    //}  else {
-    if ($user_id > 0) {
-      //$this->m_user->loginPasscodeOk($user_id);
-      $data['title'] = 'Change password';
-      //$this->load->view('/include/v_header', $data);
+    //if ($user_id > 0) {
+      $data['title'] = 'Change password';    
       $this->load->view('v_change_password');
-      //$this->load->view('include/v_footer');
     } else {
-      redirect('/start');
+      echo ('<div style="border:1px solid #DD3C10;padding:10px;margin-bottom:5px;background-color:#FFEBE8;width:200px;"><span style="color:red;">Sorry, the link has expired or you have entered the wrong code.</span></div><a href="/user/forgotpass"><input type="button" name="back" title="Go back to get a new reset your password." value="Go Back"/></a> ');
     }
   }
 

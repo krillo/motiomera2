@@ -81,10 +81,10 @@
   });
 
 </script>
-
+<div class="grid_4" style="margin-left: 20px;">
 <h1>Beställning för företag</h1>
 
-<div style="border: 2px solid red; padding-left: 10px;">   <?php echo validation_errors(); ?> </div>
+<!--div style="border: 2px solid red; padding-left: 10px;">   <?php echo validation_errors(); ?> </div-->
 
 <form class="cmxform" id="signupForm" method="post" action="/validate/companyreg">
   <fieldset>
@@ -208,6 +208,6 @@
     </p>
   </fieldset>
 </form>
-
+</div>
 
 

@@ -159,10 +159,10 @@
     });
   });  
 </script>
-
+<div class="grid_2" style="margin-left: 20px;">
 <h1>Bli medlem</h1>
 
-<div style="border: 2px solid red; padding-left: 10px;">   <?php echo validation_errors(); ?> </div>
+<!--div style="border: 2px solid red; padding-left: 10px;">   <?php echo validation_errors(); ?> </div-->
 
 <form class="cmxform" id="signupForm" method="post" action="/validate/userreg">
   <fieldset>
@@ -204,7 +204,7 @@
     </p> 
     <p>
       <label for="email">E-postadress</label>
-      <input id="email" name="email" type="text" value="<?php echo set_value('email'); ?>"/><span id="email-error"></span><em> Har du inget e-postkonto? <a href="http://motiomera.se/pages/vanligafragor.php#Fraga_IngenEpost"> Läs mer här.</a></em>     
+      <input id="email" name="email" type="text" value="<?php echo set_value('email'); ?>"/><span id="email-error"></span><em> Har du inget e-postkonto? <a href="http://motiomera.se/pages/vanligafragor.php#Fraga_IngenEpost"> Läs mer här.</a></em>
     </p>
     <p>
       <label for="email2">Upprepa</label>
@@ -243,6 +243,6 @@
     </p>
   </fieldset>
 </form>
-
+</div>
 
 

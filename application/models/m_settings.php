@@ -30,7 +30,10 @@ class M_settings extends CI_Model {
        "key" => "FRAUD_TIMESPAN_HOURS",
        "value" => "1",
        "descr" => "Timespan for 'forgot password' attempts, hours"),
-
+    array(
+       "key" => "NEW_PASS_LINK_VALID_HOURS",
+       "value" => "6",
+       "descr" => "Timespan for how long the new password link is valid, hours"),
      );
 
   

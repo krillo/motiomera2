@@ -61,10 +61,10 @@
     })
   });
 </script>
-
+<div class="grid_4" style="margin-left: 20px;"
 <h1>Ange Er adress</h1>
 
-<div style="border: 2px solid red; padding-left: 10px;">   <?php echo validation_errors(); ?> </div>
+<!--div style="border: 2px solid red; padding-left: 10px;">   <?php echo validation_errors(); ?> </div-->
 <form class="cmxform" id="signupForm" method="post" action="/validate/companyaddress">
   <fieldset>
     <legend>Fyll i formuläret</legend>
@@ -188,3 +188,4 @@
     </p>
   </fieldset>
 </form>
+</div>
