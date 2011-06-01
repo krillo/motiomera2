@@ -90,6 +90,7 @@ class M_user extends CI_Model {
   }
 
   /**
+   * This function checks if the activation code has expired.
    * This function gets the users id from db if the newpasscode has one match.
    * On match it also loggs in the user
    *
@@ -97,24 +98,13 @@ class M_user extends CI_Model {
    * @return <type>
    */
   function newPassCode($code) {
-    //$codeTimespan = 6;
-    //$checktime = new JDate();
-    //$checktime->subHours($codeTimespan);
-      $sql = "SELECT * FROM users WHERE new_pass_code = ?";
-      $query = $this->db->query($sql, array($code));
-    //$sql = "SELECT * FROM users WHERE new_pass_code = ? AND new_pass_datetime > ?";
-    //$query = $this->db->query($sql, array($code, $codeTimespan));
+      $sql = "SELECT * FROM users WHERE new_pass_code = ? AND new_pass_datetime > DATE_SUB(NOW(), INTERVAL ? HOUR)";
+      $query = $this->db->query($sql, array($code, NEW_PASS_LINK_VALID_HOURS));  // valid 6 hour
     //echo $this->db->last_query();
     if ($query->num_rows() == 1) {
       $data = $query->result();
       $user_id = $data[0]->id;
       $this->_login($data);  //login user
-      /*
-      foreach ($query->result() as $data) {
-        $user_id = $data->id;
-        $this->_login($data);  //login user
-      }
-       */
       return $user_id;
     } else {
       return -1;
@@ -164,24 +154,17 @@ class M_user extends CI_Model {
   function isFraud($footprint, $type) {
     $now = date('Y-m-d H:i:s');
     $ip = $this->input->ip_address();
-    //$ip = '127.0.9.9';
     $sql = "INSERT INTO frauds (type, ip, footprint, created_at, updated_at) VALUES (?, ?, ?, ?, ?)";
     $query = $this->db->query($sql, array($type, $ip, $footprint, $now, $now));
-    //todo: read these from settings
-    $fraudTimespan = 1;
-    $maxAttempts = 3;
 
-    $checktime = new JDate();
-    $checktime->subHours($fraudTimespan);
-
-    $sql = "SELECT COUNT(id) count FROM frauds WHERE footprint = ? AND created_at > ?";
-    $query = $this->db->query($sql, array($footprint, $fraudTimespan));
+    $sql = "SELECT COUNT(id) count FROM frauds WHERE footprint = ? AND created_at > DATE_SUB(NOW(), INTERVAL ? Hour)";
+    $query = $this->db->query($sql, array($footprint, FRAUD_TIMESPAN_HOURS)); // within 1 hour
     //echo $this->db->last_query();
     if ($query->num_rows() > 0) {
       $data = $query->result();
       //print_r($data);
       //echo $data[0]->count;
-      if ($data[0]->count <= $maxAttempts) {
+      if ($data[0]->count <= MAX_NEW_PASS_ATTEMPTS) { //max 3 attempts 
         return $data[0]->count;       //all ok
       } else {
         return 0;                  //attempts exceeded
@@ -194,13 +177,16 @@ class M_user extends CI_Model {
   
 
   /**
-   * This function gets the time when the user requested an activation code.
+   * This function check if .
    * @param <type> $code
    * @return <type>
    */
   function checkNewPassTime ($code) {
-    $sql = "SELECT new_pass_datetime FROM users WHERE new_pass_code = ?";
+    //$timeout = '2011-06-01 09:10:00';
+    //$sql = "SELECT * FROM users WHERE new_pass_code = ? AND new_pass_datetime > DATE_SUB(NOW(), INTERVAL 30 SECOND) ";
+    //$sql = "SELECT new_pass_datetime FROM users WHERE new_pass_code = ?";
     $query = $this->db->query($sql, array($code));
+    //echo $this->db->last_query();
     if ($query->num_rows() == 1) {
       $data = $query->result();
       $start = $data[0]->new_pass_datetime;
