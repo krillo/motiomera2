@@ -5,7 +5,7 @@
   });
 </script>
 
-<div class="">
+<div class="grid_12">
 <div id="tabs">
 	<ul>
 		<li><a href="#settings">General</a></li>

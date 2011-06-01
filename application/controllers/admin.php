@@ -46,20 +46,39 @@ class Admin extends CI_Controller{
   /****************************** COMPANYADMIN **************************************/
 
   /**
-   * Show the company admin page.
-   * Get all the comapnydata and stor it in the session object
-   * Always check that the user has enough priviledges<br/>
+   * Show a companys admin page.
+   * The company is selected by the user_id, the user that administrates the company.
+   *
+   * If the user has more priviledges than COMP_ADM_LEVEL, and sessionvariable
+   * administer_company_id is set to a company_id then show that companys admin page
    *
    * Displays a full HTML page
    */
   function companyadmin() {
-    $this->auth(COMP_ADM_LEVEL);
+    $this->auth(COMP_ADM_LEVEL);    
+    $company_id = $this->session->userdata('administer_company_id');
+    if($this->session->userdata('role_level') > SUPPORT_ADM_LEVEL && $company_id != ''){
+      $data = $this->_getCompanyDataByCompanyId($company_id);
+    } else {
+      $user_id = $this->session->userdata('user_id');
+      $data = $this->_getCompanyDataByUserId($user_id);
+    }
     $data['title'] = 'Company admin page';
-    $user_id = $this->session->userdata('user_id');
-    $data = $this->_getCompanyDataByUserId($user_id);
     $this->load->view('include/v_header', $data);
     $this->load->view('admin/company_admin/v_main');
     $this->load->view('include/v_footer');
+  }
+
+
+
+  function _getCompanyDataByCompanyId($company_id){
+    $this->auth(COMP_ADM_LEVEL);
+    $data['company'] = $this->m_company->getByCompanyId($company_id);
+    $company_id = $data['company']['id'];
+    $data['contest'] = $this->m_contest->getCurrentContest($company_id);
+    $contest_id = $data['contest']['id'];
+    $data['contest_dates'] = $this->m_contest_dates->getDatesByContestId($contest_id);
+    return $data;
   }
 
   /**
@@ -349,17 +368,68 @@ class Admin extends CI_Controller{
 
   /**
    * Wildcard search of users
-   * Always check that the user has enough priviledges
+   * If -1 is submitted as search string then an initial search is done based on latest id 
    */
   function findusers() {
     $this->auth(SUPPORT_ADM_LEVEL);
-    //$search_word = $this->uri->segment(3);
     $search_word = $this->input->post('search');
-    $data['records'] = $this->m_user->getByWildcard($search_word);
+    if($search_word == '-1'){  //initial listing
+      $data['records'] = $this->m_user->getAll(40);
+    } else {  //regular search
+      $data['records'] = $this->m_user->getByWildcard($search_word);
+    }
     $data['search_word'] = $search_word;
-    //$this->load->view('/snippets/v_test_snippet', $data);
-    $this->load->view('/snippets/v_users_search_result', $data);
+    $this->load->view('/admin/support/v_users_search_result', $data);
   }
+
+
+  /**
+   * List companys
+   * returns a search page and result snippet
+   */
+  function companys() {
+    $this->auth(SUPPORT_ADM_LEVEL);
+    $this->load->view('admin/support/v_list_companys');
+    $data['records'] = $this->m_company->getAll();
+    $data['search_word'] = -1;
+    //$this->load->view('/admin/support/v_companys_search_result', $data);
+  }
+
+
+
+  /**
+   * This function does a wildcard search of companys.
+   * If -1 is submitted as search string then an initial search is done based on latest id 
+   */
+  function findcompanys() {
+    $this->auth(SUPPORT_ADM_LEVEL);
+    $search_word = $this->input->post('search');
+    if($search_word == '-1'){  //initial listing
+      $data['records'] = $this->m_company->getAll(40);
+    } else {  //regular search
+      $data['records'] = $this->m_company->getByWildcard($search_word);
+    }
+    $data['search_word'] = $search_word;
+    $this->load->view('/admin/support/v_companys_search_result', $data);
+  }
+
+
+  /**
+   * Set session paramter "administer_company_id" and then show company admin page
+   */
+  function administercompany(){
+    $this->auth(SUPPORT_ADM_LEVEL);
+    $company_id = $this->uri->segment(3);
+    if($company_id > 0){
+      $session_data = array('administer_company_id' => $company_id);
+      $this->session->set_userdata($session_data);
+      $this->companyadmin();
+    }else{
+      //todo nice error
+      echo "error, company id = $company_id";
+    }
+  }
+
 
   /**
    * This function puts all the relevant session parameters as if she were the user.
@@ -568,6 +638,7 @@ class Admin extends CI_Controller{
     $data['title'] = 'superadmin';
     $this->load->view('include/v_header', $data);
     $this->load->view('admin/superadmin/v_main');
+    $this->load->view('include/v_footer');
   }
 
   function testdata(){

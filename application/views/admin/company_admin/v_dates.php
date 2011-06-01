@@ -14,8 +14,8 @@ Your competition lasts for <?php echo $contest['nof_weeks']; ?> weeks.
   <thead>
     <tr>
       <th>Info</th>
-      <th>Veckodag</th>
-      <th>Datum</th>
+      <th>Weekday</th>
+      <th>Date</th>
     </tr>
   </thead>
   <tbody>

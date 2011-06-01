@@ -10,6 +10,7 @@
 	<ul>
 		<li><a href="#settings">General</a></li>
 		<li><a href="<?php echo base_url() ?>admin/users">Users</a></li>
+		<li><a href="<?php echo base_url() ?>admin/companys">Companys</a></li>
 		<li><a href="<?php echo base_url() ?>admin/supportlegacy">Legacy</a></li>
 		<li><a href="#tabs-3">Bla bla</a></li>
 	</ul>
