@@ -38,7 +38,7 @@ class M_user extends CI_Model {
       foreach ($query->result() as $row) {
         $data[] = $row;
       }
-      return $data;
+      return $data[0];
     } else {
       //todo error handling
       return -1;

@@ -1,6 +1,7 @@
 <script type="text/javascript">
   $(function(){
 
+
     $("#regenerate-settings").click(function(){
      $.ajax({
         type: "POST",
@@ -42,9 +43,12 @@
 </script>
 
 <p>Use this testdata feature only for development</p>
-<button id="regenerate-settings" >Regenerate settings file</button>
+<button id="regenerate-settings" >Regenerate WL-settings file</button>
 <button id="deploy-testdata" >Deploy initial testdata</button>
 <button id="more-stepdata" >Add stepdata till today</button>
+
+
+
 <br/>
 <br/>
 <div id="testdata-msg"></div>

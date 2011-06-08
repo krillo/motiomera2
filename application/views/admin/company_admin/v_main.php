@@ -1,10 +1,9 @@
 <script>
   $(function() {
     var $tabs = $('#tabs').tabs();
-    //$tabs.tabs('select', 1);
+    $tabs.tabs('select', <?php echo $tab; ?>);
   });
 </script>
-
 
 <div class="grid_12">
 <h2>Administrationssida för <?php echo $company['name']; ?></h2>
@@ -25,7 +24,7 @@ Vill du anmäla fler deltagare till tävlingen gör du det under fliken <b>Till�
 		<li><a href="<?php echo base_url() ?>admin/keys/<?php echo $contest['id']; ?>">Keys</a></li>
 		<li><a href="<?php echo base_url() ?>admin/additionalorders">Additional orders</a></li>
     <li><a href="<?php echo base_url() ?>admin/reclamation/<?php echo $contest['id']; ?>">Reclamation</a></li>
-		<li><a href="<?php echo base_url() ?>admin/companysettings">Settings</a></li>
+		<li><a href="<?php echo base_url() ?>admin/companysettings/<?php echo $company['id']; ?>">Settings</a></li>
 		<li><a href="#tabs-3">Bla bla</a></li>
 	</ul>
 	<div id="tabs-3">

@@ -33,7 +33,7 @@ class Mypage extends CI_Controller{
    * @param <type> $user_id
    */
   function _showMyPage($user_id){
-    $data = $this->m_user->getById($user_id);
+    $data['user'] = $this->m_user->getById($user_id);
     $data['title'] = 'mypage';
     $this->load->view('include/v_header', $data);
     $this->load->view('mypage/v_mypage');

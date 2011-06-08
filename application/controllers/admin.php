@@ -16,6 +16,7 @@ class Admin extends CI_Controller{
       $this->load->model('m_company');
       $this->load->model('m_settings');
       $this->load->model('m_white_label');
+      $this->load->model('m_company_settings');
     }
 	}
 
@@ -54,7 +55,7 @@ class Admin extends CI_Controller{
    *
    * Displays a full HTML page
    */
-  function companyadmin() {
+  function companyadmin($tab = 0) {
     $this->auth(COMP_ADM_LEVEL);    
     $company_id = $this->session->userdata('administer_company_id');
     if($this->session->userdata('role_level') > SUPPORT_ADM_LEVEL && $company_id != ''){
@@ -64,11 +65,11 @@ class Admin extends CI_Controller{
       $data = $this->_getCompanyDataByUserId($user_id);
     }
     $data['title'] = 'Company admin page';
+    $data['tab'] = $tab;
     $this->load->view('include/v_header', $data);
     $this->load->view('admin/company_admin/v_main');
     $this->load->view('include/v_footer');
   }
-
 
 
   function _getCompanyDataByCompanyId($company_id){
@@ -166,12 +167,6 @@ class Admin extends CI_Controller{
     $data['average'] = $this->m_step->getAverageStepSumPerDay('VALID', $d->getDate(), date('Y-m-d') );
     $this->load->view('snippets/v_graph', $data);
     $this->load->view('snippets/v_grid_end');
-  }
-
-
-  function companysettings() {
-    $this->auth(COMP_ADM_LEVEL);
-    $this->load->view('admin/v_test');
   }
 
 
@@ -327,9 +322,45 @@ class Admin extends CI_Controller{
 
 
   function reclamation() {
-    $this->auth(SUPPORT_ADM_LEVEL);
+    $this->auth(COMP_ADM_LEVEL);
     $this->load->view('admin/v_test');
   }
+
+
+
+  /**
+   * List the company settings
+   */
+  function companysettings() {
+    $this->auth(COMP_ADM_LEVEL);
+    $company_id = $this->uri->segment(3);
+    $data['company_id'] = $company_id;
+    $data['records'] = $this->m_company_settings->getByCompanyId($company_id);
+    $this->load->view('admin/company_admin/v_settings', $data);
+  }
+
+
+  /**
+   * Update all settings
+   * all parameters via post
+   * return to settings panel (tab 2)
+   */
+  function company_settingsupdate() {
+    $this->auth(COMP_ADM_LEVEL);
+    $company_id = $this->uri->segment(3);
+    foreach ($_POST as $key=>$value)  {
+      if($key != 'save'){
+        $data[$key] = $this->input->post($key);
+      }
+    }
+    if($this->m_company_settings->update($company_id, $data)){
+      $this->companyadmin(7);
+    }else{
+      echo 'error';
+    }
+  }
+
+
 
 
   /****************************** SUPPORT **************************************/
@@ -454,7 +485,7 @@ class Admin extends CI_Controller{
     $this->auth(SUPPORT_ADM_LEVEL);
     $real_nick = $this->session->userdata('user_nick');
     $real_user_id = $this->session->userdata('user_id');
-    $data = $this->m_user->getById($simulate_id);
+    $data[0] = $this->m_user->getById($simulate_id);
     $session_data = array(
         'user_id' => $data[0]->id,
         'user_mail' => $data[0]->email,
@@ -491,7 +522,7 @@ class Admin extends CI_Controller{
   function _stopsimulate() {
     $this->auth(SUPPORT_ADM_LEVEL);
     $real_user_id = $this->session->userdata('real_user_id');
-    $data = $this->m_user->getById($real_user_id);
+    $data[0] = $this->m_user->getById($real_user_id);
     $session_data = array(
         'user_id' => $data[0]->id,
         'user_mail' => $data[0]->email,
@@ -506,6 +537,8 @@ class Admin extends CI_Controller{
     );
     $this->session->set_userdata($session_data);
   }
+
+
 
 
 
@@ -660,6 +693,15 @@ class Admin extends CI_Controller{
   }
 
 
+
+  /**
+   * It deletes all company settings in the db and restores it with default values
+   */
+  function restorecompanysettings($company_id){
+    $this->auth(SUPER_ADM_LEVEL);
+    $this->m_company_settings->deleteByCompanyId($company_id);
+    $this->m_company_settings->initialInsert($company_id);
+  }
 
   /**
    * This function creates and loads testdata into the db <br/>

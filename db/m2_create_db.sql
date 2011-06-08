@@ -534,7 +534,7 @@ CREATE  TABLE IF NOT EXISTS `m2`.`settings` (
   `key` VARCHAR(45) NOT NULL ,
   `value` VARCHAR(180) NULL ,
   `descr` VARCHAR(180) NULL ,
-  `default_value` VARCHAR(45) NOT NULL ,
+  `default_value` VARCHAR(180) NOT NULL ,
   `type` VARCHAR(45) NULL ,
   `created_at` DATETIME NULL ,
   `updated_at` DATETIME NULL ,
@@ -544,6 +544,33 @@ CREATE  TABLE IF NOT EXISTS `m2`.`settings` (
   CONSTRAINT `fk_settings_white_label1`
     FOREIGN KEY (`wl_id` )
     REFERENCES `m2`.`white_label` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `m2`.`company_settings`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `m2`.`company_settings` ;
+
+CREATE  TABLE IF NOT EXISTS `m2`.`company_settings` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `company_id` INT NOT NULL ,
+  `key` VARCHAR(45) NULL ,
+  `value` VARCHAR(180) NULL ,
+  `descr` VARCHAR(180) NULL ,
+  `default_value` VARCHAR(180) NULL ,
+  `type` VARCHAR(45) NULL ,
+  `admin` TINYINT(1)  NULL ,
+  `created_at` DATETIME NULL ,
+  `updated_at` DATETIME NULL ,
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
+  INDEX `fk_company_settings_companys1` (`company_id` ASC) ,
+  CONSTRAINT `fk_company_settings_companys1`
+    FOREIGN KEY (`company_id` )
+    REFERENCES `m2`.`companys` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

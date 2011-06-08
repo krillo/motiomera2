@@ -7,6 +7,7 @@
         <th>Administrator</th>
         <th>Email</th>
         <th>WL-Name</th>
+        <th>Settings</th>
         <th>Created</th>
         <th>Updated</th>
       </tr>
@@ -27,6 +28,7 @@
         <td> <?php echo $row->user_name; ?></td>
         <td> <?php echo $row->email; ?></td>
         <td> <?php echo $row->wl_name; ?></td>
+        <td><a href="/admin/restorecompanysettings/<?php echo $row->id; ?>">restore settings</a></td>
         <td> <?php echo $row->created_at; ?></td>
         <td> <?php echo $row->updated_at; ?></td>
       </tr>
