@@ -257,11 +257,14 @@ class Admin extends CI_Controller{
    */
   function competitors() {
     $this->auth(COMP_ADM_LEVEL);
-    $contest_id = $this->uri->segment(3);
+    $company_id = $this->uri->segment(3);
+    $contest_id = $this->uri->segment(4);
+    $data['settings'] = $this->m_company_settings->getByCompanyId($company_id);
     $data['competitors'] = $this->m_user->getUsersByContestId($contest_id);
     $data['teams'] = $this->m_team->getActiveTeamsByContestId($contest_id);
     $data['competition_data'] = $this->m_key->getTeamDataByContestId($contest_id);
     $this->load->view('admin/company_admin/v_competitors', $data);
+    $this->load->view('include/v_debug');
   }
 
 

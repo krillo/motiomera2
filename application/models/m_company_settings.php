@@ -35,7 +35,7 @@ class M_company_settings extends CI_Model {
     $query = $this->db->query($sql, array($company_id));
     if($query->num_rows() > 0 ){
       foreach ($query->result() as $row){
-        $data[] = $row;
+        $data[$row->key] = $row;
       }
       return $data;
     }else{

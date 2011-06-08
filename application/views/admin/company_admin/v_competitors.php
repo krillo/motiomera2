@@ -3,7 +3,8 @@ Här kan du se vilka deltagare som har registrerat sig på sajten med den kod de
 <br/>
 <br/>
 
-<?php 
+<?php
+  $simulation = $settings['ALLOW_SIMULATION']->value;
   $total_keys = $competition_data['total_keys'];
   $total_used_keys = $competition_data['total_used_keys'];
   $users_no_team = $competition_data['total_users_no_team'];
@@ -19,6 +20,7 @@ Här kan du se vilka deltagare som har registrerat sig på sajten med den kod de
   }
 ?>
 
+<?php echo $simulation;  ?>
 
 <br/>
 <br/>
@@ -29,7 +31,9 @@ Här kan du se vilka deltagare som har registrerat sig på sajten med den kod de
         <th></th>
         <th>Nick name</th>
         <th>Name</th>
-        <th>Simulate</th>
+        <?php if($simulation): ?>
+          <th>Simulate</th>
+        <?php endif;?>
         <th>Team</th>
         <th>Key</th>
         <th>Remove</th>
@@ -49,7 +53,9 @@ Här kan du se vilka deltagare som har registrerat sig på sajten med den kod de
         <td> <img src="/img/avatars/<?php echo $row->avatar_filename; ?>" class="avatar-mini"> </td>
         <td> <?php echo $row->nick ?></td>
         <td><a href="/profile/index/<?php echo $row->user_id ?>" ><?php echo $row->f_name. ' ' .$row->l_name?></a></td>
-        <td><a href="/admin/simulate/<?php echo $row->user_id ?>" >Simulate</a></td>
+        <?php if($simulation): ?>
+          <td><a href="/admin/simulate/<?php echo $row->user_id ?>" >Simulate</a></td>
+        <?php endif;?>
         <td> <?php echo $team ?></td>
         <td> <?php echo $row->key ?> </td>
         <td> Avreg från tävling </td>
