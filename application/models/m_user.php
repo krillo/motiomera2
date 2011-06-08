@@ -15,7 +15,9 @@ class M_user extends CI_Model {
    * @return <type>
    */
   function getAll($limit = 20) {
-    $query = $this->db->get($this->table, $limit);
+    $sql = "SELECT * FROM users ORDER BY id DESC LIMIT ?";
+    $query = $this->db->query($sql, array($limit));
+    //$query = $this->db->get($this->table, $limit);
     if ($query->num_rows() > 0) {
       foreach ($query->result() as $row) {
         $data[] = $row;
@@ -36,7 +38,7 @@ class M_user extends CI_Model {
       foreach ($query->result() as $row) {
         $data[] = $row;
       }
-      return $data;
+      return $data[0];
     } else {
       //todo error handling
       return -1;

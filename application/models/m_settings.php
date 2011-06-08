@@ -156,4 +156,3 @@ class M_settings extends CI_Model {
 
 
 }
-

@@ -5,11 +5,12 @@
   });
 </script>
 
-<div class="">
+<div class="grid_12">
 <div id="tabs">
 	<ul>
 		<li><a href="#settings">General</a></li>
 		<li><a href="<?php echo base_url() ?>admin/users">Users</a></li>
+		<li><a href="<?php echo base_url() ?>admin/companys">Companys</a></li>
 		<li><a href="<?php echo base_url() ?>admin/supportlegacy">Legacy</a></li>
 		<li><a href="#tabs-3">Bla bla</a></li>
 	</ul>
@@ -21,5 +22,4 @@
 		<p>Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti. Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio. Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.</p>
 	</div>
 </div>
-
 </div>
