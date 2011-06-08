@@ -98,9 +98,8 @@ class M_user extends CI_Model {
    * @return <type>
    */
   function newPassCode($code) {
-      $sql = "SELECT * FROM users WHERE new_pass_code = ? AND new_pass_datetime > DATE_SUB(NOW(), INTERVAL ? HOUR)";
-      $query = $this->db->query($sql, array($code, NEW_PASS_LINK_VALID_HOURS));  // valid 6 hour
-    //echo $this->db->last_query();
+      $sql = "SELECT * FROM users WHERE new_pass_code = ? AND new_pass_datetime > DATE_SUB(NOW(), INTERVAL ? SECOND)";
+      $query = $this->db->query($sql, array($code, 10));  // valid 6 hour, see settings file
     if ($query->num_rows() == 1) {
       $data = $query->result();
       $user_id = $data[0]->id;
@@ -149,7 +148,7 @@ class M_user extends CI_Model {
    *
    * @param string $footprint
    * @param string $type
-   * @return boolean
+   * @return int -1 error, 0 attempts exceeded, else the count for how many tries
    */
   function isFraud($footprint, $type) {
     $now = date('Y-m-d H:i:s');
@@ -163,7 +162,6 @@ class M_user extends CI_Model {
     if ($query->num_rows() > 0) {
       $data = $query->result();
       //print_r($data);
-      //echo $data[0]->count;
       if ($data[0]->count <= MAX_NEW_PASS_ATTEMPTS) { //max 3 attempts 
         return $data[0]->count;       //all ok
       } else {
@@ -175,14 +173,12 @@ class M_user extends CI_Model {
     }
   }
   
-
   /**
    * This function check if .
    * @param <type> $code
    * @return <type>
    */
   function checkNewPassTime ($code) {
-    //$timeout = '2011-06-01 09:10:00';
     //$sql = "SELECT * FROM users WHERE new_pass_code = ? AND new_pass_datetime > DATE_SUB(NOW(), INTERVAL 30 SECOND) ";
     //$sql = "SELECT new_pass_datetime FROM users WHERE new_pass_code = ?";
     $query = $this->db->query($sql, array($code));
@@ -222,45 +218,6 @@ class M_user extends CI_Model {
   }
 
   /**
-   * Creates a new post
-   * @param <type> $data
-   * @return <type>
-   */
-  function create() {
-    $data = array(
-        'email' => $_POST['email'],
-        'email_confirmed' => $_POST['email_confirmed'],
-        'password' => $this->input->post('password'),
-        'f_name' => $_POST['f_name'],
-        'l_name' => $_POST['l_name'],
-        'nick' => $_POST['nick'],
-        'sex' => $_POST['sex'],
-        'born' => $_POST['born'],
-        'descr' => $_POST['descr'],
-        'last_login' => $_POST['last_login'],
-        'img_filename' => $_POST['img_filename'],
-        'avatar_filename' => $_POST['avatar_filename'],
-        'session_id' => $_POST['session_id'],
-        'customer_id' => $_POST['customer_id'],
-        'paid_until' => $_POST['paid_until'],
-        'trophy_start' => $_POST['trophy_start'],
-        'browser' => $_POST['browser'],
-        'ip' => $_POST['ip'],
-        'type' => $_POST['type'],
-        'level' => $_POST['level'],
-        'status' => $_POST['status'],
-        'mAffCode' => $_POST['mAffCode'],
-        'company_key_temp' => $_POST['company_key_temp'],
-        'new_pass_code' => $_POST['new_pass_code'],
-        'new_pass_datetime' => $_POST['new_pass_datetime']
-    );
-    $data['created_at'] = date('Y-m-d H:i:s');
-    $data['updated_at'] = date('Y-m-d H:i:s');
-    $this->db->insert($this->table, $data);
-    return $this->db->insert_id();
-  }
-
-  /**
    * Creates a new post with the most basic parameters
    *
    * @param <string> $email
@@ -273,7 +230,8 @@ class M_user extends CI_Model {
    * @param <string> $muni
    * @return <int> on success the row id else -1
    */
-  function create_x($email, $password, $f_name, $l_name, $nick, $sex, $source, $muni) {
+  function create($email, $password, $f_name, $l_name, $nick, $sex, $source, $muni) {
+    $password = $this->_codePassword($password);
     $data = array(
         'email' => $email,
         'password' => $password,
@@ -357,15 +315,26 @@ class M_user extends CI_Model {
    * @param <type> $newpassword
    * @return <type>
    */
-  function updatePassWord($id, $newpassword) {
+  function updatePassword($user_id, $newpassword) {
     $updated_at = date('Y-m-d H:i:s');
+    $newpassword = $this->_codePassword($newpassword);
     $sql = "UPDATE users SET password = ?, updated_at = ? WHERE id = ?";
-    $query = $this->db->query($sql, array($newpassword, $updated_at, $id));
+    $query = $this->db->query($sql, array($newpassword, $updated_at, $user_id));
     if ($this->db->affected_rows() == 1) {
       return TRUE;
     } else {
       return FALSE;
     }
+  }
+
+  /**
+   * This function codes the password.
+   * @param <type> $newpassword
+   * @return <type>
+   */
+  function _codePassword($newpassword){
+    //todo, create the coding algoritm.
+    return $newpassword;
   }
 
   // update person by id

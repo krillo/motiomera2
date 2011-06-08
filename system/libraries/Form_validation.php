@@ -1010,6 +1010,28 @@ class CI_Form_validation {
 		return (strlen($str) != $val) ? FALSE : TRUE;
 	}
 
+  // --------------------------------------------------------------------
+
+  /**
+   * @access public
+   * @param string
+   * @return boll
+   */
+  function valid_username($str){
+    return ( ! preg_match("/^([A-Za-z0-9\_]+)$/i", $str)) ? FALSE : TRUE;
+  }
+
+  // --------------------------------------------------------------------
+
+  /**
+   * @access public
+   * @param string
+   * @return bool
+   */
+  function valid_password($str){
+    return ( ! preg_match("/^([A-Za-z0-9\!\@\#\$\%\^\/\+\-\=\?\&\*\(\)\_]+)$/i", $str)) ? FALSE : TRUE;
+  }
+
 	// --------------------------------------------------------------------
 
 	/**

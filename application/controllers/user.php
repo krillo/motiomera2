@@ -4,17 +4,13 @@ if (!defined('BASEPATH'))
   exit('No direct script access allowed');
 
 class User extends CI_Controller {
-
-  private static $wl_id = 0;
-  private static $newPassCount = 5;
-  private static $persistantFootPrint = '127.0.0.1Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.16) Gecko/20110319 Firefox/3.6.16 GTB7.1 ( .NET CLR 3.5.30729; .NET4.0C)';
-  
+ 
   function __construct() {
     parent::__construct();
     $this->load->model('m_municipal');
     $this->load->model('m_source');
     $this->load->model('m_trade');
-    $this::$wl_id = WL_ID;
+    //$this::$wl_id = WL_ID;
   }
 
   function index() {
@@ -66,38 +62,33 @@ class User extends CI_Controller {
   function forgotpass() {
     $data['title'] = 'Forgot password';
     $this->load->view('/include/v_header', $data);
-    $this->load->view('v_new_password');
+    $this->load->view('new_password/v_forgot_password');
     $this->load->view('include/v_footer');
   }
   
   /**
-   * This function checks if email exists or displays error message.
-   * Sending an activation code to the users email.
-   * It stops robots from accessing the function more than three times in an hour.
+   * if email exists send an activationcode to the users email else displays error message.
+   * It stops robots from accessing the function more than three times in an hour. Parameters from settings.
    */
-  function checkemail() {
+  function getnewpasscode() {
     $email = urldecode($this->uri->segment(3));
-    //if ($this->m_user->checkEmail($email)) {
-    //$code = $this->m_user->setPassCode($email);
     $footprint = $this->input->ip_address() . $this->input->user_agent();
     $isFraud = $this->m_user->isFraud($footprint, 'NEWPASSWORD');
-    //$this->m_user->checkEmail($email);
-    //$code = $this->m_user->setPassCode($email);
     if ($isFraud == -1) {
       echo 'error';
     } else {
       if ($isFraud == 0) {
         echo 'capthca <img src="/img/icons/beer.jpg">';
       } else {
-        if($this->m_user->checkEmail($email)) {
-        $code = $this->m_user->setPassCode($email);
-        echo anchor("http://m2.dev/index.php/user/newpass/$code");
-      //}
-    //}
-    }else{
-    echo 'There is no user with that email address. Please try again.';
+        if ($this->m_user->checkEmail($email)) {
+          $code = $this->m_user->setPassCode($email);
+          echo anchor("http://m2.dev/index.php/user/newpass/$code");
+        } else {
+          echo 'There is no user with that email address. Please try again.';
+        }
+      }
     }
-  }}}
+  }
 
   /**
    * This function check if the activation code has expired.
@@ -105,29 +96,33 @@ class User extends CI_Controller {
    */
   function newpass() {
     $code = $this->uri->segment(3);
-    //$expire = $this->m_user->checkNewPassTime($code);
     $user_id = $this->m_user->newPassCode($code);
-    if($user_id != -1) {
-    //if($user_id != -1){
-      //här händer allt
-    //} else{
-      //echo 'Tiden har tyvärr gått ut, eller fel kod.';          //felmedelande antingen fel kod eller tiden ute begär ett nytt
-    //}
-    //if ($user_id > 0) {
-      $data['title'] = 'Change password';    
-      $this->load->view('v_change_password');
+    if ($user_id > 0) {
+      $data['title'] = 'Change password';
+      $this->load->view('new_password/v_change_password');
     } else {
-      echo ('<div style="border:1px solid #DD3C10;padding:10px;margin-bottom:5px;background-color:#FFEBE8;width:200px;"><span style="color:red;">Sorry, the link has expired or you have entered the wrong code.</span></div><a href="/user/forgotpass"><input type="button" name="back" title="Go back to get a new reset your password." value="Go Back"/></a> ');
+      redirect('user/codeerror');
     }
   }
 
   /*
    * create receipt page
    */
-  function receipt() {
-    $data['title'] = 'Receipt';
+  function passchanged() {
+    $data['title'] = 'Password success';
     $this->load->view('/include/v_header', $data);
-    $this->load->view('v_password_receipt');
+    $this->load->view('new_password/v_success');
+    $this->load->view('include/v_footer');
+  }
+
+  /**
+   * If the activationcode has expired or the code was wrong.
+   * Show this errror page.
+   */
+  function codeerror(){
+    $data['title'] = 'Error';
+    $this->load->view('/include/v_header', $data);
+    $this->load->view('new_password/v_code_error');
     $this->load->view('include/v_footer');
   }
 
@@ -162,12 +157,13 @@ class User extends CI_Controller {
 
   /**
    * Update row - id as segment 3
-   */
+   *
   function update() {
     $id = $this->uri->segment(3);
     $this->m_user->update($id);
     $this->all();
   }
+*/
 
   /**
    * Delete row - id as segment 3

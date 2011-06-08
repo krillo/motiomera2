@@ -15,6 +15,7 @@ class Register extends CI_Controller{
 	function index(){
 		$this->all();
 	}
+  
   /**
    * create a new user
    */
@@ -24,7 +25,7 @@ class Register extends CI_Controller{
     $data['source'] = $this->m_source->getAll($this::$wl_id, 'PRIVATE');
     $this->load->view('/include/v_header', $data);
     $this->load->view('include/v_debug');
-    $this->load->view('v_new_user');
+    $this->load->view('register/v_new_user');
     $this->load->view('include/v_footer');
   }
 
@@ -35,7 +36,7 @@ class Register extends CI_Controller{
     $data['title'] = 'User address';
     $this->load->view('/include/v_header', $data);
     $this->load->view('include/v_debug');
-    $this->load->view('v_new_user_adress');
+    $this->load->view('register/v_new_user_adress');
     $this->load->view('include/v_footer');
   }
 
@@ -73,7 +74,7 @@ class Register extends CI_Controller{
     $data['source'] = $this->m_source->getAll($this::$wl_id, 'COMPANY');
     $this->load->view('/include/v_header', $data);
     $this->load->view('/include/v_debug');
-    $this->load->view('v_new_company', $data);
+    $this->load->view('register/v_new_company', $data);
     $this->load->view('include/v_footer');
   }
   /**
@@ -82,7 +83,7 @@ class Register extends CI_Controller{
   function companyadress() {
     $data['title'] = 'Company adress';
     $this->load->view('/include/v_header', $data);
-    $this->load->view('v_new_companyadress');
+    $this->load->view('register/v_new_companyadress');
     $this->load->view('include/v_footer');
   }
   /*
@@ -91,7 +92,7 @@ class Register extends CI_Controller{
   function receipt(){
     $data['title'] = 'Receipt';
     $this->load->view('/include/v_header', $data);
-    $this->load->view('v_user_receipt');
+    $this->load->view('register/v_user_receipt');
     $this->load->view('include/v_footer');
   }
 }
