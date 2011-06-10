@@ -15,7 +15,7 @@ class M_company_settings extends CI_Model {
        "value" => "0",
        "descr" => "Allow the administrator to simulate the users",
        "admin" => "1",
-       "type" => "checkbox"),
+       "type" => "radio"),
     array(
        "key" => "COMPANY_LOGO",
        "value" => "default.png",

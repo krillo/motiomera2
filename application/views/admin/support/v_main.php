@@ -1,7 +1,7 @@
 <script>
   $(function() {
     var $tabs = $('#tabs').tabs();
-    //$tabs.tabs('select', 1);
+    $tabs.tabs('select', <?php echo $tab; ?>);
   });
 </script>
 

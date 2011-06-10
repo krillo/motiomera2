@@ -264,7 +264,7 @@ class Admin extends CI_Controller{
     $data['teams'] = $this->m_team->getActiveTeamsByContestId($contest_id);
     $data['competition_data'] = $this->m_key->getTeamDataByContestId($contest_id);
     $this->load->view('admin/company_admin/v_competitors', $data);
-    $this->load->view('include/v_debug');
+    //$this->load->view('include/v_debug');
   }
 
 
@@ -373,13 +373,15 @@ class Admin extends CI_Controller{
    * Show support admin page
    * Always check that the user has enough priviledges
    */
-  function support() {
+  function support($tab = 0) {
     $this->auth(SUPPORT_ADM_LEVEL);
     $data['title'] = 'support';
+    $data['tab'] = $tab;
     $this->load->view('include/v_header', $data);
     $this->load->view('admin/support/v_main');
     $this->load->view('include/v_footer');
   }
+
 
   /**
    * List users
@@ -462,6 +464,17 @@ class Admin extends CI_Controller{
       //todo nice error
       echo "error, company id = $company_id";
     }
+  }
+
+
+  /**
+   * It deletes all company settings in the db and restores it with default values
+   */
+  function restorecompanysettings($company_id){
+    $this->auth(SUPPORT_ADM_LEVEL);
+    $this->m_company_settings->deleteByCompanyId($company_id);
+    $this->m_company_settings->initialInsert($company_id);
+    $this->support(2);
   }
 
 
@@ -697,14 +710,7 @@ class Admin extends CI_Controller{
 
 
 
-  /**
-   * It deletes all company settings in the db and restores it with default values
-   */
-  function restorecompanysettings($company_id){
-    $this->auth(SUPER_ADM_LEVEL);
-    $this->m_company_settings->deleteByCompanyId($company_id);
-    $this->m_company_settings->initialInsert($company_id);
-  }
+
 
   /**
    * This function creates and loads testdata into the db <br/>
@@ -735,7 +741,7 @@ class Admin extends CI_Controller{
         }
       }
       //create some more users
-      $data = array('Filippa', 'Mimmi', 'Tobbe', 'Carlfelix', 'Simpan', 'Mogge', 'janbanan', 'BigRred', 'bigbird', 'Bjork', 'johanna', 'jwalker','Lapen', 'greengreen', 'M', 'tomtekalendern', 'loffe', 'Klaas', 'Kaniin');
+      $data = array('Filippa', 'Mimmi', 'Tobbe', 'Carlfelix', 'Simpan', 'Mogge', 'janbanan', 'BigRed', 'bigbird', 'Bjork', 'johanna', 'jwalker','Lapen', 'greengreen', 'M', 'tomtekalendern', 'loffe', 'Klaas', 'Kaniin');
       $this->m_testdata->creteUsers($data);
       // insert random steps
       // simulation of user is required to insert steps

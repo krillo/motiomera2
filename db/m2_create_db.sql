@@ -577,6 +577,45 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `m2`.`messages`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `m2`.`messages` ;
+
+CREATE  TABLE IF NOT EXISTS `m2`.`messages` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `user_id` INT NOT NULL ,
+  `message` VARCHAR(140) NULL ,
+  `type` INT NULL ,
+  `badge_id` INT NULL ,
+  `created_at` DATETIME NULL ,
+  `updated_at` DATETIME NULL ,
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
+  INDEX `fk_messages_users1` (`user_id` ASC) ,
+  CONSTRAINT `fk_messages_users1`
+    FOREIGN KEY (`user_id` )
+    REFERENCES `m2`.`users` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `m2`.`badges`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `m2`.`badges` ;
+
+CREATE  TABLE IF NOT EXISTS `m2`.`badges` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `name` VARCHAR(45) NULL ,
+  `created_at` DATETIME NULL ,
+  `updated_at` DATETIME NULL ,
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- procedure insert_steps
 -- -----------------------------------------------------
 
@@ -782,5 +821,28 @@ USE `m2`;
 INSERT INTO `m2`.`settings` (`id`, `wl_id`, `key`, `value`, `descr`, `default_value`, `type`, `created_at`, `updated_at`) VALUES ('1', '1', 'LAST_REG_ADD_DAYS', '1', 'Allow registrations x days after closed competition ', '1', 'int', '2011-05-05 12:00:00', '2011-05-05 12:00:00');
 INSERT INTO `m2`.`settings` (`id`, `wl_id`, `key`, `value`, `descr`, `default_value`, `type`, `created_at`, `updated_at`) VALUES ('2', '1', 'SEND_RESULT_EMAIL_ADD_DAYS', '2', 'Send result email X days after closed competition ', '2', 'int', '2011-05-05 12:00:00', '2011-05-05 12:00:00');
 INSERT INTO `m2`.`settings` (`id`, `wl_id`, `key`, `value`, `descr`, `default_value`, `type`, `created_at`, `updated_at`) VALUES ('3', '1', 'LAST_ADMIN_DAY_ADD_DAYS', '14', 'Company administration page will be open X days after closed competition', '14', 'int', '2011-05-05 12:00:00', '2011-05-05 12:00:00');
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `m2`.`messages`
+-- -----------------------------------------------------
+SET AUTOCOMMIT=0;
+USE `m2`;
+INSERT INTO `m2`.`messages` (`id`, `user_id`, `message`, `type`, `badge_id`, `created_at`, `updated_at`) VALUES ('1', '1', 'kul med motiomera', '1', NULL, '2011-06-06 00:00:00', '2011-06-06 00:00:00');
+INSERT INTO `m2`.`messages` (`id`, `user_id`, `message`, `type`, `badge_id`, `created_at`, `updated_at`) VALUES ('2', '1', 'Kaptenen fick en fang badge', '2', '1', '2011-06-06 00:00:00', '2011-06-06 00:00:00');
+INSERT INTO `m2`.`messages` (`id`, `user_id`, `message`, `type`, `badge_id`, `created_at`, `updated_at`) VALUES ('3', '2', 'Tjoho 1 timme löpning', '1', NULL, '2011-06-06 00:00:00', '2011-06-06 00:00:00');
+INSERT INTO `m2`.`messages` (`id`, `user_id`, `message`, `type`, `badge_id`, `created_at`, `updated_at`) VALUES ('4', '2', '41 fick löparbadgen', '2', '2', '2011-06-06 00:00:00', '2011-06-06 00:00:00');
+INSERT INTO `m2`.`messages` (`id`, `user_id`, `message`, `type`, `badge_id`, `created_at`, `updated_at`) VALUES ('5', '6', 'Glöm inte sista regestreringen på tisdag!', '3', NULL, '2011-06-06 00:00:00', '2011-06-06 00:00:00');
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `m2`.`badges`
+-- -----------------------------------------------------
+SET AUTOCOMMIT=0;
+USE `m2`;
+INSERT INTO `m2`.`badges` (`id`, `name`, `created_at`, `updated_at`) VALUES ('1', 'fang', '2011-06-06 12:00:00', '2011-06-06 12:00:00');
+INSERT INTO `m2`.`badges` (`id`, `name`, `created_at`, `updated_at`) VALUES ('2', 'runner', '2011-06-06 12:00:00', '2011-06-06 12:00:00');
 
 COMMIT;
