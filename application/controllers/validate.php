@@ -11,9 +11,9 @@ class Validate extends CI_Controller {
     $this::$wl_id = WL_ID;
 	}
 
-
   function index() {
   }
+
   /**
    *
    */
@@ -27,23 +27,21 @@ class Validate extends CI_Controller {
     $this->form_validation->set_rules('phone', 'Phone', 'required|numeric');
     $this->form_validation->set_rules('mobile', 'Mobile', 'numeric');
     $this->form_validation->set_rules('country', 'Country', 'required');
-
-
     if ($this->form_validation->run() == FALSE) {
       $this->load->view('/include/v_header');
       $this->load->view('/include/v_debug');
-      $this->load->view('v_new_companyadress');
+      $this->load->view('register/v_new_companyadress');
       $this->load->view('include/v_footer');
     } else {
-      $this->load->view('v_new_companyadress');
+      $this->load->view('/register/receipt');
     }
   }
 
-/**
- * This function validates first step of a company registration.
- * On succcess it continues to the next registration page.
- * On fail it shows error page.
- */
+  /**
+   * This function validates first step of a company registration.
+   * On succcess it continues to the next registration page.
+   * On fail it shows error page.
+   */
   function companyreg() {
     $this->form_validation->set_rules('company', 'Company', 'required|min_length[0]|max_length[30]');
     $this->form_validation->set_rules('count1', 'count1', 'numeric');
@@ -59,8 +57,8 @@ class Validate extends CI_Controller {
       $data['source'] = $this->m_source->getAll($this::$wl_id, 'COMPANY');
       $this->load->view('/include/v_header');
       $this->load->view('include/v_debug');
-      $this->load->view('v_new_company', $data); //reload same page
-      $this->load->view('include/v_footer');     
+      $this->load->view('register/v_new_company', $data); //reload same page
+      $this->load->view('include/v_footer');
     } else { //success
       $company = $this->input->post('company');
       $count1 = $this->input->post('count1');
@@ -70,11 +68,11 @@ class Validate extends CI_Controller {
       $trade = $this->input->post('trade');
       $source = $this->input->post('source');
       $user_id = $this->m_company->create($company, $count1, $count2, $nof_weeks, $start, $trade, $source);
-      if($user_id >0) {
+      if ($user_id > 0) {
         redirect('/register/companyadress');
-        $this->load->view('v_new_companyadress');
-        }  else {
-           redirect('/error/index/0');
+        $this->load->view('register/v_new_companyadress');
+      } else {
+        redirect('/error/index/0');
       }
     }
   }
@@ -84,27 +82,20 @@ class Validate extends CI_Controller {
    * On success it continues to the next registration page
    * On fail it shows error page.
    */
-
   function userreg() {
     $this->load->library('form_validation');
-    $this->form_validation->set_rules('username', 'Username', 'required|min_length[4]|max_length[20]|callback_username_exists');
+    $this->form_validation->set_rules('username', 'Username', 'required|valid_username|min_length[4]|max_length[20]|callback_username_exists');
     $this->form_validation->set_rules('firstname', 'Firstname', 'required|min_length[0]|max_length[30]|color(red)');
     $this->form_validation->set_rules('lastname', 'Lastname', 'required|min_length[0]|max_length[30]');
     $this->form_validation->set_rules('sex', 'Sex');
     $this->form_validation->set_rules('muni', 'Muni', 'required');
     $this->form_validation->set_rules('email', 'Email', 'required|valid_email|callback_email_exists');
     $this->form_validation->set_rules('email2', 'Email2', 'required|valid_email|matches[email]');
-    $this->form_validation->set_rules('password', 'Password', 'required|min_length[6]|max_length[40]');
-    $this->form_validation->set_rules('password2', 'Password2', 'required|matches[password]|min_length[6]|max_length[40]');
+    $this->form_validation->set_rules('password', 'Password', 'required|valid_password|min_length[6]|max_length[40]');
+    $this->form_validation->set_rules('password2', 'Password2', 'required|valid_password|matches[password]|min_length[6]|max_length[40]');
     $this->form_validation->set_rules('source', 'Source', 'required');
     $this->form_validation->set_rules('agree', 'Agree', 'required');
-
     if ($this->form_validation->run() == FALSE) {
-
-      /* else
-        {
-        $this->load->view('v_new_user_adress');
-        } */
       $dupUsername = $this->m_user->isDuplicateUsername($this->input->post('username'));
       if ($dupUsername) {
         $data['usernameError'] = 'Username already in use';
@@ -113,13 +104,12 @@ class Validate extends CI_Controller {
       if ($dupEmail) {
         $data['emailError'] = 'Email already in use';
       }
-      //if ($this->form_validation->run() == FALSE OR $dupUsername OR $dupEmail) {
       $data['title'] = 'Register';
       $data['records'] = $this->m_municipal->getAll();
       $data['source'] = $this->m_source->getAll($this::$wl_id, 'PRIVATE');
       $this->load->view('/include/v_header', $data);
       $this->load->view('include/v_debug');
-      $this->load->view('v_new_user');  //reload same page
+      $this->load->view('register/v_new_user');  //reload same page
       $this->load->view('include/v_footer');
     } else { //success
       $email = $this->input->post('email');
@@ -130,15 +120,9 @@ class Validate extends CI_Controller {
       $sex = $this->input->post('sex');
       $muni = $this->input->post('muni');
       $source = $this->input->post('source');
-      $user_id = $this->m_user->create_x($email, $password, $f_name, $l_name, $nick, $sex, $source, $muni);
+      $user_id = $this->m_user->create($email, $password, $f_name, $l_name, $nick, $sex, $source, $muni);
       redirect('/register/useradress');
     }
-    /* if($user_id > 0){
-      redirect('/user/useradress');
-      $this->load->view('v_new_user_adress');
-      } else{
-      redirect('/error/index/0');
-      } */
   }
 
   /**
@@ -147,7 +131,7 @@ class Validate extends CI_Controller {
    * @return <type>
    */
   function username_exists($username) {
-    $this->form_validation->set_message('username_exists','The Username is already in use. Please try another Username.');
+    $this->form_validation->set_message('username_exists', 'The Username is already in use. Please try another Username.');
     if ($this->m_user->isDuplicateUsername($username)) {
       return FALSE;
     } else {
@@ -187,7 +171,7 @@ class Validate extends CI_Controller {
     if ($this->form_validation->run() == FALSE) {
       $this->load->view('/include/v_header');
       $this->load->view('include/v_debug');
-      $this->load->view('v_new_user_adress');  //reload same page
+      $this->load->view('register/v_new_user_adress');  //reload same page
       $this->load->view('include/v_footer');
     } else { //validation is successful
       $id = $this->input->post('user_id');
@@ -201,7 +185,7 @@ class Validate extends CI_Controller {
       $mobile = $this->input->post('mobile');
       $country = $this->input->post('country');
       $user_id = $this->m_user->updateName($id, $f_name, $l_name);
-      if($user_id > 0) {
+      if ($user_id > 0) {
         $type = 'PRIVATE';
         $company_id = NULL;
         $company_name = NULL;
@@ -211,54 +195,34 @@ class Validate extends CI_Controller {
         $tax_code = NULL;
         $email = NULL;
         $row_id = $this->m_address->create($company_id, $user_id, $type, $company_name, $ref_name, $address1, $address2, $co, $zip, $city, $email, $phone, $mobile, $country, $organisation_no, $tax_code);
-        if($row_id > 0) {
+        if ($row_id > 0) {
           redirect('/register/receipt');
         } else {
           redirect('/error/index/0');
         }
-    } else {
-      redirect('/error/index/0');
+      } else {
+        redirect('/error/index/0');
+      }
     }
   }
 
-   }
-
    /**
-    * This function validates the password from the user.
-    * If it´s ok the password ubdates in db, if not ok it shows an error.
-    */
-
-   function newpass () {
-     $this->load->library('form_validation');
-     $this->form_validation->set_rules('password', '"New password"', 'required|min_length[6]|max_length[40]');
-     $this->form_validation->set_rules('password_confirmation', '"Confirm password"', 'required|matches[password]|min_length[6]|max_length[40]');
-     if ($this->form_validation->run() == FALSE) {
-       //$this->load->view('/include/v_header');
-       $this->load->view('v_change_password');  //reload same page
-       //$this->load->view('include/v_footer');
-     }else{   //validation is successful
-       $newpassword = $this->input->post('password');
-       //$code = $this->uri->segment(3);
-       //$user_id = $this->session->userdata('id');
-       //$user_id = $this->m_user->newPassCode();
-       $id = $this->session->userdata('user_id');
-       $this->m_user->updatePassWord($id,$newpassword);
-       //if($user_id >0) {
-         redirect('/user/receipt');
-       //}  else {
-         //redirect('/error/index/0');
-       }
-     }
-
-   //}
-   /*$this->load->library('form_validation');
-    $this->form_validation->set_rules('newpass', 'Newpass', 'required|min_length[6]|max_length[40]');
-    $this->form_validation->set_rules('newpass2', 'Newpass2', 'required|matches[newpass]|min_length[6]|max_length[40]');
+   * This function validates the password from the user.
+   * If it´s ok the password ubdates in db, if not ok it shows an error.
+   */
+  function newpass() {
+    $this->load->library('form_validation');
+    $this->form_validation->set_rules('password', '"New password"', 'required|valid_password|min_length[6]|max_length[40]');
+    $this->form_validation->set_rules('password_confirmation', '"Confirm password"', 'required|valid_password|matches[password]|min_length[6]|max_length[40]');
     if ($this->form_validation->run() == FALSE) {
-
-    } else {  //Validation is ok
-      $newpassword = $this->input->post('newpass');
-      $this->m_user->updatePassWord($user_id, $newpassword);
-      redirect('/user/receipt');
-    }  */
+      //$this->load->view('/include/v_header');
+      $this->load->view('new_password/v_change_password');  //reload same page
+      //$this->load->view('include/v_footer');
+    } else {   //validation is successful
+      $newpassword = $this->input->post('password');
+      $user_id = $this->session->userdata('user_id');
+      $this->m_user->updatePassword($user_id, $newpassword);
+      redirect('/user/passchanged');
+    }
+  }
 }
