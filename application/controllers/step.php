@@ -98,13 +98,16 @@ class Step extends CI_Controller {
     $date = $this->input->post('date');
     $this->_showStepsPreview($date);
   }
-  
+
+
   /**
    * shows nicely formatted html-snippet of steps for a user 
    */
   function _showStepsPreview($date){
     $user_id = $this->session->userdata('user_id');
     $data['records'] = $this->m_step->getByUserId($user_id, 'VALID', $date, $date, 200);
+    $data['date'] = $date;
+    $data['message'] = $this->m_message->getByUserIdDateType_1($user_id, $date, m_message::TYPE_USER);
     $this->load->view('include/v_preview-step-rows', $data);
   }
 

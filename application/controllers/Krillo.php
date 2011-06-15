@@ -12,6 +12,16 @@ class Krillo extends CI_Controller {
   function index() {
     //echo 'LAST_REG_ADD_DAYS = ' . LAST_REG_ADD_DAYS;
 
+    echo "krillo dillo";
+    echo m_message::TYPE_USER;
+
+
+    $data['message'] = $this->m_message->getByUserIdDateType(1, '2011-06-14', 1);
+    print_r($data);
+
+
+/*
+
     log_message('debug', 'Some variable did not contain a value.');
     show_error('krillo error message' ,200  );
 
@@ -22,6 +32,11 @@ class Krillo extends CI_Controller {
     $this->m_settings->deleteByWlId(1);
 
     $this->m_settings->initialInsert(1);
+*/
+
+
+
+    
 
     //$this->load->view('addsteps_view');
     //$calcSteps = $this->m_activities->calcSteps(2, 30);

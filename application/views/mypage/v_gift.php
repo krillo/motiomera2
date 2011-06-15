@@ -1,3 +1,3 @@
 <?php if (isset($gift)): ?>
-  <img src="/img/icons/<?php echo $gift; ?>" alt="cappuccino" />
+  <img src="/img/badges/<?php echo $gift; ?>" alt="cappuccino" />
 <?php endif; ?>

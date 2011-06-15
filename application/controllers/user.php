@@ -78,7 +78,7 @@ class User extends CI_Controller {
       echo 'error';
     } else {
       if ($isFraud == 0) {
-        echo 'capthca <img src="/img/icons/beer.jpg">';
+        echo 'capthca <img src="/img/badges/beer.jpg">';
       } else {
         if ($this->m_user->checkEmail($email)) {
           $code = $this->m_user->setPassCode($email);

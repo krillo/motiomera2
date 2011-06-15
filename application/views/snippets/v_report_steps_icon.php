@@ -1,10 +1,6 @@
 <script type="text/javascript">
   $(function(){
 
-    function test(){
-      alert("bepa");
-    }
-
     //refresh the stepdata
     function refreshData(){
       alert("cepa");
@@ -27,7 +23,7 @@
           title: "Rapportera steg",
           height: 340,
           width: 750,
-          close: function() {alert("apa"); test(); refreshData(); }
+          close: function() {alert("apa"); refreshData(); }
         });
     });
 

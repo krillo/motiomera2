@@ -32,7 +32,7 @@
 */
 
     //get a gift
-    //setTimeout(function(){$('#gift-area').html('<img src="/img/icons/cappuccino.jpg" alt="cappuccino" />');}, 1000);
+    //setTimeout(function(){$('#gift-area').html('<img src="/img/badges/cappuccino.jpg" alt="cappuccino" />');}, 1000);
 
     //check for gifts
     setTimeout(function(){

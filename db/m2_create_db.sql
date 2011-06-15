@@ -577,30 +577,6 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `m2`.`messages`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `m2`.`messages` ;
-
-CREATE  TABLE IF NOT EXISTS `m2`.`messages` (
-  `id` INT NOT NULL AUTO_INCREMENT ,
-  `user_id` INT NOT NULL ,
-  `message` VARCHAR(140) NULL ,
-  `type` INT NULL ,
-  `badge_id` INT NULL ,
-  `created_at` DATETIME NULL ,
-  `updated_at` DATETIME NULL ,
-  PRIMARY KEY (`id`) ,
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
-  INDEX `fk_messages_users1` (`user_id` ASC) ,
-  CONSTRAINT `fk_messages_users1`
-    FOREIGN KEY (`user_id` )
-    REFERENCES `m2`.`users` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `m2`.`badges`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `m2`.`badges` ;
@@ -612,6 +588,66 @@ CREATE  TABLE IF NOT EXISTS `m2`.`badges` (
   `updated_at` DATETIME NULL ,
   PRIMARY KEY (`id`) ,
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `m2`.`messages`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `m2`.`messages` ;
+
+CREATE  TABLE IF NOT EXISTS `m2`.`messages` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `user_id` INT NOT NULL ,
+  `date` DATE NOT NULL ,
+  `type` INT NOT NULL ,
+  `message` VARCHAR(140) NULL ,
+  `smiley` INT NULL ,
+  `badge_id` INT NULL ,
+  `created_at` DATETIME NULL ,
+  `updated_at` DATETIME NULL ,
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
+  INDEX `fk_messages_users1` (`user_id` ASC) ,
+  INDEX `fk_messages_badges1` (`badge_id` ASC) ,
+  CONSTRAINT `fk_messages_users1`
+    FOREIGN KEY (`user_id` )
+    REFERENCES `m2`.`users` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_messages_badges1`
+    FOREIGN KEY (`badge_id` )
+    REFERENCES `m2`.`badges` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `m2`.`user_badges`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `m2`.`user_badges` ;
+
+CREATE  TABLE IF NOT EXISTS `m2`.`user_badges` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `user_id` INT NOT NULL ,
+  `badge_id` INT NOT NULL ,
+  `created_at` DATETIME NULL ,
+  `updated_at` DATETIME NULL ,
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
+  INDEX `fk_user_badges_users1` (`user_id` ASC) ,
+  INDEX `fk_user_badges_badges1` (`badge_id` ASC) ,
+  CONSTRAINT `fk_user_badges_users1`
+    FOREIGN KEY (`user_id` )
+    REFERENCES `m2`.`users` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_user_badges_badges1`
+    FOREIGN KEY (`badge_id` )
+    REFERENCES `m2`.`badges` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -647,11 +683,11 @@ INSERT INTO steps (user_id, activity_id, count, steps, created_at, updated_at, d
   VALUES (in_user_id, in_activity_id, in_count, v_calc_steps, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, in_step_date, 'VALID');
 SELECT LAST_INSERT_ID() step_id;
 
--- SELECT @steps:=sum(steps), @regs:=COUNT(id) FROM steps WHERE user_id = in_user_id;
+
 SELECT sum(steps) FROM steps WHERE user_id = in_user_id INTO v_total_steps;
 SELECT COUNT(id) FROM steps WHERE user_id = in_user_id INTO v_total_regs;
 UPDATE users SET total_steps = v_total_steps, total_regs = v_total_regs, updated_at = CURRENT_TIMESTAMP WHERE id = in_user_id;
--- UPDATE users SET total_steps = @steps, total_regs = @regs WHERE id = in_user_id;
+
 
 
 
@@ -825,24 +861,39 @@ INSERT INTO `m2`.`settings` (`id`, `wl_id`, `key`, `value`, `descr`, `default_va
 COMMIT;
 
 -- -----------------------------------------------------
--- Data for table `m2`.`messages`
--- -----------------------------------------------------
-SET AUTOCOMMIT=0;
-USE `m2`;
-INSERT INTO `m2`.`messages` (`id`, `user_id`, `message`, `type`, `badge_id`, `created_at`, `updated_at`) VALUES ('1', '1', 'kul med motiomera', '1', NULL, '2011-06-06 00:00:00', '2011-06-06 00:00:00');
-INSERT INTO `m2`.`messages` (`id`, `user_id`, `message`, `type`, `badge_id`, `created_at`, `updated_at`) VALUES ('2', '1', 'Kaptenen fick en fang badge', '2', '1', '2011-06-06 00:00:00', '2011-06-06 00:00:00');
-INSERT INTO `m2`.`messages` (`id`, `user_id`, `message`, `type`, `badge_id`, `created_at`, `updated_at`) VALUES ('3', '2', 'Tjoho 1 timme löpning', '1', NULL, '2011-06-06 00:00:00', '2011-06-06 00:00:00');
-INSERT INTO `m2`.`messages` (`id`, `user_id`, `message`, `type`, `badge_id`, `created_at`, `updated_at`) VALUES ('4', '2', '41 fick löparbadgen', '2', '2', '2011-06-06 00:00:00', '2011-06-06 00:00:00');
-INSERT INTO `m2`.`messages` (`id`, `user_id`, `message`, `type`, `badge_id`, `created_at`, `updated_at`) VALUES ('5', '6', 'Glöm inte sista regestreringen på tisdag!', '3', NULL, '2011-06-06 00:00:00', '2011-06-06 00:00:00');
-
-COMMIT;
-
--- -----------------------------------------------------
 -- Data for table `m2`.`badges`
 -- -----------------------------------------------------
 SET AUTOCOMMIT=0;
 USE `m2`;
 INSERT INTO `m2`.`badges` (`id`, `name`, `created_at`, `updated_at`) VALUES ('1', 'fang', '2011-06-06 12:00:00', '2011-06-06 12:00:00');
 INSERT INTO `m2`.`badges` (`id`, `name`, `created_at`, `updated_at`) VALUES ('2', 'runner', '2011-06-06 12:00:00', '2011-06-06 12:00:00');
+INSERT INTO `m2`.`badges` (`id`, `name`, `created_at`, `updated_at`) VALUES ('3', '100000', '2011-06-06 12:00:00', '2011-06-06 12:00:00');
+INSERT INTO `m2`.`badges` (`id`, `name`, `created_at`, `updated_at`) VALUES ('4', 'super user', '2011-06-06 12:00:00', '2011-06-06 12:00:00');
+INSERT INTO `m2`.`badges` (`id`, `name`, `created_at`, `updated_at`) VALUES ('5', 'newbie', '2011-06-06 12:00:00', '2011-06-06 12:00:00');
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `m2`.`messages`
+-- -----------------------------------------------------
+SET AUTOCOMMIT=0;
+USE `m2`;
+INSERT INTO `m2`.`messages` (`id`, `user_id`, `date`, `type`, `message`, `smiley`, `badge_id`, `created_at`, `updated_at`) VALUES ('1', '1', NULL, '1', 'kul med motiomera', '5', NULL, '2011-06-06 00:00:00', '2011-06-06 00:00:00');
+INSERT INTO `m2`.`messages` (`id`, `user_id`, `date`, `type`, `message`, `smiley`, `badge_id`, `created_at`, `updated_at`) VALUES ('2', '1', NULL, '2', 'Kaptenen fick en fang badge', NULL, '1', '2011-06-06 00:00:00', '2011-06-06 00:00:00');
+INSERT INTO `m2`.`messages` (`id`, `user_id`, `date`, `type`, `message`, `smiley`, `badge_id`, `created_at`, `updated_at`) VALUES ('3', '2', NULL, '1', 'Tjoho 1 timme löpning, det var jobbigt', '4', NULL, '2011-06-06 00:00:00', '2011-06-06 00:00:00');
+INSERT INTO `m2`.`messages` (`id`, `user_id`, `date`, `type`, `message`, `smiley`, `badge_id`, `created_at`, `updated_at`) VALUES ('4', '2', NULL, '2', 'Emma fick löparbadgen', NULL, '2', '2011-06-06 00:00:00', '2011-06-06 00:00:00');
+INSERT INTO `m2`.`messages` (`id`, `user_id`, `date`, `type`, `message`, `smiley`, `badge_id`, `created_at`, `updated_at`) VALUES ('5', '6', NULL, '3', 'Glöm inte sista regestreringen på tisdag!', NULL, NULL, '2011-06-06 00:00:00', '2011-06-06 00:00:00');
+INSERT INTO `m2`.`messages` (`id`, `user_id`, `date`, `type`, `message`, `smiley`, `badge_id`, `created_at`, `updated_at`) VALUES ('6', '1', NULL, '2', 'Kaptenen fick superuser badgen', NULL, '4', '2011-06-06 00:00:00', '2011-06-06 00:00:00');
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `m2`.`user_badges`
+-- -----------------------------------------------------
+SET AUTOCOMMIT=0;
+USE `m2`;
+INSERT INTO `m2`.`user_badges` (`id`, `user_id`, `badge_id`, `created_at`, `updated_at`) VALUES ('1', '1', '1', '2011-06-13 12:00:00', '2011-06-13 12:00:00');
+INSERT INTO `m2`.`user_badges` (`id`, `user_id`, `badge_id`, `created_at`, `updated_at`) VALUES ('2', '2', '2', '2011-06-13 12:00:00', '2011-06-13 12:00:00');
+INSERT INTO `m2`.`user_badges` (`id`, `user_id`, `badge_id`, `created_at`, `updated_at`) VALUES ('3', '1', '4', '2011-06-13 12:00:00', '2011-06-13 12:00:00');
 
 COMMIT;

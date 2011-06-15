@@ -19,7 +19,7 @@
 ?>
 
 
-  <div class="grid_6">
+  <div class="grid_8">
       <div id="placeholder" style="width:600px;height:300px"></div>
          <!-- p><input id="enableTooltip" type="checkbox">Enable tooltip</p -->
 

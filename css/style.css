@@ -82,8 +82,36 @@ a{text-decoration: underline; color: blue;}
 #count{width:50px;}
 .capitalize{text-transform: capitalize;}
 
-#step-data{float:left;padding-top:20px;}
 
+/******* mypage ******/
+.badges{padding-top:10px;border:solid #000 1px;height:300px;}
+
+
+
+/***** datepicker and dialog ******/
+/***** not finished ******/
+/* #preview-step-list{display:none;} */
+#step-data{float:left;padding-top:20px;}
+#step-data-area{float:left;}
+.blue { color: blue; }
+ul {list-style-type: none}
+#datepicker{ font-size:13px;float:left;width:250px;}
+#infolist {width:500px}
+#dialog{display: none;}
+#step-severity{display: none;}
+#preview-step-list{margin-top: 20px;float:left;width:450px;}
+
+table td, table th {text-align:left;vertical-align:top;}
+#preview-step-rows{color:#999;}
+#activity-link{color:#1C94C4;}
+
+.step-table-cell{width:120px;}
+.step-table-cell-big{width:220px;}
+.step-table-cell-small{width:40px;}
+
+
+
+/******* admin ******/
 .admin-table{text-align: left;border-bottom: solid 1px #A19B9E ;}
 .admin-table td, .admin-table th{padding: 0 20px 0 0; }
 .admin-table a{text-decoration: underline; color: blue;}
